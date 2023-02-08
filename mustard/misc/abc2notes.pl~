@@ -1,0 +1,78 @@
+#!/usr/bin/perl
+
+%pitch_table =
+  (
+   "C" => 3,
+   "D" => 5,
+   "E" => 7,
+   "F" => 8,
+   "G" => 10,
+   "A" => 12,
+   "B" => 14,
+   "c" => 15,
+   "d" => 17,
+   "e" => 19,
+   "f" => 20,
+   "g" => 22,
+   "a" => 24,
+   "b" => 26,
+  );
+
+sub parse_length_expr {
+  my ($e) = @_;
+  $e eq "" and return 1;
+  $e eq "/" and return 1/2;
+  $e =~ m(/(\d+)) and return 1/$1;
+  $e =~ m((\d+)) and return $1;
+  $e =~ m((\d+)/(\d+)) and return $1/$2;
+  die "weird length expression '$e'"
+}
+
+sub parse_line {
+  $_ = $_[0];
+
+  my @result;
+  while ($_) {
+    s/^\s+//;
+    if (s/^\|://) {
+      push @result, "REPEAT";
+      next
+    }
+    if (s/^\"[^\"]*\"//) {
+      next
+    }
+    if (s/([_^=]?)([a-gA-G])([',]*)(\d*\/?\d*)//) {
+      my ($acc, $note, $oct, $le) = ($1,$2,$3,$4);
+      my $pitch = $pitch_table{$note};
+      my $length = parse_length_expr($le);
+      if ($acc) {
+	$acc{lc $note} = ${{"=" => 0, "^" => 1, "_" => -1}}{$acc}
+      }
+      defined $acc{lc $note} and $pitch += $acc{lc $note};
+      for (split //, $oct) {
+	$pitch += 12 * ($_ eq "," ? -1 : 1);
+      }
+      push @result, "NOTE $pitch $length";
+      next
+    }
+    if (s/z(\d+\/?\d+)//) {
+      my ($le) = ($1);
+      my $length = parse_length_expr($le);
+      push @result, "REST $length";
+      next
+    }
+    die "don't know how to parse '$_'";
+  }
+  @result
+}
+
+while (<>) {
+  chomp;
+  if (/([A-Z])\s+:\s+(.*)/) {
+    $info{$1} = $2;
+  }
+  else {
+    print map {"$_\n"} parse_line($_);
+  }
+}
+

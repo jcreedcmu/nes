@@ -1,0 +1,266 @@
+pat_wisconsin_course_0	.macro
+	here
+	mf note, 12, 169, 0
+	mf note, 12, 179, 0
+	mf note, 12, 169, 0
+	mf note, 24, 142, 0
+	mf note, 24, 127, 0
+	mf note, 12, 142, 0
+	mf note, 24, 160, 0
+	mf note, 12, 169, 0
+	mf note, 24, 190, 0
+	mf note, 12, 169, 0
+	mf note, 24, 213, 0
+	mf note, 12, 169, 0
+	mf note, 12, 179, 0
+	mf note, 12, 169, 0
+	mf note, 24, 142, 0
+	mf note, 24, 213, 0
+	mf note, 60, 190, 0
+	mf rest, 48
+	mf note, 12, 169, 0
+	mf note, 12, 179, 0
+	mf note, 12, 169, 0
+	mf note, 12, 142, 0
+	mf rest, 12
+	mf note, 24, 127, 0
+	mf note, 12, 113, 0
+	mf note, 12, 106, 0
+	mf rest, 12
+	mf note, 12, 127, 0
+	mf note, 12, 160, 0
+	mf rest, 12
+	mf note, 12, 169, 0
+	mf note, 12, 190, 0
+	mf rest, 12
+	mf note, 12, 169, 0
+	mf note, 12, 190, 0
+	mf note, 12, 213, 0
+	mf note, 24, 190, 0
+	mf note, 24, 226, 0
+	mf note, 60, 213, 0
+	mf rest, 48
+	mf sthr3
+	.dw wisconsin_course_3b
+	mf note, 36, 127, 0
+	mf note, 24, 127, 0
+	mf note, 12, 142, 0
+	mf note, 24, 160, 0
+	mf note, 12, 142, 0
+	mf note, 12, 142, 0
+	mf rest, 24
+	mf rest, 48
+	mf note, 36, 160, 0
+	mf note, 24, 160, 0
+	mf note, 12, 169, 0
+	mf note, 24, 190, 0
+	mf note, 36, 169, 0
+	mf note, 12, 142, 0
+	mf rest, 48
+	mf note, 36, 127, 0
+	mf note, 24, 127, 0
+	mf note, 12, 113, 0
+	mf note, 12, 106, 0
+	mf note, 12, 95, 0
+	mf note, 24, 84, 0
+	mf note, 12, 106, 0
+	mf note, 24, 142, 0
+	mf note, 12, 127, 0
+	mf note, 24, 169, 0
+	mf note, 36, 190, 0
+	mf note, 36, 169, 0
+	mf note, 24, 190, 0
+	mf note, 12, 142, 0
+	mf rest, 24
+	mf note, 12, 160, 0
+	mf rest, 12
+	mf note, 12, 169, 0
+	mf rest, 12
+	mf note, 12, 190, 0
+	mf sthr3
+	.dw wisconsin_course_3a
+	start_thread 2, wisconsin_course_2
+	here
+	.endm
+
+pat_wisconsin_course_1	.macro
+	here
+	mf note, 12, 213, 0
+	mf note, 6, 226, 0
+	mf note, 6, 213, 0
+	mf rest, 24
+	mf note, 48, 142, 0
+	mf note, 12, 160, 0
+	mf note, 6, 169, 0
+	mf note, 6, 160, 0
+	mf rest, 24
+	mf note, 48, 106, 0
+	mf note, 12, 171, 1
+	mf note, 6, 226, 0
+	mf note, 6, 213, 0
+	mf rest, 24
+	mf note, 48, 142, 0
+	mf note, 12, 142, 0
+	mf note, 6, 151, 0
+	mf note, 6, 142, 0
+	mf rest, 24
+	mf note, 48, 190, 0
+	mf note, 12, 213, 0
+	mf note, 6, 226, 0
+	mf note, 6, 213, 0
+	mf rest, 24
+	mf note, 48, 142, 0
+	mf note, 12, 160, 0
+	mf note, 6, 169, 0
+	mf note, 6, 160, 0
+	mf rest, 24
+	mf note, 48, 106, 0
+	mf note, 12, 142, 0
+	mf note, 6, 151, 0
+	mf note, 6, 142, 0
+	mf rest, 24
+	mf note, 48, 190, 0
+	mf note, 12, 171, 1
+	mf note, 6, 113, 0
+	mf note, 6, 213, 0
+	mf rest, 24
+	mf note, 48, 142, 0
+	mf note_long, 36, 64, 1
+	mf note_long, 36, 254, 0
+	mf note_long, 24, 213, 0
+	mf note_long, 36, 171, 1
+	mf note_long, 24, 83, 1
+	mf note_long, 12, 29, 1
+	mf note_long, 24, 171, 1
+	mf note_long, 36, 29, 1
+	mf note_long, 36, 226, 0
+	mf note_long, 24, 190, 0
+	mf note_long, 36, 169, 0
+	mf rest, 60
+	mf note_long, 36, 64, 1
+	mf note_long, 36, 254, 0
+	mf note_long, 24, 213, 0
+	mf note_long, 36, 171, 1
+	mf note_long, 24, 83, 1
+	mf note_long, 12, 29, 1
+	mf note_long, 24, 171, 1
+	mf note_long, 36, 124, 1
+	mf note_long, 36, 171, 1
+	mf note_long, 24, 124, 1
+	mf note_long, 36, 29, 1
+	mf rest, 60
+	.endm
+
+pat_wisconsin_course_2	.macro
+	here
+	mf note_tri, 12, 171, 1
+	mf note_tri, 12, 83, 1
+	mf zero, 12
+	mf note_tri, 12, 171, 1
+	mf note_tri, 12, 83, 1
+	mf zero, 12
+	mf note_tri, 12, 171, 1
+	mf zero, 12
+	mf note_tri, 12, 64, 1
+	mf note_tri, 12, 254, 0
+	mf zero, 12
+	mf note_tri, 12, 64, 1
+	mf note_tri, 12, 254, 0
+	mf zero, 12
+	mf note_tri, 12, 64, 1
+	mf note_tri, 12, 254, 0
+	mf note_tri, 12, 171, 1
+	mf note_tri, 12, 83, 1
+	mf zero, 12
+	mf note_tri, 12, 171, 1
+	mf note_tri, 12, 83, 1
+	mf zero, 12
+	mf note_tri, 12, 171, 1
+	mf zero, 12
+	mf note_tri, 12, 29, 1
+	mf note_tri, 12, 226, 0
+	mf zero, 12
+	mf note_tri, 12, 29, 1
+	mf note_tri, 12, 226, 0
+	mf zero, 12
+	mf note_tri, 12, 29, 1
+	mf note_tri, 12, 226, 0
+	mf note_tri, 12, 171, 1
+	mf note_tri, 12, 83, 1
+	mf zero, 12
+	mf note_tri, 12, 171, 1
+	mf note_tri, 12, 83, 1
+	mf zero, 12
+	mf note_tri, 12, 171, 1
+	mf zero, 12
+	mf note_tri, 12, 64, 1
+	mf note_tri, 12, 254, 0
+	mf zero, 12
+	mf note_tri, 12, 64, 1
+	mf note_tri, 12, 254, 0
+	mf zero, 12
+	mf note_tri, 12, 64, 1
+	mf note_tri, 12, 254, 0
+	mf note_tri, 12, 29, 1
+	mf note_tri, 12, 226, 0
+	mf zero, 12
+	mf note_tri, 12, 29, 1
+	mf note_tri, 12, 226, 0
+	mf zero, 12
+	mf note_tri, 12, 29, 1
+	mf note_tri, 12, 226, 0
+	mf note_tri, 12, 171, 1
+	mf note_tri, 12, 83, 1
+	mf note_tri, 12, 64, 1
+	mf note_tri, 12, 29, 1
+	mf note_tri, 12, 213, 0
+	mf note_tri, 12, 83, 1
+	mf note_tri, 24, 171, 1
+	.endm
+
+pat_wisconsin_course_3a	.macro
+	here
+	mf specialw, 12
+	mf specialx, 6
+	mf specialx, 6
+	mf rest, 12
+	mf specialx, 12
+	mf specialy, 12
+	mf specialx, 12
+	mf rest, 12
+	mf specialx, 12
+	.endm
+
+pat_wisconsin_course_3b	.macro
+	here
+	mf specialx, 12
+	mf specialx, 6
+	mf specialx, 6
+	mf specialx, 12
+	mf specialx, 6
+	mf specialx, 6
+	mf specialx, 6
+	mf specialx, 6
+	mf specialx, 12
+	mf specialx, 24
+	.endm
+
+
+all_songs	.macro
+wisconsin_course_0:
+	pat_wisconsin_course_0
+	jmp wisconsin_course_0
+wisconsin_course_1:
+	pat_wisconsin_course_1
+	jmp wisconsin_course_1
+wisconsin_course_2:
+	pat_wisconsin_course_2
+	jmp wisconsin_course_2
+wisconsin_course_3a:
+	pat_wisconsin_course_3a
+	jmp wisconsin_course_3a
+wisconsin_course_3b:
+	pat_wisconsin_course_3b
+	jmp wisconsin_course_3b
+	.endm
+

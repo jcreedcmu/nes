@@ -1,0 +1,101 @@
+; mov src, dst
+; dst := [src]
+mova	.macro
+	sta \1
+	.endm
+movx	.macro
+	stx \1
+	.endm
+movy	.macro
+	sty \1
+	.endm
+mov	.macro
+	.if \?1 = ARG_REG
+	st\1 \2
+	.else
+	lda \1
+	sta \2
+	.endif
+	.endm
+
+; mov16 src16, dst16
+; dst16 := [src16]
+
+; mov16 #src16, dst16
+; dst16 := src16
+mov16	.macro
+	.if \?1 = ARG_IMMED
+	mov #low(\1), \2
+	mov #high(\1), \2+1
+	.else
+	mov \1, \2
+	mov \1+1, \2+1
+	.endif
+	.endm
+
+; mov16 src16, dst16
+; dst16 := [src16 + x]
+mov16sx	.macro
+	lda \1,x
+	sta \2
+	lda \1+1,x
+	sta \2+1
+	.endm
+
+
+; add16 dst16, src16
+; dst16 := [dst16] + [src16]
+
+; add16 dst16, #val16
+; dst16 := [dst16] + val16
+add16	.macro
+	clc
+	.if \?2 = ARG_IMMED
+	lda \1
+	adc #low(\2)
+	sta \1
+	lda \1+1
+	adc #high(\2)
+	sta \1+1
+	.else
+	lda \1
+	adc \2
+	sta \1
+	lda \1+1
+	adc \2+1
+	sta \1+1
+	.endif
+	.endm
+
+; inc16 dst16
+; dst16 := [dst16] + 1
+inc16	.macro
+	add16 \1, #1
+	.endm
+
+
+; some ppu stuff
+bgpal	.equ $3f00
+bgnam	.equ $2020
+
+ppua	.macro
+	.if \?1 = ARG_IMMED
+	mov #high(\1), $2006
+	mov #low(\1), $2006
+	.else
+	mov \1+1, $2006
+	mov \1, $2006
+	.endif
+	.endm
+
+ppuw	.macro
+	mov \1, $2007
+	.endm
+
+
+; get a joystick button
+get_button	.macro 
+	lda $4016
+	and #1
+	sta \1
+	.endm

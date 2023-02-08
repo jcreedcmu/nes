@@ -1,0 +1,9 @@
+#!/bin/sh
+
+perl makeinfo.pl title.ppm > title.info
+perl useinfo.pl -pattern title.info > title.pgm
+perl useinfo.pl -name title.info > title.dat
+pgm2chr.pl title.pgm > title.chr
+nbasic.jcreed title-standalone.bas ../music/music.bas titlefooter.bas -o title.asm
+nesasm title.asm
+

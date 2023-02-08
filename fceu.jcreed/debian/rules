@@ -1,0 +1,122 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper. 
+# GNU copyright 1997 by Joey Hess.
+
+# Uncomment this to turn on verbose mode. 
+#export DH_VERBOSE=1
+
+# This is the debhelper compatibility version to use.
+export DH_COMPAT=4
+
+DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
+
+
+# Configure CFLAGS
+CFLAGS := -Wall -g
+ifneq (,$(findstring noopt, $(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+ifneq (,$(findstring i386, $(DEB_HOST_ARCH)))
+	CFLAGS += -DC80x86 -DLSB_FIRST
+endif
+ifneq (,$(findstring mipsel, $(DEB_HOST_ARCH)))
+	CFLAGS += -DLSB_FIRST
+endif
+export CFLAGS
+
+# make sure debhelper sees the options set for each target
+export DH_OPTIONS
+
+build-arch: build-arch-stamp
+build-arch-stamp:
+	dh_testdir
+
+	# Build sdl version (with OpenGL)
+	$(MAKE) -f Makefile.unixsdl
+	mv fceu fceu-sdl
+
+## GTK flavor isn't ready yet... (doesn't work for me)
+##	find . -name \*.o -print0 | xargs -0r rm
+##	$(MAKE) -f Makefile.unixsdl.gtk
+##	mv fceu fceu-gtk
+
+	# Build SVGALIB version on i386 only
+ifneq (,$(findstring i386, $(DEB_HOST_ARCH)))
+	find . -name \*.o -print0 | xargs -0r rm
+	$(MAKE) -f Makefile.linuxvga
+	mv fceu fceu-svga
+endif
+
+	touch build-arch-stamp
+
+build-indep:  build-indep-stamp
+build-indep-stamp:
+	dh_testdir
+
+	touch build-indep-stamp
+
+build: build-arch build-indep
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-arch-stamp build-indep-stamp
+
+	find . -name \*.o -print0 | xargs -0r rm -f
+	rm -f fceu-svga fceu-sdl fceu-gtk
+	rm -rf debian/fceu
+
+	dh_clean
+
+install: DH_OPTIONS=-s -i
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	dh_install
+
+	# work around dh_install not handling spaces in filenames
+	mkdir -p debian/fceu-doc/usr/share/doc/fceu-doc/tech/
+	cp -a Documentation/tech/ppu/2C02\ technical\ operation.TXT \
+		debian/fceu-doc/usr/share/doc/fceu-doc/tech/
+
+# Build architecture-independent files here.
+# Pass -i to all debhelper commands in this target to reduce clutter.
+binary-indep: DH_OPTIONS=-i
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installchangelogs  Documentation/ChangeLog
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+# Build architecture-dependent files here.
+# Pass -s to all debhelper commands so that only pkgs for this arch are built.
+binary-arch: DH_OPTIONS=-s
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installmenu
+	dh_installman
+	dh_installchangelogs  Documentation/ChangeLog
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

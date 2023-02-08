@@ -1,0 +1,56 @@
+BRACES: 3 wisconsin_course_3
+Q:1/4=150
+L:1/8
+Y:2
+
+T: Wisconsin Course 0
+E_E=EG2A2G|F2ED2EC2|E_E=EG2C2(D|D4) z4|
+|E_E=EGzA2B|czAFzEDz|
+EDCD2B,2(C|C4) z4
+
+CODE: thread_off 2
+{b}
+
+A3 A2 G F2|GG z2 z4|F3 F2 E D2|E3 Gz4|
+|A3 A2 Bcd|e2 c G2 A E2|D3 E3 D2|Gz2FzEzD|
+
+{a}
+CODE: start_thread 2, wisconsin_course_2
+
+T: Wisconsin Course 1
+CB,/C/ z2 G4
+FE/F/ z2 C'4
+C,B,/C/ z2 G4
+G^F/G/ z2 D4
+CB,/C/ z2 G4
+FE/F/ z2 C'4
+G^F/G/ z2 D4
+C,B/C/ z2 G4
+
+V:long
+F,3 A,3 C2
+C,3 E,2 G, C,2
+G,3 B,3 D2
+E3 z5
+F,3 A,3 C2
+C,3 E,2 G, C,2
+D,3 C,3 D,2
+G,3 z5
+V: tri
+
+T: Wisconsin Course 2
+C,E,ZC,E,ZC,Z
+F,A,ZF,A,ZF,A,
+C,E,ZC,E,ZC,Z
+G,B,ZG,B,ZG,B,
+C,E,ZC,E,ZC,Z
+F,A,ZF,A,ZF,A,
+G,B,ZG,B,ZG,B,
+C,E,F,G,CE,C,2
+
+
+T: Wisconsin Course 3a
+w x/x/ z x y x z x
+
+T: Wisconsin Course 3b
+x x/x/ x x/x/ x/x/ x x2

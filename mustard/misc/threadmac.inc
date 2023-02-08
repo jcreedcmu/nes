@@ -1,0 +1,115 @@
+
+do_thread	.macro
+	lda thread_mask
+	and #(1 << \1)
+	beq .quit\@
+	mov16 thread\1_loc, loc
+	mov thread\1_counter, counter
+	.if (\1 < 4)
+	mov16 #($4000 + (\1 * 4)), soundreg
+	.endif
+.continue\@:
+	jsr do_thread_handler
+	lda continue
+	bne .continue\@
+	mov16 loc, thread\1_loc
+	mov counter, thread\1_counter
+.quit\@:
+	.endm
+
+
+ynext	.macro
+	add16 loc, #(.num_args+1)
+	rts
+	.endm
+
+next	.macro
+	lda #1
+	sta continue
+	add16 loc, #(.num_args+1)
+	rts
+	.endm
+
+yredo	.macro
+	rts
+	.endm
+
+mft_entry	.macro
+mf_\1_loc:
+	.dw mf_\1_handler
+	.endm
+
+mf	.macro
+	.db (mf_\1_loc - mft)*2 + 3
+	.if (\# >= 2)
+	.db \2
+	.endif
+	.if (\# >= 3)
+	.db \3
+	.endif
+	.if (\# >= 4)
+	.db \4
+	.endif
+	.endm
+
+ldarg	.macro
+	.if (\# > 0)
+	ldy #\1
+	.else
+	ldy #1
+	.endif
+	lda [loc],y
+	.endm
+
+yhere	.macro
+	jsr yield_handler
+	.endm
+
+here	.macro
+	lda #1
+	sta continue
+	jsr yield_handler
+	.endm
+
+
+; use at the beginning of an mf_handler
+; that incorporates a delay. The argument
+; to delay_header is the index of the
+; argument to the mf that contains the
+; delay amount.
+delay_header	.macro
+	lda counter
+	bne .decrement
+	ldarg \1
+	beq .quit
+	sta counter
+	.endm
+
+delay_footer	.macro
+	yredo
+.decrement:
+	dec counter
+	beq .quit
+	yredo
+.quit:
+	next
+	.endm
+
+; similarly put this at the end
+
+mf_handler	.macro
+mf_\1_handler:
+.num_args .equ \2
+	.endm
+
+
+do_threads	.macro
+	do_thread 0
+	do_thread 1
+	do_thread 2
+	do_thread 3
+	do_thread 4
+	do_thread 5
+	do_thread 6
+	do_thread 7
+	.endm

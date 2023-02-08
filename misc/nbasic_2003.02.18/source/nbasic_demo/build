@@ -1,0 +1,5 @@
+#!/bin/sh
+nbasic header.bas main.bas common.bas footer.bas -quiet -o nbasic_demo.asm
+nesasm nbasic_demo.asm
+rm *.asm
+

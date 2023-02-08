@@ -1,0 +1,63 @@
+t180
+
+channel 2
+v20 o4 l4 c l8 < GB p8 > cec
+p8 < geg l4 b > d
+d < l2 b p4
+p1
+
+l4 > e l8 c < g p8 bge
+gede f#gab
+l1 g
+p1
+
+l4 a > c l8 c < a p8 l4 > c < af p4 l8 efg p8 g p4 b g p2 p4 p8 g
+
+l4 > e l8 c < a eded ef p8 f p8 efg p1 p2 p4 p8 g
+
+channel 0
+o3
+l4 c c g p4 l4 c p4 g e 
+g p4 d p4 l4 g p4 d b 
+
+c c g p4 l4 c p4 g e 
+g p4 d p4 l4 g p4 d b 
+
+l8 a p4 a p4 a f p4 f p4 f p8 
+g p4 d p4 l4 g p4 d b 
+
+l8 a p4 a p4 a f p4 f p4 f p8 
+g p4 d p4 l4 g p4 d b 
+channel 1
+o2 l4
+p8 e p4 c p4 l4 e p4 c p8 
+p8 b p4 g p4 l4 b p4 g p8 
+
+p8 e p4 c p4 l4 e p4 c p8 
+p8 b p4 g p4 l4 b p4 g p8 
+
+l8 c p4 e p4 c a p4 c p4 a p8 
+l4
+p8 b p4 g p4 l4 b p4 g p8 
+
+l8 c p4 e p4 c a p4 c p4 a p8 
+l4
+p8 b p4 g p4 l4 b p4 g p8 
+
+channel 2
+l8 b p8 a g p8 f# p8 g p1
+a p8 g f# p8 e p8 f# p1
+g p8 f# e p8 d p8 e p2 l4 f# g
+a p8 g p8 a b p8 l16 bb l8 bbb p8 
+
+
+
+
+;|"B7"B2 A G2 ^F2 (G|"Em"G8) |"A"A2 G ^F2 E2 (F|"D"^F8) |
+;|"G"G2 ^F E2 D2 (E|"C"E4) ^F2 G2 |"A"A3 G3 A2|"B7"B3 B/B/BBBz |
+;|"Cmaj7"z4 cdeg|edcB cBGB|"G"dB(G2 G4)|z8|
+;|"Cmaj7"z2 cd cBAB| AG^FE FGAB |"G"G8|z8|
+;|"Am"z2 cB cBAB |"F" cBF6|"G"z2 BA BAGA |B3 A3 G2|
+;|"Am"z2 cB cded | "F"cBAG AGF(G|"G"G8)|z2 G2 A2 G2|
+;|"B7"B2 A G2 ^F2 (G|"Em"G8) |"A"A2 G ^F2 E2 (F|"D"^F8) |
+;|"G"G2 ^F E2 D2 (E|"C"E4) ^F2 G2 |"A"A3 G3 A2|"B7"B4 z4:|

@@ -1,0 +1,22 @@
+#NBASIC = nbasic.jcreed
+NBASIC = nbasic.exe
+
+SOURCES = code/puttputt.bas music/music.bas title/title.bas code/footer.bas 
+
+puttputt.nes: gfx/gfx.chr map/basic.dat music/wis.dat puttputt.asm 
+	nesasm puttputt.asm 
+
+puttputt.asm:
+	$(NBASIC) $(SOURCES) -o puttputt.asm
+
+gfx/gfx.chr: gfx/gfx.pgm
+	pgm2chr.pl gfx/gfx.pgm > gfx/gfx.chr
+
+map/basic.dat: map/basic.map
+	perl map/mapcompile.pl map/basic.map > map/basic.dat
+
+music/wis.dat: music/wis.mus
+	nesmus music/wis.mus music/wis.dat
+
+clean:
+	rm puttputt.asm puttputt.nes

@@ -1,0 +1,8 @@
+mov16	.macro
+	lda \1
+	sta \2
+	lda \1+1
+	sta \2+1
+	.endm
+
+	

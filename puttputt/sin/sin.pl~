@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+
+print "sin_tab:\n .db 0";
+for (1..255) {
+  print ", ", int(0.5 + 256 * log(1 + $_ / 256) / log(2));
+}
+print "\n";
+
+print "exp_tab:\n .db 0";
+for (1..255) {
+  print ", ", int(0.5 + 256 * (exp(log(2) * $_ / 256) - 1));
+}
+print "\n";

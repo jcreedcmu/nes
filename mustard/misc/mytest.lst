@@ -1,0 +1,963 @@
+#[1]   mytest.asm
+#[2]   macro.inc
+   26                      .include "macro.inc"
+    1           0002      ARG_IMMED       .equ 2
+    2                     
+    3                     mov     .macro
+    4                             lda \1
+    5                             sta \2
+    6                             .endm
+    7                     
+    8                     mov16   .macro
+    9                             .if \?1 = ARG_IMMED
+   10                             mov #low(\1), \2
+   11                             mov #high(\1), \2+1
+   12                             .else
+   13                             mov \1, \2
+   14                             mov \1+1, \2+1
+   15                             .endif
+   16                             .endm
+   17                     
+   18                     mov16sx .macro
+   19                             lda \1,x
+   20                             sta \2
+   21                             lda \1+1,x
+   22                             sta \2+1
+   23                             .endm
+   24                     
+   25                     do_thread       .macro
+   26                             lda thread_mask
+   27                             and #(1 << \1)
+   28                             beq .quit\@
+   29                             mov16 thread\1_loc, loc
+   30                             mov thread\1_counter, counter
+   31                             .if (\1 < 4)
+   32                             mov16 #($4000 + (\1 * 4)), soundreg
+   33                             .endif
+   34                     .continue\@:
+   35                             jsr do_thread_handler
+   36                             lda continue
+   37                             bne .continue\@
+   38                             mov16 loc, thread\1_loc
+   39                             mov counter, thread\1_counter
+   40                     .quit\@:
+   41                             .endm
+   42                     
+   43                     ;;;;
+   44                     ; add16 dst, src
+   45                     ; add16 dst, #val
+   46                     ; dst := dst + src/#val
+   47                     ;;;;
+   48                     add16   .macro
+   49                             clc
+   50                             .if \?2 = ARG_IMMED
+   51                             lda \1
+   52                             adc #low(\2)
+   53                             sta \1
+   54                             lda \1+1
+   55                             adc #high(\2)
+   56                             sta \1+1
+   57                             .else
+   58                             lda \1
+   59                             adc \2
+   60                             sta \1
+   61                             lda \1+1
+   62                             adc \2+1
+   63                             sta \1+1
+   64                             .endif
+   65                             .endm
+   66                     
+   67                     inc16   .macro
+   68                             add16 \1, #1
+   69                             .endm
+   70                     
+   71                     ynext   .macro
+   72                             add16 loc, #(.num_args+1)
+   73                             rts
+   74                             .endm
+   75                     
+   76                     next    .macro
+   77                             lda #1
+   78                             sta continue
+   79                             add16 loc, #(.num_args+1)
+   80                             rts
+   81                             .endm
+   82                     
+   83                     yredo   .macro
+   84                             rts
+   85                             .endm
+   86                     
+   87                     mft_entry       .macro
+   88                     mf_\1_loc:
+   89                             .dw mf_\1_handler
+   90                             .endm
+   91                     
+   92                     mf      .macro
+   93                             .db (mf_\1_loc - mft)*2 + 3
+   94                             .if (\# >= 2)
+   95                             .db \2
+   96                             .endif
+   97                             .if (\# >= 3)
+   98                             .db \3
+   99                             .endif
+  100                             .if (\# >= 4)
+  101                             .db \4
+  102                             .endif
+  103                             .endm
+  104                     
+  105                     ldarg   .macro
+  106                             .if (\# > 0)
+  107                             ldy #\1
+  108                             .else
+  109                             ldy #1
+  110                             .endif
+  111                             lda [loc],y
+  112                             .endm
+  113                     
+  114                     yhere   .macro
+  115                             jsr yield_handler
+  116                             .endm
+  117                     
+  118                     here    .macro
+  119                             lda #1
+  120                             sta continue
+  121                             jsr yield_handler
+  122                             .endm
+  123                     
+  124                     debug_loc       .macro
+  125                             lda #\1
+  126                             sta $2009
+  127                             lda loc+1
+  128                             sta $2008
+  129                             lda loc
+  130                             sta $2008
+  131                             .endm
+  132                     
+  133                     debug_thing     .macro
+  134                             lda #\1
+  135                             sta $2009
+  136                             lda \2
+  137                             sta $2008
+  138                             .endm
+  139                     
+  140                     ; use at the beginning of an mf_handler
+  141                     ; that incorporates a delay. The argument
+  142                     ; to delay_header is the index of the
+  143                     ; argument to the mf that contains the
+  144                     ; delay amount.
+  145                     delay_header    .macro
+  146                             lda counter
+  147                             bne .decrement
+  148                             ldarg \1
+  149                             beq .quit
+  150                             sta counter
+  151                             .endm
+  152                     
+  153                     delay_footer    .macro
+  154                             yredo
+  155                     .decrement:
+  156                             dec counter
+  157                             beq .quit
+  158                             yredo
+  159                     .quit:
+  160                             next
+  161                             .endm
+  162                     
+  163                     ; similarly put this at the end
+  164                     
+  165                     mf_handler      .macro
+  166                     mf_\1_handler:
+  167                     .num_args .equ \2
+  168                             .endm
+  169                     
+  170                     ;       tsx
+  171                     ;       lda $102, x
+  172                     ;       sta $2008
+  173                     ;       lda $101, x
+  174                     ;       sta $2008
+  175                     ;       sta $2009
+  176                     
+#[1]   mytest.asm
+   27                     
+   28                             .inesprg 1
+   29                             .ineschr 0
+   30                             .inesmir 0
+   31                             .inesmap 0
+   32                     
+   33                     
+   34           0000              .bank 0
+   35           8000              .org $8000
+   36                     
+   37  00:8000            start:  
+   38                             mov16 #music, thread0_loc
+                0001              .if 2 = ARG_IMMED
+                                  mov #low(#music), thread0_loc
+       00:8000  A9 05             lda #low(#music)
+       00:8002  8D 00 00          sta thread0_loc
+                                  mov #high(#music), thread0_loc+1
+       00:8005  A9 83             lda #high(#music)
+       00:8007  8D 01 00          sta thread0_loc+1
+                                  .else
+                                  .endif
+   39                             mov16 #music2, thread1_loc
+                0001              .if 2 = ARG_IMMED
+                                  mov #low(#music2), thread1_loc
+       00:800A  A9 1B             lda #low(#music2)
+       00:800C  8D 02 00          sta thread1_loc
+                                  mov #high(#music2), thread1_loc+1
+       00:800F  A9 83             lda #high(#music2)
+       00:8011  8D 03 00          sta thread1_loc+1
+                                  .else
+                                  .endif
+   40                             mov #%00000011, thread_mask
+       00:8014  A9 03             lda #%00000011
+       00:8016  8D 20 00          sta thread_mask
+   41                     
+   42  00:8019  20 36 83          jsr vwait
+   43  00:801C  20 36 83          jsr vwait
+   44                             mov #%10000000, $2000
+       00:801F  A9 80             lda #%10000000
+       00:8021  8D 00 20          sta $2000
+   45                             mov #%00000000, $2001
+       00:8024  A9 00             lda #%00000000
+       00:8026  8D 01 20          sta $2001
+   46                     
+   47                             mov #$0F, $4015
+       00:8029  A9 0F             lda #$0F
+       00:802B  8D 15 40          sta $4015
+   48                     
+   49                     
+   50  00:802E            main_loop:
+   51                             do_thread 0
+       00:802E  AD 20 00          lda thread_mask
+       00:8031  29 01             and #(1 << 0)
+       00:8033  F0 36             beq .quit00011
+                                  mov16 thread0_loc, loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov thread0_loc, loc
+       00:8035  AD 00 00          lda thread0_loc
+       00:8038  8D 1C 00          sta loc
+                                  mov thread0_loc+1, loc+1
+       00:803B  AD 01 00          lda thread0_loc+1
+       00:803E  8D 1D 00          sta loc+1
+                                  .endif
+                                  mov thread0_counter, counter
+       00:8041  AD 10 00          lda thread0_counter
+       00:8044  8D 1E 00          sta counter
+                0001              .if (0 < 4)
+                                  mov16 #($4000 + (0 * 4)), soundreg
+                0001              .if 2 = ARG_IMMED
+                                  mov #low(#($4000 + (0 * 4))), soundreg
+       00:8047  A9 00             lda #low(#($4000 + (0 * 4)))
+       00:8049  8D 18 00          sta soundreg
+                                  mov #high(#($4000 + (0 * 4))), soundreg+1
+       00:804C  A9 40             lda #high(#($4000 + (0 * 4)))
+       00:804E  8D 19 00          sta soundreg+1
+                                  .else
+                                  .endif
+                                  .endif
+       00:8051            .continue00011:
+       00:8051  20 D4 82          jsr do_thread_handler
+       00:8054  AD 1F 00          lda continue
+       00:8057  D0 F8             bne .continue00011
+                                  mov16 loc, thread0_loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov loc, thread0_loc
+       00:8059  AD 1C 00          lda loc
+       00:805C  8D 00 00          sta thread0_loc
+                                  mov loc+1, thread0_loc+1
+       00:805F  AD 1D 00          lda loc+1
+       00:8062  8D 01 00          sta thread0_loc+1
+                                  .endif
+                                  mov counter, thread0_counter
+       00:8065  AD 1E 00          lda counter
+       00:8068  8D 10 00          sta thread0_counter
+       00:806B            .quit00011:
+   52                             do_thread 1
+       00:806B  AD 20 00          lda thread_mask
+       00:806E  29 02             and #(1 << 1)
+       00:8070  F0 36             beq .quit00023
+                                  mov16 thread1_loc, loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov thread1_loc, loc
+       00:8072  AD 02 00          lda thread1_loc
+       00:8075  8D 1C 00          sta loc
+                                  mov thread1_loc+1, loc+1
+       00:8078  AD 03 00          lda thread1_loc+1
+       00:807B  8D 1D 00          sta loc+1
+                                  .endif
+                                  mov thread1_counter, counter
+       00:807E  AD 11 00          lda thread1_counter
+       00:8081  8D 1E 00          sta counter
+                0001              .if (1 < 4)
+                                  mov16 #($4000 + (1 * 4)), soundreg
+                0001              .if 2 = ARG_IMMED
+                                  mov #low(#($4000 + (1 * 4))), soundreg
+       00:8084  A9 04             lda #low(#($4000 + (1 * 4)))
+       00:8086  8D 18 00          sta soundreg
+                                  mov #high(#($4000 + (1 * 4))), soundreg+1
+       00:8089  A9 40             lda #high(#($4000 + (1 * 4)))
+       00:808B  8D 19 00          sta soundreg+1
+                                  .else
+                                  .endif
+                                  .endif
+       00:808E            .continue00023:
+       00:808E  20 D4 82          jsr do_thread_handler
+       00:8091  AD 1F 00          lda continue
+       00:8094  D0 F8             bne .continue00023
+                                  mov16 loc, thread1_loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov loc, thread1_loc
+       00:8096  AD 1C 00          lda loc
+       00:8099  8D 02 00          sta thread1_loc
+                                  mov loc+1, thread1_loc+1
+       00:809C  AD 1D 00          lda loc+1
+       00:809F  8D 03 00          sta thread1_loc+1
+                                  .endif
+                                  mov counter, thread1_counter
+       00:80A2  AD 1E 00          lda counter
+       00:80A5  8D 11 00          sta thread1_counter
+       00:80A8            .quit00023:
+   53                             do_thread 2
+       00:80A8  AD 20 00          lda thread_mask
+       00:80AB  29 04             and #(1 << 2)
+       00:80AD  F0 36             beq .quit00035
+                                  mov16 thread2_loc, loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov thread2_loc, loc
+       00:80AF  AD 04 00          lda thread2_loc
+       00:80B2  8D 1C 00          sta loc
+                                  mov thread2_loc+1, loc+1
+       00:80B5  AD 05 00          lda thread2_loc+1
+       00:80B8  8D 1D 00          sta loc+1
+                                  .endif
+                                  mov thread2_counter, counter
+       00:80BB  AD 12 00          lda thread2_counter
+       00:80BE  8D 1E 00          sta counter
+                0001              .if (2 < 4)
+                                  mov16 #($4000 + (2 * 4)), soundreg
+                0001              .if 2 = ARG_IMMED
+                                  mov #low(#($4000 + (2 * 4))), soundreg
+       00:80C1  A9 08             lda #low(#($4000 + (2 * 4)))
+       00:80C3  8D 18 00          sta soundreg
+                                  mov #high(#($4000 + (2 * 4))), soundreg+1
+       00:80C6  A9 40             lda #high(#($4000 + (2 * 4)))
+       00:80C8  8D 19 00          sta soundreg+1
+                                  .else
+                                  .endif
+                                  .endif
+       00:80CB            .continue00035:
+       00:80CB  20 D4 82          jsr do_thread_handler
+       00:80CE  AD 1F 00          lda continue
+       00:80D1  D0 F8             bne .continue00035
+                                  mov16 loc, thread2_loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov loc, thread2_loc
+       00:80D3  AD 1C 00          lda loc
+       00:80D6  8D 04 00          sta thread2_loc
+                                  mov loc+1, thread2_loc+1
+       00:80D9  AD 1D 00          lda loc+1
+       00:80DC  8D 05 00          sta thread2_loc+1
+                                  .endif
+                                  mov counter, thread2_counter
+       00:80DF  AD 1E 00          lda counter
+       00:80E2  8D 12 00          sta thread2_counter
+       00:80E5            .quit00035:
+   54                             do_thread 3
+       00:80E5  AD 20 00          lda thread_mask
+       00:80E8  29 08             and #(1 << 3)
+       00:80EA  F0 36             beq .quit00047
+                                  mov16 thread3_loc, loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov thread3_loc, loc
+       00:80EC  AD 06 00          lda thread3_loc
+       00:80EF  8D 1C 00          sta loc
+                                  mov thread3_loc+1, loc+1
+       00:80F2  AD 07 00          lda thread3_loc+1
+       00:80F5  8D 1D 00          sta loc+1
+                                  .endif
+                                  mov thread3_counter, counter
+       00:80F8  AD 13 00          lda thread3_counter
+       00:80FB  8D 1E 00          sta counter
+                0001              .if (3 < 4)
+                                  mov16 #($4000 + (3 * 4)), soundreg
+                0001              .if 2 = ARG_IMMED
+                                  mov #low(#($4000 + (3 * 4))), soundreg
+       00:80FE  A9 0C             lda #low(#($4000 + (3 * 4)))
+       00:8100  8D 18 00          sta soundreg
+                                  mov #high(#($4000 + (3 * 4))), soundreg+1
+       00:8103  A9 40             lda #high(#($4000 + (3 * 4)))
+       00:8105  8D 19 00          sta soundreg+1
+                                  .else
+                                  .endif
+                                  .endif
+       00:8108            .continue00047:
+       00:8108  20 D4 82          jsr do_thread_handler
+       00:810B  AD 1F 00          lda continue
+       00:810E  D0 F8             bne .continue00047
+                                  mov16 loc, thread3_loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov loc, thread3_loc
+       00:8110  AD 1C 00          lda loc
+       00:8113  8D 06 00          sta thread3_loc
+                                  mov loc+1, thread3_loc+1
+       00:8116  AD 1D 00          lda loc+1
+       00:8119  8D 07 00          sta thread3_loc+1
+                                  .endif
+                                  mov counter, thread3_counter
+       00:811C  AD 1E 00          lda counter
+       00:811F  8D 13 00          sta thread3_counter
+       00:8122            .quit00047:
+   55                             do_thread 4
+       00:8122  AD 20 00          lda thread_mask
+       00:8125  29 10             and #(1 << 4)
+       00:8127  F0 2C             beq .quit00059
+                                  mov16 thread4_loc, loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov thread4_loc, loc
+       00:8129  AD 08 00          lda thread4_loc
+       00:812C  8D 1C 00          sta loc
+                                  mov thread4_loc+1, loc+1
+       00:812F  AD 09 00          lda thread4_loc+1
+       00:8132  8D 1D 00          sta loc+1
+                                  .endif
+                                  mov thread4_counter, counter
+       00:8135  AD 14 00          lda thread4_counter
+       00:8138  8D 1E 00          sta counter
+                0000              .if (4 < 4)
+                                  .endif
+       00:813B            .continue00059:
+       00:813B  20 D4 82          jsr do_thread_handler
+       00:813E  AD 1F 00          lda continue
+       00:8141  D0 F8             bne .continue00059
+                                  mov16 loc, thread4_loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov loc, thread4_loc
+       00:8143  AD 1C 00          lda loc
+       00:8146  8D 08 00          sta thread4_loc
+                                  mov loc+1, thread4_loc+1
+       00:8149  AD 1D 00          lda loc+1
+       00:814C  8D 09 00          sta thread4_loc+1
+                                  .endif
+                                  mov counter, thread4_counter
+       00:814F  AD 1E 00          lda counter
+       00:8152  8D 14 00          sta thread4_counter
+       00:8155            .quit00059:
+   56                             do_thread 5
+       00:8155  AD 20 00          lda thread_mask
+       00:8158  29 20             and #(1 << 5)
+       00:815A  F0 2C             beq .quit00068
+                                  mov16 thread5_loc, loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov thread5_loc, loc
+       00:815C  AD 0A 00          lda thread5_loc
+       00:815F  8D 1C 00          sta loc
+                                  mov thread5_loc+1, loc+1
+       00:8162  AD 0B 00          lda thread5_loc+1
+       00:8165  8D 1D 00          sta loc+1
+                                  .endif
+                                  mov thread5_counter, counter
+       00:8168  AD 15 00          lda thread5_counter
+       00:816B  8D 1E 00          sta counter
+                0000              .if (5 < 4)
+                                  .endif
+       00:816E            .continue00068:
+       00:816E  20 D4 82          jsr do_thread_handler
+       00:8171  AD 1F 00          lda continue
+       00:8174  D0 F8             bne .continue00068
+                                  mov16 loc, thread5_loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov loc, thread5_loc
+       00:8176  AD 1C 00          lda loc
+       00:8179  8D 0A 00          sta thread5_loc
+                                  mov loc+1, thread5_loc+1
+       00:817C  AD 1D 00          lda loc+1
+       00:817F  8D 0B 00          sta thread5_loc+1
+                                  .endif
+                                  mov counter, thread5_counter
+       00:8182  AD 1E 00          lda counter
+       00:8185  8D 15 00          sta thread5_counter
+       00:8188            .quit00068:
+   57                             do_thread 6
+       00:8188  AD 20 00          lda thread_mask
+       00:818B  29 40             and #(1 << 6)
+       00:818D  F0 2C             beq .quit00077
+                                  mov16 thread6_loc, loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov thread6_loc, loc
+       00:818F  AD 0C 00          lda thread6_loc
+       00:8192  8D 1C 00          sta loc
+                                  mov thread6_loc+1, loc+1
+       00:8195  AD 0D 00          lda thread6_loc+1
+       00:8198  8D 1D 00          sta loc+1
+                                  .endif
+                                  mov thread6_counter, counter
+       00:819B  AD 16 00          lda thread6_counter
+       00:819E  8D 1E 00          sta counter
+                0000              .if (6 < 4)
+                                  .endif
+       00:81A1            .continue00077:
+       00:81A1  20 D4 82          jsr do_thread_handler
+       00:81A4  AD 1F 00          lda continue
+       00:81A7  D0 F8             bne .continue00077
+                                  mov16 loc, thread6_loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov loc, thread6_loc
+       00:81A9  AD 1C 00          lda loc
+       00:81AC  8D 0C 00          sta thread6_loc
+                                  mov loc+1, thread6_loc+1
+       00:81AF  AD 1D 00          lda loc+1
+       00:81B2  8D 0D 00          sta thread6_loc+1
+                                  .endif
+                                  mov counter, thread6_counter
+       00:81B5  AD 1E 00          lda counter
+       00:81B8  8D 16 00          sta thread6_counter
+       00:81BB            .quit00077:
+   58                             do_thread 7
+       00:81BB  AD 20 00          lda thread_mask
+       00:81BE  29 80             and #(1 << 7)
+       00:81C0  F0 2C             beq .quit00086
+                                  mov16 thread7_loc, loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov thread7_loc, loc
+       00:81C2  AD 0E 00          lda thread7_loc
+       00:81C5  8D 1C 00          sta loc
+                                  mov thread7_loc+1, loc+1
+       00:81C8  AD 0F 00          lda thread7_loc+1
+       00:81CB  8D 1D 00          sta loc+1
+                                  .endif
+                                  mov thread7_counter, counter
+       00:81CE  AD 17 00          lda thread7_counter
+       00:81D1  8D 1E 00          sta counter
+                0000              .if (7 < 4)
+                                  .endif
+       00:81D4            .continue00086:
+       00:81D4  20 D4 82          jsr do_thread_handler
+       00:81D7  AD 1F 00          lda continue
+       00:81DA  D0 F8             bne .continue00086
+                                  mov16 loc, thread7_loc
+                0000              .if 6 = ARG_IMMED
+                                  .else
+                                  mov loc, thread7_loc
+       00:81DC  AD 1C 00          lda loc
+       00:81DF  8D 0E 00          sta thread7_loc
+                                  mov loc+1, thread7_loc+1
+       00:81E2  AD 1D 00          lda loc+1
+       00:81E5  8D 0F 00          sta thread7_loc+1
+                                  .endif
+                                  mov counter, thread7_counter
+       00:81E8  AD 1E 00          lda counter
+       00:81EB  8D 17 00          sta thread7_counter
+       00:81EE            .quit00086:
+   59  00:81EE  20 36 83          jsr vwait
+   60  00:81F1  4C 2E 80          jmp     main_loop
+   61                     
+   62                     ;;; del;;;
+   63                     
+   64                             mf_handler del, 1
+       00:81F4            mf_del_handler:
+                0001      .num_args .equ 1
+   65  00:81F4  AD 1E 00          lda counter
+   66  00:81F7  D0 0A             bne .decrement
+   67                             ldarg
+                0000              .if (0 > 0)
+                                  .else
+       00:81F9  A0 01             ldy #1
+                                  .endif
+       00:81FB  B1 1C             lda [loc],y
+   68  00:81FD  F0 0A             beq .quit
+   69  00:81FF  8D 1E 00          sta counter
+   70                             yredo
+       00:8202  60                rts
+   71  00:8203            .decrement:
+   72  00:8203  CE 1E 00          dec counter
+   73  00:8206  F0 01             beq .quit
+   74                             yredo
+       00:8208  60                rts
+   75  00:8209            .quit:
+   76                             next
+       00:8209  A9 01             lda #1
+       00:820B  8D 1F 00          sta continue
+                                  add16 loc, #(.num_args+1)
+       00:820E  18                clc
+                0001              .if 2 = ARG_IMMED
+       00:820F  AD 1C 00          lda loc
+       00:8212  69 02             adc #low(#(.num_args+1))
+       00:8214  8D 1C 00          sta loc
+       00:8217  AD 1D 00          lda loc+1
+       00:821A  69 00             adc #high(#(.num_args+1))
+       00:821C  8D 1D 00          sta loc+1
+                                  .else
+                                  .endif
+       00:821F  60                rts
+   77                     
+   78                     ;;; note ;;;
+   79                     
+   80                             mf_handler note, 1
+       00:8220            mf_note_handler:
+                0001      .num_args .equ 1
+   81  00:8220  A9 0F             lda #$f
+   82  00:8222  A0 00             ldy #0
+   83  00:8224  91 18             sta [soundreg],y
+   84  00:8226  A9 00             lda #0
+   85  00:8228  C8                iny
+   86  00:8229  91 18             sta [soundreg],y
+   87                             ldarg
+                0000              .if (0 > 0)
+                                  .else
+       00:822B  A0 01             ldy #1
+                                  .endif
+       00:822D  B1 1C             lda [loc],y
+   88  00:822F  C8                iny
+   89  00:8230  91 18             sta [soundreg],y
+   90  00:8232  A9 09             lda #9
+   91  00:8234  C8                iny
+   92  00:8235  91 18             sta [soundreg],y
+   93                             next
+       00:8237  A9 01             lda #1
+       00:8239  8D 1F 00          sta continue
+                                  add16 loc, #(.num_args+1)
+       00:823C  18                clc
+                0001              .if 2 = ARG_IMMED
+       00:823D  AD 1C 00          lda loc
+       00:8240  69 02             adc #low(#(.num_args+1))
+       00:8242  8D 1C 00          sta loc
+       00:8245  AD 1D 00          lda loc+1
+       00:8248  69 00             adc #high(#(.num_args+1))
+       00:824A  8D 1D 00          sta loc+1
+                                  .else
+                                  .endif
+       00:824D  60                rts
+   94                     
+   95                     ;;; noted ;;;
+   96                     
+   97                             mf_handler noted, 2
+       00:824E            mf_noted_handler:
+                0002      .num_args .equ 2
+   98                             delay_header 2
+       00:824E  AD 1E 00          lda counter
+       00:8251  D0 21             bne .decrement
+                                  ldarg 2
+                0001              .if (1 > 0)
+       00:8253  A0 02             ldy #2
+                                  .else
+                                  .endif
+       00:8255  B1 1C             lda [loc],y
+       00:8257  F0 21             beq .quit
+       00:8259  8D 1E 00          sta counter
+   99  00:825C  A9 0F             lda #$f
+  100  00:825E  A0 00             ldy #0
+  101  00:8260  91 18             sta [soundreg],y
+  102  00:8262  A9 00             lda #0
+  103  00:8264  C8                iny
+  104  00:8265  91 18             sta [soundreg],y
+  105                             ldarg
+                0000              .if (0 > 0)
+                                  .else
+       00:8267  A0 01             ldy #1
+                                  .endif
+       00:8269  B1 1C             lda [loc],y
+  106  00:826B  C8                iny
+  107  00:826C  91 18             sta [soundreg],y
+  108  00:826E  A9 09             lda #9
+  109  00:8270  C8                iny
+  110  00:8271  91 18             sta [soundreg],y
+  111                             delay_footer
+                                  yredo
+       00:8273  60                rts
+       00:8274            .decrement:
+       00:8274  CE 1E 00          dec counter
+       00:8277  F0 01             beq .quit
+                                  yredo
+       00:8279  60                rts
+       00:827A            .quit:
+                                  next
+       00:827A  A9 01             lda #1
+       00:827C  8D 1F 00          sta continue
+                                  add16 loc, #(.num_args+1)
+       00:827F  18                clc
+                0001              .if 2 = ARG_IMMED
+       00:8280  AD 1C 00          lda loc
+       00:8283  69 03             adc #low(#(.num_args+1))
+       00:8285  8D 1C 00          sta loc
+       00:8288  AD 1D 00          lda loc+1
+       00:828B  69 00             adc #high(#(.num_args+1))
+       00:828D  8D 1D 00          sta loc+1
+                                  .else
+                                  .endif
+       00:8290  60                rts
+  112                     
+  113                     ;;; crazy ;;;
+  114                     
+  115                             mf_handler crazy, 2
+       00:8291            mf_crazy_handler:
+                0002      .num_args .equ 2
+  116                             delay_header 1
+       00:8291  AD 1E 00          lda counter
+       00:8294  D0 21             bne .decrement
+                                  ldarg 1
+                0001              .if (1 > 0)
+       00:8296  A0 01             ldy #1
+                                  .else
+                                  .endif
+       00:8298  B1 1C             lda [loc],y
+       00:829A  F0 21             beq .quit
+       00:829C  8D 1E 00          sta counter
+  117  00:829F  A9 A0             lda #%10100000
+  118  00:82A1  A0 00             ldy #0
+  119  00:82A3  91 18             sta [soundreg],y
+  120  00:82A5  A9 8F             lda #%10001111
+  121  00:82A7  C8                iny
+  122  00:82A8  91 18             sta [soundreg],y
+  123                             ldarg 2
+                0001              .if (1 > 0)
+       00:82AA  A0 02             ldy #2
+                                  .else
+                                  .endif
+       00:82AC  B1 1C             lda [loc],y
+  124  00:82AE  C8                iny
+  125  00:82AF  91 18             sta [soundreg],y
+  126  00:82B1  A9 0F             lda #%00001111
+  127  00:82B3  C8                iny
+  128  00:82B4  91 18             sta [soundreg],y
+  129                             delay_footer
+                                  yredo
+       00:82B6  60                rts
+       00:82B7            .decrement:
+       00:82B7  CE 1E 00          dec counter
+       00:82BA  F0 01             beq .quit
+                                  yredo
+       00:82BC  60                rts
+       00:82BD            .quit:
+                                  next
+       00:82BD  A9 01             lda #1
+       00:82BF  8D 1F 00          sta continue
+                                  add16 loc, #(.num_args+1)
+       00:82C2  18                clc
+                0001              .if 2 = ARG_IMMED
+       00:82C3  AD 1C 00          lda loc
+       00:82C6  69 03             adc #low(#(.num_args+1))
+       00:82C8  8D 1C 00          sta loc
+       00:82CB  AD 1D 00          lda loc+1
+       00:82CE  69 00             adc #high(#(.num_args+1))
+       00:82D0  8D 1D 00          sta loc+1
+                                  .else
+                                  .endif
+       00:82D3  60                rts
+  130                     
+  131  00:82D4            do_thread_handler:
+  132  00:82D4  A0 00             ldy #0
+  133  00:82D6  8C 1F 00          sty continue
+  134  00:82D9  B1 1C             lda [loc],y
+  135  00:82DB  A8                tay
+  136  00:82DC  29 03             and #3
+  137  00:82DE  C9 03             cmp #3
+  138  00:82E0  D0 12             bne do_thread_code
+  139                     ;;; special op 
+  140                     ;;; xxxxxx11
+  141  00:82E2  98                tya
+  142  00:82E3  4A                lsr a
+  143  00:82E4  AA                tax
+  144                             mov16sx mft-1, jmpdest
+       00:82E5  BD 54 83          lda mft-1,x
+       00:82E8  8D 1A 00          sta jmpdest
+       00:82EB  BD 55 83          lda mft-1+1,x
+       00:82EE  8D 1B 00          sta jmpdest+1
+  145  00:82F1  6C 1A 00          jmp [jmpdest]
+  146                     ;;; ordinary 6502 code
+  147                     ;;; xxxxxx00, xxxxxx01, xxxxxx10
+  148  00:82F4            do_thread_code:
+  149  00:82F4  6C 1C 00          jmp [loc]
+  150                     
+  151  00:82F7            yield_handler:
+  152  00:82F7  18                clc
+  153  00:82F8  68                pla
+  154  00:82F9  69 01             adc #1 
+  155  00:82FB  8D 1C 00          sta loc
+  156  00:82FE  68                pla
+  157  00:82FF  69 00             adc #0
+  158  00:8301  8D 1D 00          sta loc+1
+  159  00:8304  60                rts
+  160                     
+  161  00:8305            music:
+  162                             here
+       00:8305  A9 01             lda #1
+       00:8307  8D 1F 00          sta continue
+       00:830A  20 F7 82          jsr yield_handler
+  163                             mf noted, $2f, $10
+       00:830D  0B                .db (mf_noted_loc - mft)*2 + 3
+                0001              .if (3 >= 2)
+       00:830E  2F                .db $2f
+                                  .endif
+                0001              .if (3 >= 3)
+       00:830F  10                .db $10
+                                  .endif
+                0000              .if (3 >= 4)
+                                  .endif
+  164                             mf del, $10
+       00:8310  03                .db (mf_del_loc - mft)*2 + 3
+                0001              .if (2 >= 2)
+       00:8311  10                .db $10
+                                  .endif
+                0000              .if (2 >= 3)
+                                  .endif
+                0000              .if (2 >= 4)
+                                  .endif
+  165                             mf noted, $2f, $10
+       00:8312  0B                .db (mf_noted_loc - mft)*2 + 3
+                0001              .if (3 >= 2)
+       00:8313  2F                .db $2f
+                                  .endif
+                0001              .if (3 >= 3)
+       00:8314  10                .db $10
+                                  .endif
+                0000              .if (3 >= 4)
+                                  .endif
+  166                             mf noted, $2f, $30
+       00:8315  0B                .db (mf_noted_loc - mft)*2 + 3
+                0001              .if (3 >= 2)
+       00:8316  2F                .db $2f
+                                  .endif
+                0001              .if (3 >= 3)
+       00:8317  30                .db $30
+                                  .endif
+                0000              .if (3 >= 4)
+                                  .endif
+  167  00:8318  4C 05 83          jmp music
+  168                     
+  169  00:831B            music2:
+  170                             here
+       00:831B  A9 01             lda #1
+       00:831D  8D 1F 00          sta continue
+       00:8320  20 F7 82          jsr yield_handler
+  171                             mf note, $60
+       00:8323  07                .db (mf_note_loc - mft)*2 + 3
+                0001              .if (2 >= 2)
+       00:8324  60                .db $60
+                                  .endif
+                0000              .if (2 >= 3)
+                                  .endif
+                0000              .if (2 >= 4)
+                                  .endif
+  172                             mf del, $06
+       00:8325  03                .db (mf_del_loc - mft)*2 + 3
+                0001              .if (2 >= 2)
+       00:8326  06                .db $06
+                                  .endif
+                0000              .if (2 >= 3)
+                                  .endif
+                0000              .if (2 >= 4)
+                                  .endif
+  173                             mf note, $e0
+       00:8327  07                .db (mf_note_loc - mft)*2 + 3
+                0001              .if (2 >= 2)
+       00:8328  E0                .db $e0
+                                  .endif
+                0000              .if (2 >= 3)
+                                  .endif
+                0000              .if (2 >= 4)
+                                  .endif
+  174                             mf del, $06
+       00:8329  03                .db (mf_del_loc - mft)*2 + 3
+                0001              .if (2 >= 2)
+       00:832A  06                .db $06
+                                  .endif
+                0000              .if (2 >= 3)
+                                  .endif
+                0000              .if (2 >= 4)
+                                  .endif
+  175                             mf note, $d0
+       00:832B  07                .db (mf_note_loc - mft)*2 + 3
+                0001              .if (2 >= 2)
+       00:832C  D0                .db $d0
+                                  .endif
+                0000              .if (2 >= 3)
+                                  .endif
+                0000              .if (2 >= 4)
+                                  .endif
+  176                             mf del, $60
+       00:832D  03                .db (mf_del_loc - mft)*2 + 3
+                0001              .if (2 >= 2)
+       00:832E  60                .db $60
+                                  .endif
+                0000              .if (2 >= 3)
+                                  .endif
+                0000              .if (2 >= 4)
+                                  .endif
+  177                             mf note, $c0
+       00:832F  07                .db (mf_note_loc - mft)*2 + 3
+                0001              .if (2 >= 2)
+       00:8330  C0                .db $c0
+                                  .endif
+                0000              .if (2 >= 3)
+                                  .endif
+                0000              .if (2 >= 4)
+                                  .endif
+  178                             mf del, $06
+       00:8331  03                .db (mf_del_loc - mft)*2 + 3
+                0001              .if (2 >= 2)
+       00:8332  06                .db $06
+                                  .endif
+                0000              .if (2 >= 3)
+                                  .endif
+                0000              .if (2 >= 4)
+                                  .endif
+  179  00:8333  4C 1B 83          jmp music2
+  180                     
+  181                     
+  182  00:8336            vwait:
+  183                     
+  184  00:8336  AD 02 20                  lda $2002
+  185  00:8339  10 FB                     bpl vwait ;//wait for start of retrace
+  186  00:833B                    vwait_1:
+  187  00:833B  AD 02 20                  lda $2002
+  188  00:833E  30 FB                     bmi vwait_1 ;//wait for end of retrace
+  189  00:8340  A9 00              lda #0
+  190  00:8342  8D 05 20   sta 8197
+  191  00:8345  A9 00      lda #0
+  192  00:8347  8D 05 20   sta 8197
+  193  00:834A  A9 00      lda #0
+  194  00:834C  8D 06 20   sta 8198
+  195  00:834F  A9 00      lda #0
+  196  00:8351  8D 06 20   sta 8198
+  197  00:8354  60         rts
+  198                     
+  199  00:8355            mft:
+  200                             mft_entry del
+       00:8355            mf_del_loc:
+       00:8355  F4 81             .dw mf_del_handler
+  201                             mft_entry note
+       00:8357            mf_note_loc:
+       00:8357  20 82             .dw mf_note_handler
+  202                             mft_entry noted
+       00:8359            mf_noted_loc:
+       00:8359  4E 82             .dw mf_noted_handler
+  203                             mft_entry crazy
+       00:835B            mf_crazy_loc:
+       00:835B  91 82             .dw mf_crazy_handler
+  204                     
+  205  00:835D            nmi:
+  206  00:835D  40                rti
+  207                     
+  208           0001              .bank 1
+  209           FFFA              .org $fffa
+  210  01:FFFA  5D 83             .dw nmi,start,start
+       01:FFFC  00 80     
+       01:FFFE  00 80     
+  211                     
+  212                     

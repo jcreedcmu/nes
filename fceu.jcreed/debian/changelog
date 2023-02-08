@@ -1,0 +1,224 @@
+fceu (0.97.5-2) unstable; urgency=low
+
+  * fceu-doc.doc-base: Add required Index line (closes: #223505).
+  * manpages: escaped bare hyphen-dashes.
+
+ -- Joe Nahmias <jello@debian.org>  Thu, 11 Dec 2003 00:39:36 -0500
+
+fceu (0.97.5-1) unstable; urgency=low
+
+  * New upstream release (closes: #223118).
+  * debian/control: update maintainer email.
+  * debian/control: bump std-ver (no changes).
+  * debian/control: add build-dep on xlibmesa-gl-dev for OpenGL.
+  * debian/copyright: update download location.
+  * debian/watch: added to check for new upstream releases.
+  * Fixed garbled sound on big-endian machines (closes: #221394):
+     + drivers/common/unixdsp.c: use correct ioctl() based on endian type.
+  * Fix crash when using OpenGL mode in fceu-sdl:
+     + drivers/common/sdl-opengl.c[34]: change 512*4 to 256*4.
+  * updated manpages:
+     + reflect new location/format of FCEUltra readme.
+     + disambiguate status of default keybindings (closes: #220312).
+
+ -- Joe Nahmias <jello@debian.org>  Mon,  8 Dec 2003 18:02:11 -0500
+
+fceu (0.96-1) unstable; urgency=low
+
+  * New upstream release
+        + Improved RAMBO-1(mapper 64) emulation.  Fixes "Skull and Crossbones".
+  * debian/control (Std-Ver): 3.6.0 (no changes).
+
+ -- Joe Nahmias <joe@nahmias.net>  Tue,  5 Aug 2003 19:58:04 -0400
+
+fceu (0.95-1) unstable; urgency=low
+
+  * The "I love my upstream" release :-)
+  * New upstream release
+        + powerpad.c: avoid a symbol clash on PowerPC arch.
+        + sdl-throttle.c: now uses SDL_Delay() to relinquish CPU time.
+        + /dev/dsp code now searches for /dev/dsp before looking for dspX.
+        + SDL joystick axes configuration is now done from the joystick.
+        + Added somewhat crude support for games that switch background CHR
+          data mid-scanline (eg. Pirates!, Business Wars, and Marble Madness).
+        + Low-quality sound emulation now uses 32-bit integers for better speed.
+        + Tweaked various Konami mappers' IRQ counter emulation.
+        + Fixed an issue with sprite priorities on MSB-first platforms.
+        + Fixed a mapper 90 save state bug.
+        + Various and sundry other bug fixes and code cleanups.
+  * debian/patches: all patches have been merged upstream, remove it!
+  * debian/control (Build-Dep): remove dpatch.
+  * debian/copyright: updated download location.
+  * debian/rules: now using upstream's build mechanism, modified somewhat.
+
+ -- Joe Nahmias <joe@nahmias.net>  Sun, 22 Jun 2003 01:14:29 -0400
+
+fceu (0.94r3-4) unstable; urgency=low
+
+  * patches/10_PPC-symbol-clash: change symbol name from PPC to PwrPadCtrl to
+    make the powerpc buildd happy (input/powerpad.c).
+
+ -- Joe Nahmias <joe@nahmias.net>  Mon, 16 Jun 2003 16:11:59 -0400
+
+fceu (0.94r3-3) unstable; urgency=low
+
+  * debian/rules: remove -march compile option.
+  * debian/control: fceu-svga is now Arch: i386.
+  * debian/rules: use -s switch to debhelper in binary-arch target.
+
+ -- Joe Nahmias <joe@nahmias.net>  Tue, 10 Jun 2003 21:09:12 -0400
+
+fceu (0.94r3-2) unstable; urgency=low
+
+  * debian/control: really fix build-deps.
+
+ -- Joe Nahmias <joe@nahmias.net>  Mon,  9 Jun 2003 22:11:43 -0400
+
+fceu (0.94r3-1) unstable; urgency=low
+
+  * New upstream release
+        + fix divide-by-zero error.
+  * debian/control: Standards-Version: 3.5.10 (no changes).
+
+ -- Joe Nahmias <joe@nahmias.net>  Mon,  9 Jun 2003 20:45:14 -0400
+
+fceu (0.94r2-2) unstable; urgency=low
+
+  * Standards-Version: 3.5.9 (no changes).
+  * debian/control: change build-deps to try and fix #178192,
+    thanks Christian T. Steigies.
+
+ -- Joe Nahmias <joe@nahmias.net>  Thu,  1 May 2003 21:51:20 -0400
+
+fceu (0.94r2-1) unstable; urgency=low
+
+  * New upstream release
+        + Even more bug fixes. 
+        + Adds support for mapper 107.
+
+ -- Joe Nahmias <joe@nahmias.net>  Sat, 12 Apr 2003 21:11:23 -0400
+
+fceu (0.94-1) unstable; urgency=low
+
+  * New upstream release
+        + Adds support for dedicated rapid-fire A and B buttons.
+        + Adds support for on-the-fly IPS patching.
+        + Includes the manpages I wrote.
+        + More bug fixes. 
+  * Migrated patching system to dpatch.
+  * Added patch so that /dev/dsp is used (not /dev/dsp0).
+
+ -- Joe Nahmias <joe@nahmias.net>  Sat, 12 Apr 2003 20:53:02 -0400
+
+fceu (0.93-2) unstable; urgency=low
+
+  * sdl-joystick.patch: resynced Deraj's patch for fixing the joystick
+    config in SDL.
+
+ -- Joe Nahmias <joe@nahmias.net>  Mon, 31 Mar 2003 22:28:14 -0500
+
+fceu (0.93-1) unstable; urgency=low
+
+  * New upstream release
+        + Bug fixes galore :-)
+  * fceu-s{dl,svga}.6: Added section on keyboard bindings.
+  * fceu-svga.6: added note about using dpkg-statoverride.
+
+ -- Joe Nahmias <joe@nahmias.net>  Thu, 27 Mar 2003 14:31:57 -0500
+
+fceu (0.92-1) unstable; urgency=low
+
+  * New upstream release
+        + Added support for mappers 57, 61, 249.
+        + New in-memory-cheat search methods.
+        + Bug and memory leak fixes.
+  * debian/compat ==> 4.
+
+ -- Joe Nahmias <joe@nahmias.net>  Wed, 12 Mar 2003 21:33:05 -0500
+
+fceu (0.91-1) unstable; urgency=low
+
+  * New upstream release
+        + Improved network play.
+        + NSF player improvements.
+        + Fixed sprite detection loop.
+        + Fixed cpu emulation bug in GETIYWR.
+        + Fixed sprite transfer bug (affected Rainbow Islands).
+        + Added support for unif board UNL-8237.
+        + Added support for mappers 241, 114, and 91.
+        + ...all this and much, much, more... :-)
+  * debian/dups.patch: added 8237.c, updated mmc5.c.
+  * Makefile.Debian: removed joystick patch from deraj, as this is fixed
+    upstream in this release.
+  * Standards-Version ==> 3.5.8.0, no changes. 
+
+ -- Joe Nahmias <joe@nahmias.net>  Thu, 13 Feb 2003 18:50:21 -0500
+
+fceu (0.81-post-1) unstable; urgency=low
+
+  * New upstream version:
+  	+ Fixed/Worked around(?) compilation problems on gcc 3.2.x.
+  * debian/control: Fix svgalib build-dep so that non-i386 archs can build,
+    thanks James Troup.
+  * debian/control: Build-Depend on patch, updated long description.
+  * Makefile.debian: added patch from Jared Krinke (deraj) in CVS to fix SDL
+    joystick configuration, closes: #174868.
+  * Makefile.debian: added patch from Jared Krinke (deraj) in CVS to fix SDL
+    CPU utilization, closes: #174940.
+  * debian/rules: added support for 'optimize' in ${DEB_BUILD_OPTIONS} for
+    Shaun Jackman.
+
+ -- Joe Nahmias <joe@nahmias.net>  Mon,  6 Jan 2003 22:37:27 -0500
+
+fceu (0.81-6) unstable; urgency=low
+
+  * Forgot to mark ITP bug as closed,  closes: #160810.
+
+ -- Joe Nahmias <joe@nahmias.net>  Fri, 20 Dec 2002 16:04:52 -0500
+
+fceu (0.81-5) unstable; urgency=low
+
+  * debian/copyright: removed parens from Author(s) to appease lintian.
+  * debian/control: removed trailing period so that lintian can STFU now.
+  * debian/control: changed build-deps to use virtual packages (eg. libz-dev
+    and libsdl-dev instead of zlib1g-dev and libsdl1.2-dev).
+
+ -- Joe Nahmias <joe@nahmias.net>  Wed, 18 Dec 2002 22:49:36 -0500
+
+fceu (0.81-4) unstable; urgency=low
+
+  * Makefile.Debian: changed ${DOCDIR} to /usr/share/doc/fceu-doc for
+    policy compliance (docs must appear in /usr/share/doc/<package>).
+  * Fixed fixdups.sh and redup.sh to be idempotent.
+
+ -- Joe Nahmias <joe@nahmias.net>  Sun, 15 Dec 2002 09:17:10 -0500
+
+fceu (0.81-3) unstable; urgency=low
+
+  * Removed menu entries since ROMs must be specified on the command-line and
+    fceu has no interface to load a ROM.
+  * debian/rules: Fixed running of redup.sh and fixdups.sh.
+  * debian/changelog: Fixed spacing in -2 entries.
+
+ -- Joe Nahmias <joe@nahmias.net>  Thu, 12 Dec 2002 12:47:30 -0500
+
+fceu (0.81-2) unstable; urgency=low
+
+  * Reworked package to build both SVGALIB and SDL binaries from the same
+    source.
+  * Makefile.debian: New makefile to build both sdl and svgalib versions of
+    the emulator.
+  * debian/fixdups.sh: Renamed a couple of files to avoid namespace
+    clobbering.
+  * debian/rules: Fixed so that fixdups.sh runs in configure target.
+  * Wrote manpages for both SVGALIB and SDL versions of fceu.
+
+ -- Joe Nahmias <joe@nahmias.net>  Sun, 17 Nov 2002 17:06:04 -0500
+
+fceu (0.81-1) unstable; urgency=low
+
+  * Initial Release.
+  * Removed bundled copy of zlib.
+  * Added install target to Makefile.linuxvga
+
+ -- Joe Nahmias <joe@nahmias.net>  Thu, 12 Sep 2002 23:46:05 -0400

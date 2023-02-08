@@ -1,0 +1,66 @@
+nesmus
+NES Music Programming Language
+by Bob Rost
+
+
+The nesmus language allows a musician to compose or transcribe music for the NES in a programming language that resembles sheet music in form. It accomodates the 4 NES sound channels, over a 6 octave range. It also allows definition of tempo in beats per minute, and note lengths in terms of the current tempo. Additionally, it has support for musical loops.
+
+Your game is expected to run at 30 frames per second and update the music loop once per frame. The nesmus language internally uses fractional time values and will play your notes on the closest frame to their actual time, so that your music, when played back, is timed as accurately as possible.
+
+NES Channels:
+	0: square wave 1
+	1: square wave 2
+	2: triangle wave
+	3: noise channel
+
+
+
+
+Using nesmus Data (for programmers):
+
+Include the file music.bas in your nbasic game. Read the comments at the start of the file to see how to use it in your game.
+
+
+
+
+Testing Your Music Data (for musicians):
+
+You must have nesmus and nesasm on your system, as well as the music.asm file included with nesmus. Look in the examples folder. You can open the mus files with a standard text editor. To listen to the Sack of Flour Hills music (in the sofhills.mus file), you must first compile the mus file into a data file (which must be named "music.dat"), and then assemble the music.asm file into a ROM, which you can test in a NES emulator. To compile and assemble the Hills music, and create a ROM named "music.nes", these would be the commands:
+	nesmus sofhills.mus music.dat
+	nesasm music.asm
+
+
+
+
+Music Syntax (for musicians):
+
+txxx: Tempo change. xxx (1-3 digits) is the beats per minute of a quarter note.
+
+vxx: Volume change. xx is the volume level (0-15)
+Note that on the square wave channels, a volume in the range 16-31 will actually alter the degree of "pong" in the sound, rather than the volume.
+
+ox: Octave change. x is the octave number (0-6)
+
+>: Raise the current octave by 1
+
+<: Lower the current octave by 1
+
+lx: Current note length change, which affects the following notes until the next note length change. Valid x values are 1,2,4,8, and 16, to specify whole note, half note, quarter note, 1/8 note, and 1/16 note.
+
+px: Rest. The value of x (1,2,4,8, or 16) specifies how long to rest, the same as for the note length change.
+
+c,d,e,f,g,a,b: The notes in the current octave
+
+#: Placed directly after a note, makes it sharp.
+
+-: Placed directly after a note, makes it flat.
+
+.: Placed directly after a note, dots the length.
+
+channel x: Signal that the following music commands apply to channel x, which must be 0, 1, 2, or 3. It is not necessary to use all 4 channels in a song.
+
+loop x: Start a music loop. The value x must be in the range 1 to 255. The loop command must be on a line by itself. You may not nest loops within each other, but you may have parts for all four channels defined inside the loop.
+
+end: End the current music loop.
+
+;: Starting a line with a semicolon turns that line into a comment. You can write notes for yourself or anyone else reading the music source, and the language will not try to interpret it.

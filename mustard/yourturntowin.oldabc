@@ -1,0 +1,61 @@
+Q:1/4=200
+L:1/8
+Y:1
+
+T: Your Turn To Win 3
+yx z yxw yx
+
+T: Your Turn To Win 3b
+xxxx z4
+
+T: Your Turn To Win 0 c
+C,2
+
+T: Your Turn To Win 0 e
+E,2E,2G,B,,E,2
+
+T: Your Turn To Win 0 f
+F,2
+
+T: Your Turn To Win 0 d
+D,2F,2A,2C2
+
+T: Your Turn To Win 0 g
+G,2B,2D2F2
+
+T: Your Turn To Win 0 c7
+C,2E,2G,2_B,2
+
+T: Your Turn To Win 1
+|"Cmaj7" CDE CDE CD | ECD ECD EC
+CODE: set_thread 0, your_turn_to_win_0_e
+| "Em" G8 | z8 | 
+CODE: set_thread 0, your_turn_to_win_0_c
+|"Cmaj7" CDE CDE CD | ECD ECD EC
+CODE: set_thread 0, your_turn_to_win_0_e
+| "Em" B3 G4 z |
+CODE: set_thread 0, your_turn_to_win_0_c7
+z8
+CODE: set_thread 0, your_turn_to_win_0_f
+CODE: set_thread 3, your_turn_to_win_3b
+|"F" c3 A3 c2 
+CODE: set_thread 0, your_turn_to_win_0_e
+| "Em" B3 G3 z2 
+CODE: set_thread 0, your_turn_to_win_0_d
+| "Dm7" A3 
+CODE: set_thread 0, your_turn_to_win_0_g
+"G7" F2 GA z 
+CODE: set_thread 0, your_turn_to_win_0_c7
+| "C" G8 | 
+CODE: set_thread 0, your_turn_to_win_0_f
+|"F" c3 B3 A2 
+CODE: set_thread 0, your_turn_to_win_0_e
+| "Em" G3 F3 E2 
+CODE: set_thread 0, your_turn_to_win_0_d
+| "Dm7" D2 C"G7"B,z D
+CODE: set_thread 0, your_turn_to_win_0_c
+"C"C z | "C" z4 
+CODE: set_thread 0, your_turn_to_win_0_g
+"G" z4| 
+CODE: set_thread 0, your_turn_to_win_0_c
+CODE: set_thread 3, your_turn_to_win_3

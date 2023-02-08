@@ -1,0 +1,1313 @@
+Grammar
+
+    0 $accept: top_block $end
+
+    1 top_block: nstatement
+    2          | top_block nstatement
+
+    3 code_block: nstatement
+    4           | code_block nstatement
+
+    5 nstatement: declaration
+    6           | asm_block
+    7           | if_block
+    8           | jump_statement
+    9           | arith_statement
+   10           | END
+   11           | COMMENT
+
+   12 declaration: array_decl
+   13            | label_decl
+
+   14 array_decl: VAR IDENTIFIER
+   15           | ARRAY IDENTIFIER CONSTANT
+   16           | ARRAY ZEROPAGE IDENTIFIER CONSTANT
+   17           | ARRAY ABSOLUTE CONSTANT IDENTIFIER CONSTANT
+
+   18 label_decl: LABEL ':'
+
+   19 asm_block: ASM ENDASM
+   20          | ASM asm_lines ENDASM
+
+   21 asm_lines: ASMCHAR
+   22          | asm_lines ASMCHAR
+
+   23 if_block: IF rel_exp THEN code_block ENDIF
+   24         | IF rel_exp nstatement
+
+   25 rel_exp: arith_exp rel_op arith_exp
+
+   26 arith_exp: var_exp
+   27          | const_exp
+
+   28 var_exp: lvalue
+   29        | arith_op var_exp var_exp
+   30        | arith_op var_exp const_exp
+   31        | arith_op const_exp var_exp
+
+   32 const_exp: CONSTANT
+   33          | arith_op const_exp const_exp
+
+   34 lvalue: REGISTER
+   35       | IDENTIFIER
+   36       | array_access
+
+   37 array_access: '[' const_exp ']'
+   38             | '[' const_exp arith_exp ']'
+   39             | '[' IDENTIFIER arith_exp ']'
+
+   40 arith_op: '+'
+   41         | '-'
+   42         | LSH
+   43         | RSH
+   44         | '&'
+   45         | '|'
+
+   46 rel_op: '='
+   47       | '<'
+   48       | '>'
+   49       | LEQ
+   50       | GEQ
+   51       | NEQ
+
+   52 jump_statement: goto_statement
+   53               | gosub_statement
+   54               | RETURN
+   55               | RESUME
+
+   56 goto_statement: GOTO CONSTANT
+   57               | GOTO IDENTIFIER
+
+   58 gosub_statement: GOSUB CONSTANT
+   59                | GOSUB IDENTIFIER
+
+   60 arith_statement: SET addr_exp arith_exp
+   61                | INC addr_exp
+   62                | DEC addr_exp
+   63                | PUSH addr_exp
+   64                | POP addr_exp
+
+   65 addr_exp: lvalue
+   66         | const_exp
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'&' (38) 44
+'+' (43) 40
+'-' (45) 41
+':' (58) 18
+'<' (60) 47
+'=' (61) 46
+'>' (62) 48
+'[' (91) 37 38 39
+']' (93) 37 38 39
+'|' (124) 45
+error (256)
+ABSOLUTE (258) 17
+END (259) 10
+COMMENT (260) 11
+LSH (261) 42
+RSH (262) 43
+LEQ (263) 49
+GEQ (264) 50
+NEQ (265) 51
+ASM (266) 19 20
+ENDASM (267) 19 20
+IF (268) 23 24
+THEN (269) 23
+ENDIF (270) 23
+SET (271) 60
+INC (272) 61
+DEC (273) 62
+GOTO (274) 56 57
+GOSUB (275) 58 59
+RESUME (276) 55
+RETURN (277) 54
+ARRAY (278) 15 16 17
+VAR (279) 14
+ZEROPAGE (280) 16
+PUSH (281) 63
+POP (282) 64
+LABEL (283) 18
+REGISTER (284) 34
+IDENTIFIER (285) 14 15 16 17 35 39 57 59
+CONSTANT (286) 15 16 17 32 56 58
+ASMCHAR (287) 21 22
+
+
+Nonterminals, with rules where they appear
+
+$accept (43)
+    on left: 0
+top_block (44)
+    on left: 1 2, on right: 0 2
+code_block (45)
+    on left: 3 4, on right: 4 23
+nstatement (46)
+    on left: 5 6 7 8 9 10 11, on right: 1 2 3 4 24
+declaration (47)
+    on left: 12 13, on right: 5
+array_decl (48)
+    on left: 14 15 16 17, on right: 12
+label_decl (49)
+    on left: 18, on right: 13
+asm_block (50)
+    on left: 19 20, on right: 6
+asm_lines (51)
+    on left: 21 22, on right: 20 22
+if_block (52)
+    on left: 23 24, on right: 7
+rel_exp (53)
+    on left: 25, on right: 23 24
+arith_exp (54)
+    on left: 26 27, on right: 25 38 39 60
+var_exp (55)
+    on left: 28 29 30 31, on right: 26 29 30 31
+const_exp (56)
+    on left: 32 33, on right: 27 30 31 33 37 38 66
+lvalue (57)
+    on left: 34 35 36, on right: 28 65
+array_access (58)
+    on left: 37 38 39, on right: 36
+arith_op (59)
+    on left: 40 41 42 43 44 45, on right: 29 30 31 33
+rel_op (60)
+    on left: 46 47 48 49 50 51, on right: 25
+jump_statement (61)
+    on left: 52 53 54 55, on right: 8
+goto_statement (62)
+    on left: 56 57, on right: 52
+gosub_statement (63)
+    on left: 58 59, on right: 53
+arith_statement (64)
+    on left: 60 61 62 63 64, on right: 9
+addr_exp (65)
+    on left: 65 66, on right: 60 61 62 63 64
+
+
+state 0
+
+    0 $accept: . top_block $end
+
+    END      shift, and go to state 1
+    COMMENT  shift, and go to state 2
+    ASM      shift, and go to state 3
+    IF       shift, and go to state 4
+    SET      shift, and go to state 5
+    INC      shift, and go to state 6
+    DEC      shift, and go to state 7
+    GOTO     shift, and go to state 8
+    GOSUB    shift, and go to state 9
+    RESUME   shift, and go to state 10
+    RETURN   shift, and go to state 11
+    ARRAY    shift, and go to state 12
+    VAR      shift, and go to state 13
+    PUSH     shift, and go to state 14
+    POP      shift, and go to state 15
+    LABEL    shift, and go to state 16
+
+    top_block        go to state 17
+    nstatement       go to state 18
+    declaration      go to state 19
+    array_decl       go to state 20
+    label_decl       go to state 21
+    asm_block        go to state 22
+    if_block         go to state 23
+    jump_statement   go to state 24
+    goto_statement   go to state 25
+    gosub_statement  go to state 26
+    arith_statement  go to state 27
+
+
+state 1
+
+   10 nstatement: END .
+
+    $default  reduce using rule 10 (nstatement)
+
+
+state 2
+
+   11 nstatement: COMMENT .
+
+    $default  reduce using rule 11 (nstatement)
+
+
+state 3
+
+   19 asm_block: ASM . ENDASM
+   20          | ASM . asm_lines ENDASM
+
+    ENDASM   shift, and go to state 28
+    ASMCHAR  shift, and go to state 29
+
+    asm_lines  go to state 30
+
+
+state 4
+
+   23 if_block: IF . rel_exp THEN code_block ENDIF
+   24         | IF . rel_exp nstatement
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    rel_exp       go to state 41
+    arith_exp     go to state 42
+    var_exp       go to state 43
+    const_exp     go to state 44
+    lvalue        go to state 45
+    array_access  go to state 46
+    arith_op      go to state 47
+
+
+state 5
+
+   60 arith_statement: SET . addr_exp arith_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    const_exp     go to state 48
+    lvalue        go to state 49
+    array_access  go to state 46
+    arith_op      go to state 50
+    addr_exp      go to state 51
+
+
+state 6
+
+   61 arith_statement: INC . addr_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    const_exp     go to state 48
+    lvalue        go to state 49
+    array_access  go to state 46
+    arith_op      go to state 50
+    addr_exp      go to state 52
+
+
+state 7
+
+   62 arith_statement: DEC . addr_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    const_exp     go to state 48
+    lvalue        go to state 49
+    array_access  go to state 46
+    arith_op      go to state 50
+    addr_exp      go to state 53
+
+
+state 8
+
+   56 goto_statement: GOTO . CONSTANT
+   57               | GOTO . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 54
+    CONSTANT    shift, and go to state 55
+
+
+state 9
+
+   58 gosub_statement: GOSUB . CONSTANT
+   59                | GOSUB . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 56
+    CONSTANT    shift, and go to state 57
+
+
+state 10
+
+   55 jump_statement: RESUME .
+
+    $default  reduce using rule 55 (jump_statement)
+
+
+state 11
+
+   54 jump_statement: RETURN .
+
+    $default  reduce using rule 54 (jump_statement)
+
+
+state 12
+
+   15 array_decl: ARRAY . IDENTIFIER CONSTANT
+   16           | ARRAY . ZEROPAGE IDENTIFIER CONSTANT
+   17           | ARRAY . ABSOLUTE CONSTANT IDENTIFIER CONSTANT
+
+    ABSOLUTE    shift, and go to state 58
+    ZEROPAGE    shift, and go to state 59
+    IDENTIFIER  shift, and go to state 60
+
+
+state 13
+
+   14 array_decl: VAR . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 61
+
+
+state 14
+
+   63 arith_statement: PUSH . addr_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    const_exp     go to state 48
+    lvalue        go to state 49
+    array_access  go to state 46
+    arith_op      go to state 50
+    addr_exp      go to state 62
+
+
+state 15
+
+   64 arith_statement: POP . addr_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    const_exp     go to state 48
+    lvalue        go to state 49
+    array_access  go to state 46
+    arith_op      go to state 50
+    addr_exp      go to state 63
+
+
+state 16
+
+   18 label_decl: LABEL . ':'
+
+    ':'  shift, and go to state 64
+
+
+state 17
+
+    0 $accept: top_block . $end
+    2 top_block: top_block . nstatement
+
+    $end     shift, and go to state 65
+    END      shift, and go to state 1
+    COMMENT  shift, and go to state 2
+    ASM      shift, and go to state 3
+    IF       shift, and go to state 4
+    SET      shift, and go to state 5
+    INC      shift, and go to state 6
+    DEC      shift, and go to state 7
+    GOTO     shift, and go to state 8
+    GOSUB    shift, and go to state 9
+    RESUME   shift, and go to state 10
+    RETURN   shift, and go to state 11
+    ARRAY    shift, and go to state 12
+    VAR      shift, and go to state 13
+    PUSH     shift, and go to state 14
+    POP      shift, and go to state 15
+    LABEL    shift, and go to state 16
+
+    nstatement       go to state 66
+    declaration      go to state 19
+    array_decl       go to state 20
+    label_decl       go to state 21
+    asm_block        go to state 22
+    if_block         go to state 23
+    jump_statement   go to state 24
+    goto_statement   go to state 25
+    gosub_statement  go to state 26
+    arith_statement  go to state 27
+
+
+state 18
+
+    1 top_block: nstatement .
+
+    $default  reduce using rule 1 (top_block)
+
+
+state 19
+
+    5 nstatement: declaration .
+
+    $default  reduce using rule 5 (nstatement)
+
+
+state 20
+
+   12 declaration: array_decl .
+
+    $default  reduce using rule 12 (declaration)
+
+
+state 21
+
+   13 declaration: label_decl .
+
+    $default  reduce using rule 13 (declaration)
+
+
+state 22
+
+    6 nstatement: asm_block .
+
+    $default  reduce using rule 6 (nstatement)
+
+
+state 23
+
+    7 nstatement: if_block .
+
+    $default  reduce using rule 7 (nstatement)
+
+
+state 24
+
+    8 nstatement: jump_statement .
+
+    $default  reduce using rule 8 (nstatement)
+
+
+state 25
+
+   52 jump_statement: goto_statement .
+
+    $default  reduce using rule 52 (jump_statement)
+
+
+state 26
+
+   53 jump_statement: gosub_statement .
+
+    $default  reduce using rule 53 (jump_statement)
+
+
+state 27
+
+    9 nstatement: arith_statement .
+
+    $default  reduce using rule 9 (nstatement)
+
+
+state 28
+
+   19 asm_block: ASM ENDASM .
+
+    $default  reduce using rule 19 (asm_block)
+
+
+state 29
+
+   21 asm_lines: ASMCHAR .
+
+    $default  reduce using rule 21 (asm_lines)
+
+
+state 30
+
+   20 asm_block: ASM asm_lines . ENDASM
+   22 asm_lines: asm_lines . ASMCHAR
+
+    ENDASM   shift, and go to state 67
+    ASMCHAR  shift, and go to state 68
+
+
+state 31
+
+   42 arith_op: LSH .
+
+    $default  reduce using rule 42 (arith_op)
+
+
+state 32
+
+   43 arith_op: RSH .
+
+    $default  reduce using rule 43 (arith_op)
+
+
+state 33
+
+   34 lvalue: REGISTER .
+
+    $default  reduce using rule 34 (lvalue)
+
+
+state 34
+
+   35 lvalue: IDENTIFIER .
+
+    $default  reduce using rule 35 (lvalue)
+
+
+state 35
+
+   32 const_exp: CONSTANT .
+
+    $default  reduce using rule 32 (const_exp)
+
+
+state 36
+
+   37 array_access: '[' . const_exp ']'
+   38             | '[' . const_exp arith_exp ']'
+   39             | '[' . IDENTIFIER arith_exp ']'
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    IDENTIFIER  shift, and go to state 69
+    CONSTANT    shift, and go to state 35
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    const_exp  go to state 70
+    arith_op   go to state 50
+
+
+state 37
+
+   40 arith_op: '+' .
+
+    $default  reduce using rule 40 (arith_op)
+
+
+state 38
+
+   41 arith_op: '-' .
+
+    $default  reduce using rule 41 (arith_op)
+
+
+state 39
+
+   44 arith_op: '&' .
+
+    $default  reduce using rule 44 (arith_op)
+
+
+state 40
+
+   45 arith_op: '|' .
+
+    $default  reduce using rule 45 (arith_op)
+
+
+state 41
+
+   23 if_block: IF rel_exp . THEN code_block ENDIF
+   24         | IF rel_exp . nstatement
+
+    END      shift, and go to state 1
+    COMMENT  shift, and go to state 2
+    ASM      shift, and go to state 3
+    IF       shift, and go to state 4
+    THEN     shift, and go to state 71
+    SET      shift, and go to state 5
+    INC      shift, and go to state 6
+    DEC      shift, and go to state 7
+    GOTO     shift, and go to state 8
+    GOSUB    shift, and go to state 9
+    RESUME   shift, and go to state 10
+    RETURN   shift, and go to state 11
+    ARRAY    shift, and go to state 12
+    VAR      shift, and go to state 13
+    PUSH     shift, and go to state 14
+    POP      shift, and go to state 15
+    LABEL    shift, and go to state 16
+
+    nstatement       go to state 72
+    declaration      go to state 19
+    array_decl       go to state 20
+    label_decl       go to state 21
+    asm_block        go to state 22
+    if_block         go to state 23
+    jump_statement   go to state 24
+    goto_statement   go to state 25
+    gosub_statement  go to state 26
+    arith_statement  go to state 27
+
+
+state 42
+
+   25 rel_exp: arith_exp . rel_op arith_exp
+
+    LEQ  shift, and go to state 73
+    GEQ  shift, and go to state 74
+    NEQ  shift, and go to state 75
+    '='  shift, and go to state 76
+    '<'  shift, and go to state 77
+    '>'  shift, and go to state 78
+
+    rel_op  go to state 79
+
+
+state 43
+
+   26 arith_exp: var_exp .
+
+    $default  reduce using rule 26 (arith_exp)
+
+
+state 44
+
+   27 arith_exp: const_exp .
+
+    $default  reduce using rule 27 (arith_exp)
+
+
+state 45
+
+   28 var_exp: lvalue .
+
+    $default  reduce using rule 28 (var_exp)
+
+
+state 46
+
+   36 lvalue: array_access .
+
+    $default  reduce using rule 36 (lvalue)
+
+
+state 47
+
+   29 var_exp: arith_op . var_exp var_exp
+   30        | arith_op . var_exp const_exp
+   31        | arith_op . const_exp var_exp
+   33 const_exp: arith_op . const_exp const_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    var_exp       go to state 80
+    const_exp     go to state 81
+    lvalue        go to state 45
+    array_access  go to state 46
+    arith_op      go to state 47
+
+
+state 48
+
+   66 addr_exp: const_exp .
+
+    $default  reduce using rule 66 (addr_exp)
+
+
+state 49
+
+   65 addr_exp: lvalue .
+
+    $default  reduce using rule 65 (addr_exp)
+
+
+state 50
+
+   33 const_exp: arith_op . const_exp const_exp
+
+    LSH       shift, and go to state 31
+    RSH       shift, and go to state 32
+    CONSTANT  shift, and go to state 35
+    '+'       shift, and go to state 37
+    '-'       shift, and go to state 38
+    '&'       shift, and go to state 39
+    '|'       shift, and go to state 40
+
+    const_exp  go to state 82
+    arith_op   go to state 50
+
+
+state 51
+
+   60 arith_statement: SET addr_exp . arith_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    arith_exp     go to state 83
+    var_exp       go to state 43
+    const_exp     go to state 44
+    lvalue        go to state 45
+    array_access  go to state 46
+    arith_op      go to state 47
+
+
+state 52
+
+   61 arith_statement: INC addr_exp .
+
+    $default  reduce using rule 61 (arith_statement)
+
+
+state 53
+
+   62 arith_statement: DEC addr_exp .
+
+    $default  reduce using rule 62 (arith_statement)
+
+
+state 54
+
+   57 goto_statement: GOTO IDENTIFIER .
+
+    $default  reduce using rule 57 (goto_statement)
+
+
+state 55
+
+   56 goto_statement: GOTO CONSTANT .
+
+    $default  reduce using rule 56 (goto_statement)
+
+
+state 56
+
+   59 gosub_statement: GOSUB IDENTIFIER .
+
+    $default  reduce using rule 59 (gosub_statement)
+
+
+state 57
+
+   58 gosub_statement: GOSUB CONSTANT .
+
+    $default  reduce using rule 58 (gosub_statement)
+
+
+state 58
+
+   17 array_decl: ARRAY ABSOLUTE . CONSTANT IDENTIFIER CONSTANT
+
+    CONSTANT  shift, and go to state 84
+
+
+state 59
+
+   16 array_decl: ARRAY ZEROPAGE . IDENTIFIER CONSTANT
+
+    IDENTIFIER  shift, and go to state 85
+
+
+state 60
+
+   15 array_decl: ARRAY IDENTIFIER . CONSTANT
+
+    CONSTANT  shift, and go to state 86
+
+
+state 61
+
+   14 array_decl: VAR IDENTIFIER .
+
+    $default  reduce using rule 14 (array_decl)
+
+
+state 62
+
+   63 arith_statement: PUSH addr_exp .
+
+    $default  reduce using rule 63 (arith_statement)
+
+
+state 63
+
+   64 arith_statement: POP addr_exp .
+
+    $default  reduce using rule 64 (arith_statement)
+
+
+state 64
+
+   18 label_decl: LABEL ':' .
+
+    $default  reduce using rule 18 (label_decl)
+
+
+state 65
+
+    0 $accept: top_block $end .
+
+    $default  accept
+
+
+state 66
+
+    2 top_block: top_block nstatement .
+
+    $default  reduce using rule 2 (top_block)
+
+
+state 67
+
+   20 asm_block: ASM asm_lines ENDASM .
+
+    $default  reduce using rule 20 (asm_block)
+
+
+state 68
+
+   22 asm_lines: asm_lines ASMCHAR .
+
+    $default  reduce using rule 22 (asm_lines)
+
+
+state 69
+
+   39 array_access: '[' IDENTIFIER . arith_exp ']'
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    arith_exp     go to state 87
+    var_exp       go to state 43
+    const_exp     go to state 44
+    lvalue        go to state 45
+    array_access  go to state 46
+    arith_op      go to state 47
+
+
+state 70
+
+   37 array_access: '[' const_exp . ']'
+   38             | '[' const_exp . arith_exp ']'
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    ']'         shift, and go to state 88
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    arith_exp     go to state 89
+    var_exp       go to state 43
+    const_exp     go to state 44
+    lvalue        go to state 45
+    array_access  go to state 46
+    arith_op      go to state 47
+
+
+state 71
+
+   23 if_block: IF rel_exp THEN . code_block ENDIF
+
+    END      shift, and go to state 1
+    COMMENT  shift, and go to state 2
+    ASM      shift, and go to state 3
+    IF       shift, and go to state 4
+    SET      shift, and go to state 5
+    INC      shift, and go to state 6
+    DEC      shift, and go to state 7
+    GOTO     shift, and go to state 8
+    GOSUB    shift, and go to state 9
+    RESUME   shift, and go to state 10
+    RETURN   shift, and go to state 11
+    ARRAY    shift, and go to state 12
+    VAR      shift, and go to state 13
+    PUSH     shift, and go to state 14
+    POP      shift, and go to state 15
+    LABEL    shift, and go to state 16
+
+    code_block       go to state 90
+    nstatement       go to state 91
+    declaration      go to state 19
+    array_decl       go to state 20
+    label_decl       go to state 21
+    asm_block        go to state 22
+    if_block         go to state 23
+    jump_statement   go to state 24
+    goto_statement   go to state 25
+    gosub_statement  go to state 26
+    arith_statement  go to state 27
+
+
+state 72
+
+   24 if_block: IF rel_exp nstatement .
+
+    $default  reduce using rule 24 (if_block)
+
+
+state 73
+
+   49 rel_op: LEQ .
+
+    $default  reduce using rule 49 (rel_op)
+
+
+state 74
+
+   50 rel_op: GEQ .
+
+    $default  reduce using rule 50 (rel_op)
+
+
+state 75
+
+   51 rel_op: NEQ .
+
+    $default  reduce using rule 51 (rel_op)
+
+
+state 76
+
+   46 rel_op: '=' .
+
+    $default  reduce using rule 46 (rel_op)
+
+
+state 77
+
+   47 rel_op: '<' .
+
+    $default  reduce using rule 47 (rel_op)
+
+
+state 78
+
+   48 rel_op: '>' .
+
+    $default  reduce using rule 48 (rel_op)
+
+
+state 79
+
+   25 rel_exp: arith_exp rel_op . arith_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    arith_exp     go to state 92
+    var_exp       go to state 43
+    const_exp     go to state 44
+    lvalue        go to state 45
+    array_access  go to state 46
+    arith_op      go to state 47
+
+
+state 80
+
+   29 var_exp: arith_op var_exp . var_exp
+   30        | arith_op var_exp . const_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    var_exp       go to state 93
+    const_exp     go to state 94
+    lvalue        go to state 45
+    array_access  go to state 46
+    arith_op      go to state 47
+
+
+state 81
+
+   31 var_exp: arith_op const_exp . var_exp
+   33 const_exp: arith_op const_exp . const_exp
+
+    LSH         shift, and go to state 31
+    RSH         shift, and go to state 32
+    REGISTER    shift, and go to state 33
+    IDENTIFIER  shift, and go to state 34
+    CONSTANT    shift, and go to state 35
+    '['         shift, and go to state 36
+    '+'         shift, and go to state 37
+    '-'         shift, and go to state 38
+    '&'         shift, and go to state 39
+    '|'         shift, and go to state 40
+
+    var_exp       go to state 95
+    const_exp     go to state 96
+    lvalue        go to state 45
+    array_access  go to state 46
+    arith_op      go to state 47
+
+
+state 82
+
+   33 const_exp: arith_op const_exp . const_exp
+
+    LSH       shift, and go to state 31
+    RSH       shift, and go to state 32
+    CONSTANT  shift, and go to state 35
+    '+'       shift, and go to state 37
+    '-'       shift, and go to state 38
+    '&'       shift, and go to state 39
+    '|'       shift, and go to state 40
+
+    const_exp  go to state 96
+    arith_op   go to state 50
+
+
+state 83
+
+   60 arith_statement: SET addr_exp arith_exp .
+
+    $default  reduce using rule 60 (arith_statement)
+
+
+state 84
+
+   17 array_decl: ARRAY ABSOLUTE CONSTANT . IDENTIFIER CONSTANT
+
+    IDENTIFIER  shift, and go to state 97
+
+
+state 85
+
+   16 array_decl: ARRAY ZEROPAGE IDENTIFIER . CONSTANT
+
+    CONSTANT  shift, and go to state 98
+
+
+state 86
+
+   15 array_decl: ARRAY IDENTIFIER CONSTANT .
+
+    $default  reduce using rule 15 (array_decl)
+
+
+state 87
+
+   39 array_access: '[' IDENTIFIER arith_exp . ']'
+
+    ']'  shift, and go to state 99
+
+
+state 88
+
+   37 array_access: '[' const_exp ']' .
+
+    $default  reduce using rule 37 (array_access)
+
+
+state 89
+
+   38 array_access: '[' const_exp arith_exp . ']'
+
+    ']'  shift, and go to state 100
+
+
+state 90
+
+    4 code_block: code_block . nstatement
+   23 if_block: IF rel_exp THEN code_block . ENDIF
+
+    END      shift, and go to state 1
+    COMMENT  shift, and go to state 2
+    ASM      shift, and go to state 3
+    IF       shift, and go to state 4
+    ENDIF    shift, and go to state 101
+    SET      shift, and go to state 5
+    INC      shift, and go to state 6
+    DEC      shift, and go to state 7
+    GOTO     shift, and go to state 8
+    GOSUB    shift, and go to state 9
+    RESUME   shift, and go to state 10
+    RETURN   shift, and go to state 11
+    ARRAY    shift, and go to state 12
+    VAR      shift, and go to state 13
+    PUSH     shift, and go to state 14
+    POP      shift, and go to state 15
+    LABEL    shift, and go to state 16
+
+    nstatement       go to state 102
+    declaration      go to state 19
+    array_decl       go to state 20
+    label_decl       go to state 21
+    asm_block        go to state 22
+    if_block         go to state 23
+    jump_statement   go to state 24
+    goto_statement   go to state 25
+    gosub_statement  go to state 26
+    arith_statement  go to state 27
+
+
+state 91
+
+    3 code_block: nstatement .
+
+    $default  reduce using rule 3 (code_block)
+
+
+state 92
+
+   25 rel_exp: arith_exp rel_op arith_exp .
+
+    $default  reduce using rule 25 (rel_exp)
+
+
+state 93
+
+   29 var_exp: arith_op var_exp var_exp .
+
+    $default  reduce using rule 29 (var_exp)
+
+
+state 94
+
+   30 var_exp: arith_op var_exp const_exp .
+
+    $default  reduce using rule 30 (var_exp)
+
+
+state 95
+
+   31 var_exp: arith_op const_exp var_exp .
+
+    $default  reduce using rule 31 (var_exp)
+
+
+state 96
+
+   33 const_exp: arith_op const_exp const_exp .
+
+    $default  reduce using rule 33 (const_exp)
+
+
+state 97
+
+   17 array_decl: ARRAY ABSOLUTE CONSTANT IDENTIFIER . CONSTANT
+
+    CONSTANT  shift, and go to state 103
+
+
+state 98
+
+   16 array_decl: ARRAY ZEROPAGE IDENTIFIER CONSTANT .
+
+    $default  reduce using rule 16 (array_decl)
+
+
+state 99
+
+   39 array_access: '[' IDENTIFIER arith_exp ']' .
+
+    $default  reduce using rule 39 (array_access)
+
+
+state 100
+
+   38 array_access: '[' const_exp arith_exp ']' .
+
+    $default  reduce using rule 38 (array_access)
+
+
+state 101
+
+   23 if_block: IF rel_exp THEN code_block ENDIF .
+
+    $default  reduce using rule 23 (if_block)
+
+
+state 102
+
+    4 code_block: code_block nstatement .
+
+    $default  reduce using rule 4 (code_block)
+
+
+state 103
+
+   17 array_decl: ARRAY ABSOLUTE CONSTANT IDENTIFIER CONSTANT .
+
+    $default  reduce using rule 17 (array_decl)

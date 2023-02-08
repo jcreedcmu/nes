@@ -1,0 +1,68 @@
+Source: fceu
+Section: contrib/games
+Priority: optional
+Maintainer: Joe Nahmias <jello@debian.org>
+Build-Depends: debhelper (>> 4.0.0), zlib1g-dev | libz-dev, svgalibg1-dev [i386], libsdl1.2-dev | libsdl-dev, xlibmesa-gl-dev | libgl-dev
+Standards-Version: 3.6.1
+
+Package: fceu-sdl
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: fceu-doc
+Description: SDL version of FCE Ultra - a nintendo (8-bit) emulator
+ FCE Ultra is an emulator of the original (8-bit) Nintendo Entertainment
+ System (NES) released under the GNU General Public License (GPL).  It
+ includes the following features (and many more):
+       * fully customizable color palette rendering engine
+       * complete sound emulation (all five channels)
+       * support for up to four joystick controllers
+       * zapper emulation for the mouse
+       * GameGenie emulation
+       * accepts compressed (PKZIP, gzip) ROM images
+       * TCP/IP network play
+ .
+ The project's homepage is at: http://fceultra.sourceforge.net/
+ .
+ This package contains the SDL version of the emulator.
+ There is also an SVGALIB version (i386 only) of the emulator in 'fceu-svga'.
+ Also recommended is the documentation available in 'fceu-doc'.
+
+Package: fceu-svga
+Architecture: i386
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: fceu-doc
+Description: Linux SVGALIB version of FCE Ultra - a nintendo (8-bit) emulator
+ FCE Ultra is an emulator of the original (8-bit) Nintendo Entertainment
+ System (NES) released under the GNU General Public License (GPL).  It
+ includes the following features (and many more):
+       * fully customizable color palette rendering engine
+       * complete sound emulation (all five channels)
+       * support for up to four joystick controllers
+       * zapper emulation for the mouse
+       * GameGenie emulation
+       * accepts compressed (PKZIP, gzip) ROM images
+       * TCP/IP network play
+ .
+ The project's homepage is at: http://fceultra.sourceforge.net/
+ .
+ This package contains the SVGALIB version of the emulator.
+ There is also an SDL version of the emulator in 'fceu-sdl'.
+ Also recomended is the documentation available in 'fceu-doc'.
+
+Package: fceu-doc
+Architecture: all
+Recommends: fceu-sdl | fceu-svga
+Description: Documentation for FCE Ultra - a nintendo (8-bit) emulator
+ FCE Ultra is an emulator of the original (8-bit) Nintendo Entertainment
+ System (NES) released under the GNU General Public License (GPL).  It
+ includes the following features (and many more):
+       * fully customizable color palette rendering engine
+       * complete sound emulation (all five channels)
+       * support for up to four joystick controllers
+       * zapper emulation for the mouse
+       * GameGenie emulation
+       * accepts compressed (PKZIP, gzip) ROM images
+       * TCP/IP network play
+ .
+ The project's homepage is at: http://fceultra.sourceforge.net/
+ The emulator is available as 'fceu-sdl' or 'fceu-svga' (i386 only).

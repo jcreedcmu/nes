@@ -1,0 +1,10 @@
+Document: fceu
+Title: FCE Ultra Manual
+Author: Ben Parnell <xodnizel@users.sourceforge.net>
+Abstract: This manual describes all the supported features of
+ FCE Ultra including all of the command-line switches.
+Section: games
+
+Format: HTML
+Index: /usr/share/doc/fceu-doc/fceultra.html
+Files: /usr/share/doc/fceu-doc/*.html

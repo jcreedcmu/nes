@@ -1,0 +1,343 @@
+Practical NES Programming With nbasic
+by Bob Rost (rrost+nes@andrew.cmu.edu)
+
+About This Document:
+While working with the rest of my development team to create "Sack of Flour, Heart of Gold", I quickly became aware that the state of NES documentation is absolutely terrible. Various documents exist, but they seem to enjoy conflicting with each other in their often poorly-written English. And in many cases, the important points are only mentioned as a passing reference buried deep within an unreadable paragraph of a single obscure document. This document highlights a radical new approach to NES development, to allow aspiring developers to have a single source that will provide them with enough information to create a high-quality NES game or demo, and to allow current developers to create their games and demos with greater ease.
+
+This document illustrates the use of the language nbasic, which was created for the rapid development of the game "Sack of Flour, Heart of Gold". In all the documents and messageboards I read during development, any mention of a high level language was extremely negative. Arguments essentially stated that it's impossible to program anything decent for the NES with a high level language because assembly is the only thing efficient enough. This is, of course, not true. Given the right language, such as nbasic, high level programming is very efficient, and it is the only thing to feasibly allow development of a large project. The effectiveness of nbasic was immediately shown, as "Sack of Flour" is currently the most sophisticated and complete homebrew NES game by far. I look forward to the day when someone reading this will be able to create a game of the same caliber.
+
+What nbasic is:
+nbasic is a high-level programming language designed for the 6502 processor, the main CPU of the Nintendo Entertainment System. It has BASIC-like program flow, relying on goto, gosub, and return for most execution flow. It also has no dynamic memory allocation and no actual function parameter passing; rather, globally scoped variables and arrays take the place of these. This kind of language design allows for a very efficient implementation on a low-powered 8-bit CPU such as the NES's 6502.
+
+What nbasic is not:
+nbasic is not a clone of GW-BASIC or QBasic. I received email from someone saying that he wrote a simple program:
+	10 PRINT "Hello"
+	20 GOTO 10
+and he couldn't for the life of him figure out why it wasn't working. Novice programmers relying on statements such as PRINT and INPUT are not the target audience for this language. Skilled programmers with some knowledge of assembly and the need for easier logic coding are the optimal target audience. Any NES programmers who have already written a demo and who wish to create a full game should find nbasic to be a blessing. For others, nbasic may provide a reasonable entry path to NES development.
+
+The nbasic Language Definition:
+Usage
+Arithmetic Expressions
+Arrays
+Comments
+Ending a Program
+For Loops
+If Statements
+Inline Assembly
+Jumps
+Labels
+Numbers
+Variables
+Known Bugs
+
+Usage:
+The nbasic compiler is a console application. Its usage has changed since the first version. current usage is made to somewhat resemble most common language compilers. It accepts input files written in nbasic, and, if the input file is valid, nbasic outputs a file containing 6502 assembly code, which can be run through nesasm to create an NES ROM. (nesasm is part of the MagicKit toolset, which can be found online). If no target filename is given, then nbasic defaults to "nbasic_output.asm". The parameter "-o" is used to specify a target name. Note that nbasic can accept more than one input file on the command line. I encourage splitting code among several files like this, as it will allow you to separate code into logical pieces, as well as easily reuse some large portions of code in various games. A typical nbasic compile, to create a ROM called game.nes, might look like this:
+	nbasic header.bas main.bas footer.bas -o game.asm
+	nesasm game.asm
+
+Arithmetic Expressions:
+Arithmetic expressions in nbasic use prefix notation, which implies a non-ambiguous order of operations. The supported operations are addition (+), subtraction (-), shift left (<<), shift right (>>) and bitwise and (&). Other related expressions are variable assignment (set), variable increment (inc), and variable decrement (dec). Here are some example arithmetic expressions. (See the section on numbers for an explanation of notation).
+	set i & $3e %100
+	set i + 3 >> j 1
+	set $2000 %00000011
+	inc i
+	dec $2010
+The first expression will calculate the bitwise-and of the hexadecimal number 3E and the binary number 111, and store the result into the variable i. Note that in this case, because both of the terms involved are numbers, the compiler will actually calculate the expression's value (4) at compile time.
+
+The second expression will load i with the value of (3 + (2*j)). The third expression will store the number 3 into memory location $2000. The fourth expression will increment the value of variable i, and the fifth expression will decrement the value in memory location $2010. Note that, as in the case of the third expression, setting a constant will assume that the constant is a memory location. Also note that expressions may only be bit-shifted by constant amounts.
+
+Arrays:
+An array can be declared at any point in the code, in order to statically allocate memory. It is recommended, however, that you declare arrays at the beginning of the source files where they are most relevant, to improve readability. Array declaration requires the keyword "array", followed by the array's name and size. 6502 addressing limits array indexing to 256 bytes, so you will be unable to declare and use a single array larger than that size. In some cases, you may need an array to reside in the zero-page (first 256 bytes) memory region. This can be specified with the additional keyword "zeropage" after the "array" keyword. If you require an array to reside at a specific memory location, you may declare it as "absolute" and provide the memory location in the declaration.
+	array myarray 10 //allocates 10 bytes for variable "myarray"
+	array zeropage myarray2 10 //allocates 10 bytes in the zero-page
+	array absolute $8000 datastart 0
+The first two declarations above declare an array in memory, and one specifically in the zero page. The third declaration will allow you to refer to a specific memory location by a name, but the compiler won't actually try to reserve memory, since the given size in this case is 0. When writing to and reading from arrays, use the open and close brackets, as shown below. Array indexing begins at 0 and may go as high as 255. There is no bounds checking
+	set i + [ myarray 2 ] 4 //gives the variable i the value of 4 plus the current value of myarray's 3rd index
+	set [ myarray 0 ] i
+	set i [$2002] //reads a byte from memory location $2002, and stores it in i
+Note that the NES has its call stack located at memory location $100, with a size of 256 bytes. Since accidentally writing over this memory in your program will most likely break something, the nbasic compiler automatically reserves this area of memory. If, for some reason, you need access to the stack's contents, you may access the stack array using the name "nbasic_stack", or you may use inline assembly to manipulate it. In general, messing with the stack is highly discouraged.
+
+Further note that, in most cases, array accesses will alter the contents of the X register. Beware of this, if you are using the X register and arrays in the same statement or function.
+
+Comments:
+Comments are created by using any of several common comment conventions. Comments begin with a double forward slash, a hash mark, or a semicolon. A comment may begin at any location in a line, and the rest of the line is ignored by the compiler.
+	// this is a C++-style comment
+	# this is a shell-style comment
+	; this is a nesasm-style comment (for inline assembly)
+	;// this nesasm-style comment shows up colored in my C++ editor
+
+Ending a Program:
+At any point in your program's source code, you may use the keyword "end" to stop compilation at that point. This allows you to have any amount of test code and unfinished functions without breaking compilation, since anything after the "end" will be ignored. Note that this keyword is entirely optional, and your program will stop compilation at end of file if it is not present.
+
+Loops:
+Loops currently are not supported natively by the compiler, but you can create them manually. An example "for" loop is shown below.
+	set i 0
+	looplabel:
+	//do something here
+	inc i
+	if i <> 10 goto looplabel
+If you need a fast loop, you may wish to use the "branchto" keyword, instead of "goto". The branchto keyword is only valid as the result of an if statement, and it creates code as fast as hand-optimized assembly. Any other statement, including "goto", is treated as a generalized conditional result and will not be as fast. For the fastest loop execution, you may wish to use the X or Y register as your looping index, rather than a variable.
+	set y 0 //using the Y register is faster than a variable
+	fastloop:
+	//do something here
+	inc y
+	if y <> 32 branchto fastloop
+
+If Statements:
+The if statement is very important for creating code that does anything useful. Available comparisons are equal (=), less than (<), greater than (>), less or equal (<=), greater or equal (>=), and not equal (<>). The standard if statement will execute the statement following it when the comparison is true. Multiple statements may be executed by using the block if, which is begun with the keyword "then", and ended with the keyword "endif".
+	if numlives > 0
+		gosub dostuff1 //this only gets called when numlives>0
+		gosub dostuff2 //this is always called
+	if health = 3 then
+		gosub dostuff1 //this only gets called when health=3
+		gosub dostuff2 //this is also only called when health=3
+		endif
+
+Inline Assembly:
+Inline assembly is vital for functionality that is not provided by nbasic, such as nesasm directives. An assembly block is started with the keyword "asm" on its own line, and ended by the keyword "endasm" on its own line. All the lines between will be copied to the output assembly listing exactly as they are, including spacing. Note that nesasm will require at least one space or tab before most instructions.
+	asm
+	lda #0 ;we must start comments with semicolon here, to make nesasm happy
+	;//I write comments like this, so they show up in my usual code editor
+	endasm
+
+Jumps:
+Jumps are used to replace function calls. BASIC programmers have long been known for writing spaghetti code, thanks to prolific usage of the "goto" statement. Such a coding style leads to horribly unreadable code and, in many cases, a slew of bugs. For this reason, I very strongly suggest that you follow these two simple rules for jumps:
+	1. Use the "goto" statement only for downward jumps within the same function, or for loops
+	2. Use "gosub" and "return" for all other jumps
+Of course, the term "function" isn't exactly well-defined in nbasic, but in general it should be fairly obvious. A block of code that is accessed by jumping to a common label can be considered to be a function.
+
+The dangerous "goto" statement will stop program execution at the current line and resume it at the indicated label. The "gosub" statement will similarly begin execution at another location, but it will keep track of your previous location in the code. Upon encountering a "return" statement, execution will resume at the location directly after the "gosub" jump. Become proficient at using "gosub" and "return". They are your friends.
+
+Labels:
+Labels are declared by beginning a line with a label name followed by a colon. This label may be used as the target for a goto or gosub command, or, if you're really ambitious, you can use it as the array name for static data.
+	mylabel: //this is a label
+
+Numbers:
+Numbers in nbasic may be expressed as decimal, hexadecimal, or binary. In most cases, except for memory locations, constants greater than 255 will be truncated to 8 bits (mod 256). The number 255 in decimal, hexadecimal, and binary would be written as 255, $ff, and %11111111.
+
+Variables:
+The first thing to note about variables is that you should not use A, X, or Y as general variable names. These are the names of the main 6502 registers, and they could cause bad things to happen if treated carelessly. However, in order to allow greater flexibility, nbasic does allow you to use these named registers in many useful situations.
+
+Arrays and general variables are treated as essentially the same. In fact, you can access memory elements after variables by treating them as arrays, but this is not recommended unless you're certain that you know what memory you are affecting. Similarly, the first element of an array can be accessed simply by using the array's name as a variable. Single-byte variables do not need to be declared. The first time that the compiler sees a new variable name in a "set" statement, it will automatically reserve 1 byte of memory for that variable.
+
+Note that, as stated above in the array section of this document, the memory region $100-$1FF is reserved by the NES's execution stack, under the name "nbasic_stack". Attempts to declare variables of non-zero size in this region will fail.
+
+
+Programming The NES
+The NES CPU
+CPU Memory Map
+INES Header
+Interrupt Vectors
+Joystick Polling
+MMC3 Memory Mapper
+PPU Memory Map
+The NES PPU
+Palettes
+Tiles and Pattern Tables
+Name Tables
+Attribute Tables
+Scrolling
+Sprites
+Sprite 0 Hit
+Vertical Blanking
+NES Sound
+Acknowledgements
+
+
+The NES CPU
+At the heart of the NES is a 2A03 processor, which is a modified MOS 6502 processor. It has 16-bit memory addressing, a variable length instruction set, and 8-bit processing capabilities. It runs at a blazing 1.79 MHz. Most of the arithmetic processing is handled by the accumulator register, A. The X and Y registers are used mostly for array addressing. More information on the 6502 and its instruction set can be found in the following two documents.
+http://nesdev.parodius.com/6502.txt
+http://nesdev.parodius.com/6502guid.txt
+
+CPU Memory Map
+The 16-bit addressable memory of the 6502 gives the programmer direct access to 64k of data, arranged as in the table below. In most cases, the programmer would only be concerned with the $8000-$FFFF range (program code and data), $0000-$07FF (generally-available RAM), and certain memory locations in the $2000-$4FFF range (hardware interrupts and polling).
+
+$C000 - $FFFF	Upper Bank of PRG ROM
+$8000 - $BFFF	Lower Bank of PRG ROM
+$6000 - $7FFF	Cartridge RAM (possibly battery-backed)
+$5000 - $5FFF	Expansion Modules
+$2000 - $4FFF	I/O
+$0000 - $1FFF	Internal RAM (2k, mirrored 4 times)
+
+INES Header:
+incomplete section
+
+Interrupt Vectors:
+incomplete section
+
+Joystick Polling:
+Polling the joystick, or reading the status of the controller buttons, is easy. Controller 1 is accessed through port $4016, and controller 2 through port $4017. To read the status of the controller, first strobe by writing a 1 and a 0 to the port. Then, successive reads from the port will give the status of each button in turn. The low bit will tell if the button is currently pressed. The buttons are read in the order A, B, Select, Start, Up, Down, Left, Right. The following code will read the status of the first controller, and set appropriate variables with the value 1 or 0, depending on whether each button is pressed or released at the time.
+	poll_joystick_1: //update joystick 1 button status
+		set $4016 1 //first strobe byte
+		set $4016 0 //second strobe byte
+		set joy1a		& [$4016] 1
+		set joy1b		& [$4016] 1
+		set joy1select	& [$4016] 1
+		set joy1start	& [$4016] 1
+		set joy1up		& [$4016] 1
+		set joy1down	& [$4016] 1
+		set joy1left	& [$4016] 1
+		set joy1right	& [$4016] 1
+		return
+
+MMC3 Memory Mapper:
+incomplete section
+
+PPU Memory Map
+$3F20		--
+$3F10 - $3F1F	Foreground Palette (16 bytes)
+$3F00 - $3F0F	Background Palette (16 bytes)
+$3000		--
+$2FC0 - $2FFF	Attribute table 3 (8x8 entries, 64 bytes)
+$2C00 - $2FBF	Name Table 3 (32x30 tiles, 960 bytes)
+$2BC0 - $2BFF	Attribute Table 2 (8x8 entries, 64 bytes)
+$2800 - $2BBF	Name Table 2 (32x30 tiles, 960 bytes)
+$27C0 - $27FF	Attribute table 1 (8x8 entries, 64 bytes)
+$2400 - $24BF	Name Table 1 (32x30 tiles, 960 bytes)
+$23C0 - $23FF	Attribute Table 0 (8x8 entries, 64 bytes)
+$2000 - $23BF	Name Table 0 (32x30 tiles, 960 bytes)
+$1000 - $1FFF	Pattern Table 1 (256 tiles, 4 Kbytes)
+$0000 - $0FFF	Pattern Table 0 (256 tiles, 4 Kbytes)
+
+The NES PPU
+The PPU is the "picture processing unit", the main graphics chip. It has two image planes -- one for background, and one for foreground. The NES has enough video memory for two screens' worth of background image (stored in the name tables).
+
+To write data to or read data from the PPU, use CPU ports $2006 and $2007. Write the high byte, then the low byte, of the desired PPU start address to $2006, then read from or write to $2007. Each read/write to $2007 will return or change the data at the current PPU address, and then increment the current address. The PPU initialization vector has a bit that allows incrementing by 32 instead of by 1, which is good for accessing vertical columns of the name tables without many address restarts.
+
+An important thing to note is that before each screen update (at the start of your vblank function perhaps), you should reset the PPU's current address by writing a 0 to CPU port $2006 twice. If you fail to do this, then your screen will probably flicker each time you write to the PPU.
+
+Palettes:
+The background and foreground image planes each have their own palette, each of which consists of 16 entries. Each of these entries is an index lookup into the NES's hardware palette. Although both image planes are allowed a 16-color palette, the NES graphics hardware places the limitation that any foreground sprite or background tile may only consist of up to 4 colors, and these 4 colors must all be within a single "subpalette".
+
+Each palette of 16 entries is divided into 4 subpalettes of 4 entries each. Further, the first entry of each 4-color subpalette is the same across both palettes. In both the foreground and background 16-color palettes, entries 4, 8, and 12 are copies of entry 0. Entry 0 of both palettes is hardwired to the same memory cell, meaning that changing one will affect the other, as well as entries 4, 8, and 12 of both palettes. In short, reading palette entry 0, 4, 8, or 12 from either palette will return the same value. The background palette treats these entries as the indicated color, whereas the foreground palette treats them as transparent, no matter what their value.
+
+Overall, the two palettes, with all their entry mirroring, are capable of displaying 25 simultaneous colors. This consists of 13 for the background, and 12 for the foreground (not counting transparent as a color).
+
+The background palette is located at PPU memory address $3f00, and the foreground palette is at address $3f10. To write values to one or both of these palettes, first set the address in CPU port $2006, then write to $2007.
+	set $2006 $3f  //high byte
+	set $2006 $00  //low byte (background palette)
+	set $2007 1  //first palette entry
+	set $2007 2  //second palette entry
+	...
+As you write to the palette, keep in mind that entry 0 for each palette is actually wired to the same memory location, and mirrored across each subpallete. So, for your own sake, it may be helpful to write the same value in each subpalette.
+
+One technique that can be very helpful is to create static data holding the desired values for the palette, and then run through a loop to set the palette.
+	set $2006 $3f
+	set $2006 0
+	set x 0
+	palette_loop:
+	set $2007 [palette_data x]
+	inc x
+	if x <> 32 branchto palette_loop
+
+	palette_data:
+	asm
+	.db 0,1,2,3,0,5,6,7,0,9,10,11,0,13,14,15 ;//background colors
+	.db 0,1,2,3,0,5,6,7,0,9,10,11,0,13,14,15 ;//foreground colors
+	endasm
+	
+
+
+Good references for the colors that correspond to each value are below.
+http://www.zyx.com/chrisc/NESTechFAQ.html (HTML table graphics near the bottom)
+http://nesdev.parodius.com/nespal.txt
+http://nesdev.parodius.com/pal.txt
+
+Tiles and Pattern Tables:
+Tiles are the basic unit of NES graphics. A tile can be thought of as a pre-drawn picture that is available to place on the screen. Each tile is 8x8 pixels with 2-bit color, and by itself has no associated palette. At any time, the NES may have two pattern tables, each consisting of 256 tiles. A pattern table is essentially a bank of available tiles. Usually, one pattern table is set for background images, and one for foreground, but this is not necessary if your game has very few unique tiles. The pattern tables are loaded from the CHR ROM of your game.
+
+For storage in memory, each of these 2-bit tiles in the pattern table is separated into its two bitplanes (low bit and high bit) and packed into 16 bytes. The first 8 bytes are the bit-packed rows of the low bitplane (1 byte per row), and the next 8 bytes are the packed rows of the high bitplane. With 16 bytes per tile and 256 tiles per pattern table, each pattern table uses 4 kilobytes of memory.
+
+For example, assume that the top row of a tile has the 2-bit colors 01230123. Written as binary values, this row would be 00, 01, 10, 11, 00, 01, 10, 11. The first byte in the tile's stored format would be the packed low bits of the top row, %01010101, or 85 in decimal. The packed low bits from the other seven rows would take up the next seven bytes, and the eighth byte would be the packed high bits of this top row, %00110011, or 51 in decimal.
+
+Name Tables:
+The background image plane is called the name table. Tiles are copied from the background pattern table into the name table, and their colors is determined by the background palette and the attribute table. The PPU memory map shown above has four name table and attribute table pairs. The hardware has enough RAM for two name tables, and the other two are mirrors of them. Visually, and for scrolling purposes, the name tables are laid out with 0 in the lower left, 1 in the lower right, 2 in the upper left, and 3 in the upper right. When the PPU is initialized with vertical mirroring, table 2 mirrors table 0, and table 3 mirrors table 1. This will give two screens of contiguous horizontal name table, and scrolling vertically will create a wraparound. This vertical mirroring is good for standard side-scroller games. Similarly, when the PPU is initialized with horizontal mirroring, table 1 is a mirror of 0, and table 3 is a mirror of 2. This would be good for standard vertical scrollers, such as several popular driving or air combat games. Some memory mappers will actually provide more VRAM on the cartridge, which will allow the NES to hold four unique name tables simultaneously with no mirroring.
+
+Each name table is a 32x30 array of bytes, where the byte is a tile lookup value into the background pattern table. This corresponds to a 256x240 pixel area on the screen, since each tile is 8x8 pixels. The first byte of the name table determines the tile in the upper left of the screen (discounting any scrolling). Consecutive bytes determine the tiles to the right in the same row, until the 32nd byte wraps around to the location 8 pixels below the first tile. 30 such rows fill the name table. Every tile has a 4-bit color index, where the lower two bits are determined by the packed data in the pattern table (see above) and the upper two bits are determined by the attribute table (see below).
+
+Attribute Tables:
+Understanding the attribute table is possibly the most difficult part of the NES graphics, so read this section several times until you fully understand it. Since tiles are defined with 2-bit color and the NES has 4-bit palettes, the attribute table is used to determine the upper two bits of color for each tile in the name table. Each 32x30 name table has a corresponding 8x8 attribute table. A bit of simple math reveals that each byte of the attribute table affects a 4x4 tile (32x32 pixel) area of the name table, with a little bit of unused attribute data along the bottom row of the table.
+
+I have already stated that each attribute byte affects a 4x4 square of tiles in the name table. This is further split into four squares of 2x2 tiles, where each is affected by two bits of the attribute byte. The two least significant bits of the attribute byte (bits 0 and 1) provide the upper color bits for the upper-left 2x2 square of tiles. Bits 2 and 3 provide the upper color bits for the upper-right 2x2 square. Bits 4 and 5 provide the color for the lower-left square, and, finally, bits 6 and 7 for the lower-right square. Note that within each 2x2 square, all four tiles share the same upper color bits, thus restricting them to the same subpalette. What this means for an artist is that every aligned 16x16 pixel area of the background can only have a maximum of four colors, all from the same subpalette.
+
+Scrolling:
+One of the NES's most powerful graphics capabilities is the built-in hardware scrolling. Normally, with no scrolling set, the NES will display name table 0, which will fill the screen (with 256x240 pixels). Setting the horizontal scroll value will shift the background image to the left, and the lefthand edge of name table 1 will appear on the righthand edge of the screen. (See the above section on name tables for the virtual layout in video memory.) The horizontal scroll value has a range of 0 to 255, which will almost completely display name table 1 in place of table 0 when set to the maximum. If you set the proper bit in the PPU initialization vector (bit 0 of $2000), then the base name table will be 1, instead of 0, and horizontal scrolling will wrap around to table 0. Similarly, the vertical scroll has a range of 0 to 255, where incrementing the scroll value will shift the background image down, wrapping around the top. Remember that, due to the name table mirroring, either the horizontal or vertical scroll will start to wrap around immediately when scrolling, depending on whether you have horizontal or vertical mirroring set.
+
+To set the scroll position, write the horizontal then vertical scroll values to $2005. A good time to do this is just before calling your vwait function. As a precaution against flickering, you should set both scroll values to 0 after your vwait exits. Also to avoid flickering, you should set the PPU base address to $0000 at the same time, as mentioned above.
+	draw:
+	gosub draw_things //custom game draw stuff
+	set $2005 scroll_x //set horizontal scroll
+	set $2005 scroll_y //set vertical scroll
+	gosub vwait //wait for screen refresh
+	set $2005 0 //clear scroll to avoid flicker
+	set $2005 0
+	set $2006 0 //set PPU base address to avoid flicker
+	set $2006 0
+
+Sprites:
+Sprites are very important if you want your game to become more than a demonstration of scrolling backgrounds. A sprite is the way to draw a tile, or a pair of tiles, in the foreground image plane. Sprites may be either 8x8 pixels (one tile), or 8x16 pixels (two tiles). Sprites will be 8x16 pixels if bit 5 of port $2000 is set. In this case, the tile indicated in sprite memory will be displayed at the given coordinates, and the next tile from the pattern table will be displayed directly below it, 8 pixels down. An important restriction to note is that when in 8x16 sprite mode, the indicated tile number must be an even number.
+
+Contrary to what you may be thinking at this point, overlapping sprite handling is not done by magic. While Sack of Flour did make use of some elemental magic to speed up certain calculations, all sprite display is left to the hardware. Sprites are numbered 0 through 63, where sprite 0 is in the lowest sprite RAM location, and 63 in the highest. This numbering acts as a both an index and a priority. In general, lower numbered sprites are given higher priority, and thus will be drawn on top of higher numbered sprites. When drawing many sprites on the screen, keep in mind that the NES will draw no more than 8 sprites per scanline. If more than 8 sprites are on a single scanline (meaning that some part of each of them has the same vertical displacement), then that scanline will display the 8 highest priority sprites, and the rest will simply not be drawn, thus creating a flickering. Each scanline is handled independently.
+
+order of displayed sprites. 0 to 63. no more than 8 per scanline.
+
+The basic way to create a sprite is by writing to sprite memory in the PPU. The PPU has 256 bytes of sprite memory, and each sprite takes up 4 bytes, allowing room for 64 sprites. (The format of these 4 bytes is below.) To write to this memory, write the index value of the first desired byte to $2003, and then write consecutive values of the sprite memory into $2004. You may also read from $2004 if you wish to read the sprite memory instead. For example, if you wanted to place sprite 3 on the screen, you would want to start writing memory at byte 12.
+	set $2003 12
+	set $2004 sprite_y
+	set $2004 sprite_tile
+	set $2004 sprite_attrib
+	set $2005 sprite_x
+
+Sprite DMA (Direct Memory Access) is an extremely useful feature, which will allow you to copy a 256-byte region of memory to the PPU's sprite RAM. By writing a value N to the port $4014, memory starting at $100*N will be copied. Good game design will take full advantage of the sprite DMA capability, and probably not use the basic method at all. This will allow you to modify sprite memory as needed during your calculations for the current frame. Then at the vblank, when you don't have any extra time for calculations, you only need to tell the CPU to copy the sprite memory.
+	array absolute $4014 SPRITE_DMA 0 //make a 0-size array for our DMA port
+	array absolute $200 spritemem 256 //allocate memory for sprites
+	set [ spritemem 0 ] sprite_y
+	set [ spritemem 1 ] sprite_tile
+	set [ spritemem 2 ] sprite_attrib
+	set [ spritemem 3 ] sprite_x
+	//more game calculations
+	gosub vwait
+	set SPRITE_DMA 2 //copy sprite ram from address $200
+
+The format of each sprite's memory, as shown in the code examples above, is y value, tile number, attributes, and x value. The coordinate pair (x,y) indicates the horizontal and vertical displacement of the sprite's top left corner, counted in pixels from the top left of the screen. A larger x value means further to the right, and a larger y value means further down the screen. Setting the y value to 240 or greater will place the sprite below the bottom edge of the screen. The tile number is an index lookup into the foreground pattern table. You may determine whether pattern table 0 or 1 acts as foreground by setting bit 3 of port $2000.
+
+The sprite attribute byte is a bit vector, and it is thankfully much easier to understand than the background attribute table. Like the background, a 4-bit palette is available for tiles defined with 2-bit color. The two least significant bits (0 and 1) of the attribute byte determine the upper two bits of the sprite's palette index. Equivalently, you may consider these two bits to be a subpalette identifier. Bit 5 of the attribute byte is a toggle to display behind the background. When this bit is set to 1, the sprite will only show pixels where the background's color is the default (background palette entries 0, 4, 8, and 12). Bit 6 of the attribute, when set to 1, will display the sprite flipped horizontally, around the Y axis, and bit 7 will similarly flip the sprite vertically. Bits 2, 3, and 4 of the attribute byte appear to be unused.
+
+
+
+Sprite 0 Hit:
+incomplete section
+
+Vertical Blanking:
+On a television display, the vertical blank interval is the time during which the electron gun traces from the bottom right of the screen, at the end of one frame, to the top left of the screen, at the start of the next frame. The NES stores information about this in port $2002. After a vertical blank, it is advisable to set the scroll values and PPU base address to 0, or else your game will likely display some flicker after writing to the PPU. More information on the intricacies of the vertical and horizontal blanking can be found in some of the documents referenced in the Acknowledgements section, but most developers would be best off simply having an efficient vertical blank wait function handed to them. Below is just such a function. Calling it will sync your program with the next full blanking interval, which happens 30 times per second on an NTSC (American) NES, and 25 times per second on a PAL (European) NES. Note that, in the current implementation of nbasic, the most efficient vertical blanking function uses inline assembly.
+	//wait until screen refresh
+	vwait:
+		asm
+			lda $2002
+			bpl vwait ;//wait for start of retrace
+		vwait_1:
+			lda $2002
+			bmi vwait_1 ;//wait for end of retrace
+		endasm
+		//set scroll and PPU base address
+		set $2005 0
+		set $2005 0
+		set $2006 0
+		set $2006 0
+		return
+
+NES Sound:
+incomplete section
+
+
+Acknowledgements:
+Some of the information for this document was taken from the following sources:
+
+"Nintendo entertainment System Architecture" by Marat Fayzullin
+http://nesdev.parodius.com/nes.txt
+
+"The NES Sound Channel Guide" by Brad Taylor
+http://nesdev.parodius.com/NESSOUND.txt
+
+"Programming That 8-bit Beast of Power, the NES" by joker21
+http://nesdev.parodius.com/NESSOUND.txt

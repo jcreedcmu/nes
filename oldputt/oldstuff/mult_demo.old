@@ -1,0 +1,229 @@
+//header for nesasm
+asm
+	.inesprg 1 ;//one PRG bank
+	.ineschr 1 ;//one CHR bank
+	.inesmir 0 ;//mirroring type 0
+	.inesmap 0 ;//memory mapper 0 (none)
+	.org 32768
+	.bank 0
+endasm
+
+//the program starts here on NES boot (see footer)
+goto start
+
+init_args:
+        set posl $01
+        set posh $21
+        set outb_val 0
+        set outb_digit_l 0
+        set outb_digit_h 0
+        set input_a a_orig
+        set input_b b_orig
+        set input_b_h $0
+        set output_h 0
+        set output_l 0
+        return
+
+start:
+        set a_orig $0
+        set b_orig $0
+        gosub init_args
+	gosub vwait
+	set $2000 %00000000
+	set $2001 %00011110 
+
+	gosub vwait
+	gosub load_palette
+
+
+  
+set $2006 posh
+set $2006 posl
+set $2007 1
+
+//the main program loop
+mainloop:
+
+	gosub vwait
+        gosub joystick1
+        gosub incrementer
+        if a_pressed = 1 then
+         set a_orig + a_orig 1
+         gosub init_args
+	 set $2001 %00000000 
+lilloop:
+	 gosub vwait
+	 gosub show_results
+         gosub compute_results
+         if input_a <> 0 branchto lilloop
+	 gosub vwait
+         gosub show_results
+	 set $2001 %00011110 
+        endif
+        if b_pressed = 1 then
+         set b_orig + b_orig 1
+         gosub init_args
+	 set $2001 %00000000 
+lilloop2:
+	 gosub vwait
+	 gosub show_results
+         gosub compute_results
+         if input_a <> 0 branchto lilloop2
+	 gosub vwait
+         gosub show_results
+	 set $2001 %00011110 
+        endif
+
+	goto mainloop
+
+//load the colors
+load_palette:
+	//set the PPU start address (background color 0)
+	set $2006 $3f
+	set $2006 $00
+	set $2007 $30 //set base color white
+	set $2007 $0e // bg color 1 black
+	return	
+
+//write your name into the background
+
+outb:
+asm
+        lda outb_val
+        and #15
+        adc #16
+        sta outb_digit_l
+
+        lda outb_val
+        lsr a
+        lsr a
+        lsr a
+        lsr a
+        clc
+        and #15
+        adc #16
+        sta outb_digit_h
+endasm
+        set $2006 posh
+        set $2006 posl
+        set $2007 outb_digit_h
+        set $2007 outb_digit_l
+asm
+        clc          ; increment
+        lda posl
+        adc #4
+        sta posl
+        lda posh
+        adc #0
+        sta posh
+endasm
+        return
+
+asm
+compute_results:
+        lda input_a
+        and #1
+        beq skip
+        clc
+        lda output_l
+        adc input_b
+        sta output_l
+        lda output_h
+        adc input_b_h
+        sta output_h
+skip:
+        asl input_b
+        rol input_b_h
+        lsr input_a
+;       bne compute_results
+        rts
+endasm
+
+show_results:
+        set outb_val input_b_h
+        gosub outb
+        set outb_val input_b
+        gosub outb
+
+        set outb_val input_a
+        gosub outb
+
+        set outb_val output_h
+        gosub outb
+        set outb_val output_l
+        gosub outb
+
+asm
+        clc          ; increment
+        lda posl
+        adc #44
+        sta posl
+        lda posh
+        adc #0
+        sta posh
+endasm
+
+	return
+
+//wait until screen refresh
+vwait:
+	asm
+		lda $2002
+		bpl vwait ;//wait for start of retrace
+	vwait_1:
+		lda $2002
+		bmi vwait_1 ;//wait for end of retrace
+	endasm
+	//set scroll and PPU base address
+	set $2005 0
+	set $2005 0
+	set $2006 0
+	set $2006 0
+	return
+
+joystick1:
+	set $4016 1 //first strobe byte
+	set $4016 0 //second strobe byte
+	set joy1a		& [$4016] 1
+	set joy1b		& [$4016] 1
+	set joy1select	& [$4016] 1
+	set joy1start	& [$4016] 1
+	set joy1up		& [$4016] 1
+	set joy1down	& [$4016] 1
+	set joy1left	& [$4016] 1
+	set joy1right	& [$4016] 1
+	return
+
+incrementer:
+	//handle A button
+	if joy1a = 0 set a_pressed 0
+	if joy1a = 1 if a_pressed = 0 then
+		set a_pressed 1
+		endif
+	//handle B button
+	if joy1b = 0 set b_pressed 0
+	if joy1b = 1 if b_pressed = 0 then
+		set b_pressed 1
+		endif
+	return
+
+
+//file footer
+
+vretrace:
+        set $2006 $20
+        set $2006 $80
+        set $2007 1
+asm
+       rti
+
+;//jump table points to NMI, Reset, and IRQ start points
+	.bank 1
+	.org $fffa
+	.dw vretrace, start, start
+;//include CHR ROM
+	.bank 2
+	.org $0000
+	.incbin "hex.chr"
+	.incbin "hex.chr"
+endasm

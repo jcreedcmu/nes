@@ -1,0 +1,44 @@
+//file footer
+
+//dont_call_me:
+// set draw 0
+
+vretrace:
+        gosub joystick1
+        gosub edge_detect
+        set sprite_dma 2
+        
+asm
+;  lda draw
+;  beq nmi_done
+;  clc
+;  lda argl
+;  adc #$20
+;  sta argl
+;  lda argh
+;  adc #$20
+;  sta argh
+;  lda argh
+;  sta $2006
+;  lda argl
+;  sta $2006
+;  lda #47
+;  sta $2007
+;  lda #0
+;  sta draw
+;nmi_done:
+
+  rti
+
+        .include "sin/sin.tab"
+
+;//jump table points to NMI, Reset, and IRQ start points
+	.bank 1
+	.org $fffa
+	.dw vretrace, start, start
+;//include CHR ROM
+	.bank 2
+	.org $0000
+	.incbin "gfx/gfx.chr"
+	.incbin "title/title.chr"
+endasm

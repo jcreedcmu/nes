@@ -1,0 +1,58 @@
+Q:1/4=200
+L:1/8
+Y:3
+
+BRACES: 3 your_turn_to_win_3
+QUOTES: 0 your_turn_to_win_0_
+
+T: Your Turn To Win 3a
+CODE: thread_on 4
+zx z
+CODE: thread_on 4
+yxz
+CODE: thread_on 4
+yx
+
+T: Your Turn To Win 3b
+CODE: thread_on 4
+x
+CODE: thread_on 4
+x
+CODE: thread_on 4
+x
+CODE: thread_on 4
+x
+z4
+
+T: Your Turn To Win 0 c
+C,2
+
+T: Your Turn To Win 0 cmaj7
+C,2
+
+T: Your Turn To Win 0 em
+E,2E,2G,B,,E,2
+
+T: Your Turn To Win 0 f
+F,2
+
+T: Your Turn To Win 0 dm7
+D,2F,2A,2C2
+
+T: Your Turn To Win 0 g7
+G,2B,2D2F2
+
+T: Your Turn To Win 0 g
+G,
+
+T: Your Turn To Win 0 c9
+C,2E,2G,2_B,2
+
+T: Your Turn To Win 1
+| CDE CDE CD | ECD ECD EC | "Em" G8 | z8 | 
+|"Cmaj7" CDE CDE CD | ECD ECD EC | "Em" B3 G4 z | "C9" z8 | 
+%|{b} "F" c3 A3 c2 | "Em" B3 G3 z2 | "Dm7" A3 "G7" F2 GA z | "C" G8 | 
+|{b} "F" c3 A3 c2 | "Em" B3 G3 z2 | "Dm7" A3 "G7" F5/3 G5/3 A5/3  | "C" G8 | 
+|"F" c3 B3 A2 | "Em" G3 F3 E2 | "Dm7" D2 C"G7"B,z D"C"C z | "C" z4 "G" z4|
+"Cmaj7" {a} 
+

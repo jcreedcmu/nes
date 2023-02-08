@@ -1,0 +1,108 @@
+//header for nesasm
+asm
+	.inesprg 3
+	.ineschr 0
+	.inesmir 0
+	.inesmap 4 ;//memory mapper 4 (MMC3)
+	.bank 3
+	.org $e000
+endasm
+
+
+
+start:
+	set a 0
+	set $2000 a
+	set $2001 a //turn off the PPU
+	asm
+		sei ;//disable interrupts
+	endasm
+	gosub vwait
+	gosub vwait //it's good to wait 2 vblanks at the start
+
+// palette bs
+	set $2006 $3f
+	set $2006 $00
+	set $2007 $1a //set base color green
+	set $2007 $08 //bg color 1 brown
+	set $2007 $2a //bg color 2 green
+	set $2007 $28 //bg color 3 yellow
+
+	asm
+		ldx #$ff
+		txs ;//reset the stack
+	endasm
+	set $2000 %10101000 //NMI, 8x16 sprites, bg 0, fg 1
+	set $2001 %00011000 //show sprites, bg, clipping
+
+// mmc3 commands. cross our fingers!
+        set $8001 0
+       set $8000 %00000111
+//
+        set $2009 0
+        set $2008 [$8000]
+        set $2008 [$a000]
+        set $2008 [$c000]
+        set $2008 [$fffa]
+        set $2009 0
+mainloop:
+	set nmi_hit 0
+	gosub nmi_wait
+	gosub draw
+	gosub vwait_end
+	goto mainloop
+
+nmi_wait:
+	if nmi_hit = 0 branchto nmi_wait
+	return
+
+nmi:
+	set nmi_hit 1
+	resume
+
+irq:
+	resume
+
+//wait full vertical retrace
+vwait:
+	gosub vwait_start
+	gosub vwait_end
+	return
+
+//wait until start of vertical retrace
+vwait_start:
+	asm
+		lda $2002
+		bpl vwait_start
+	endasm
+	return
+
+//wait until end of vertical retrace
+vwait_end:
+	asm
+		lda $2002
+		bmi vwait_end
+	endasm
+	//set scroll and PPU base address
+	set a 0
+	set $2005 a
+	set $2005 a
+	set $2006 a
+	set $2006 a
+	return
+
+draw:
+	return
+
+
+//file footer
+asm
+;//jump table points to NMI, Reset, and IRQ start points
+	.org $fffa
+	.dw nmi, start, irq
+
+	.bank 2
+        .org $a000
+        .db $ca
+endasm
+

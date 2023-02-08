@@ -1,0 +1,21 @@
+mov	.macro
+	lda \1
+	sta \2
+	.endm
+
+mov16	.macro
+	.if \?1 = ARG_IMMED
+	mov #low(\1), \2
+	mov #high(\1), \2+1
+	.else
+	mov \1, \2
+	mov \1+1, \2+1
+	.endif
+	.endm
+
+mov16sx	.macro
+	lda \1,x
+	sta \2
+	lda \1+1,x
+	sta \2+1
+	.endm

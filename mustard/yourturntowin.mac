@@ -1,0 +1,231 @@
+pat_your_turn_to_win_3a	.macro
+	here
+	thread_on 4
+	here
+	mf rest, 9
+	mf specialx, 9
+	mf rest, 9
+	thread_on 4
+	here
+	mf specialy, 9
+	mf specialx, 9
+	mf rest, 9
+	thread_on 4
+	here
+	mf specialy, 9
+	mf specialx, 9
+	.endm
+
+pat_your_turn_to_win_3b	.macro
+	here
+	thread_on 4
+	here
+	mf specialx, 9
+	thread_on 4
+	here
+	mf specialx, 9
+	thread_on 4
+	here
+	mf specialx, 9
+	thread_on 4
+	here
+	mf specialx, 9
+	mf rest, 36
+	.endm
+
+pat_your_turn_to_win_0_c	.macro
+	here
+	mf note, 18, 171, 1
+	.endm
+
+pat_your_turn_to_win_0_cmaj7	.macro
+	here
+	mf note, 18, 171, 1
+	.endm
+
+pat_your_turn_to_win_0_em	.macro
+	here
+	mf note, 18, 83, 1
+	mf note, 18, 83, 1
+	mf note, 9, 29, 1
+	mf note, 9, 197, 1
+	mf note, 18, 83, 1
+	.endm
+
+pat_your_turn_to_win_0_f	.macro
+	here
+	mf note, 18, 64, 1
+	.endm
+
+pat_your_turn_to_win_0_dm7	.macro
+	here
+	mf note, 18, 124, 1
+	mf note, 18, 64, 1
+	mf note, 18, 254, 0
+	mf note, 18, 213, 0
+	.endm
+
+pat_your_turn_to_win_0_g7	.macro
+	here
+	mf note, 18, 29, 1
+	mf note, 18, 226, 0
+	mf note, 18, 190, 0
+	mf note, 18, 160, 0
+	.endm
+
+pat_your_turn_to_win_0_g	.macro
+	here
+	mf note, 9, 29, 1
+	.endm
+
+pat_your_turn_to_win_0_c9	.macro
+	here
+	mf note, 18, 171, 1
+	mf note, 18, 83, 1
+	mf note, 18, 29, 1
+	mf note, 18, 239, 0
+	.endm
+
+pat_your_turn_to_win_1	.macro
+	here
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf sthr0
+	.dw your_turn_to_win_0_em
+	mf note, 72, 142, 0
+	mf rest, 72
+	mf sthr0
+	.dw your_turn_to_win_0_cmaj7
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf note, 9, 190, 0
+	mf note, 9, 169, 0
+	mf note, 9, 213, 0
+	mf sthr0
+	.dw your_turn_to_win_0_em
+	mf note, 27, 113, 0
+	mf note, 36, 142, 0
+	mf rest, 9
+	mf sthr0
+	.dw your_turn_to_win_0_c9
+	mf rest, 72
+	mf sthr3
+	.dw your_turn_to_win_3b
+	mf sthr0
+	.dw your_turn_to_win_0_f
+	mf note, 27, 106, 0
+	mf note, 27, 127, 0
+	mf note, 18, 106, 0
+	mf sthr0
+	.dw your_turn_to_win_0_em
+	mf note, 27, 113, 0
+	mf note, 27, 142, 0
+	mf rest, 18
+	mf sthr0
+	.dw your_turn_to_win_0_dm7
+	mf note, 27, 127, 0
+	mf sthr0
+	.dw your_turn_to_win_0_g7
+	mf note, 15, 160, 0
+	mf note, 15, 142, 0
+	mf note, 15, 127, 0
+	mf sthr0
+	.dw your_turn_to_win_0_c
+	mf note, 72, 142, 0
+	mf sthr0
+	.dw your_turn_to_win_0_f
+	mf note, 27, 106, 0
+	mf note, 27, 113, 0
+	mf note, 18, 127, 0
+	mf sthr0
+	.dw your_turn_to_win_0_em
+	mf note, 27, 142, 0
+	mf note, 27, 160, 0
+	mf note, 18, 169, 0
+	mf sthr0
+	.dw your_turn_to_win_0_dm7
+	mf note, 18, 190, 0
+	mf note, 9, 213, 0
+	mf sthr0
+	.dw your_turn_to_win_0_g7
+	mf note, 9, 226, 0
+	mf rest, 9
+	mf note, 9, 190, 0
+	mf sthr0
+	.dw your_turn_to_win_0_c
+	mf note, 9, 213, 0
+	mf rest, 9
+	mf sthr0
+	.dw your_turn_to_win_0_c
+	mf rest, 36
+	mf sthr0
+	.dw your_turn_to_win_0_g
+	mf rest, 36
+	mf sthr0
+	.dw your_turn_to_win_0_cmaj7
+	mf sthr3
+	.dw your_turn_to_win_3a
+	.endm
+
+
+all_songs	.macro
+your_turn_to_win_3a:
+	pat_your_turn_to_win_3a
+	jmp your_turn_to_win_3a
+your_turn_to_win_3b:
+	pat_your_turn_to_win_3b
+	jmp your_turn_to_win_3b
+your_turn_to_win_0_c:
+	pat_your_turn_to_win_0_c
+	jmp your_turn_to_win_0_c
+your_turn_to_win_0_cmaj7:
+	pat_your_turn_to_win_0_cmaj7
+	jmp your_turn_to_win_0_cmaj7
+your_turn_to_win_0_em:
+	pat_your_turn_to_win_0_em
+	jmp your_turn_to_win_0_em
+your_turn_to_win_0_f:
+	pat_your_turn_to_win_0_f
+	jmp your_turn_to_win_0_f
+your_turn_to_win_0_dm7:
+	pat_your_turn_to_win_0_dm7
+	jmp your_turn_to_win_0_dm7
+your_turn_to_win_0_g7:
+	pat_your_turn_to_win_0_g7
+	jmp your_turn_to_win_0_g7
+your_turn_to_win_0_g:
+	pat_your_turn_to_win_0_g
+	jmp your_turn_to_win_0_g
+your_turn_to_win_0_c9:
+	pat_your_turn_to_win_0_c9
+	jmp your_turn_to_win_0_c9
+your_turn_to_win_1:
+	pat_your_turn_to_win_1
+	jmp your_turn_to_win_1
+	.endm
+

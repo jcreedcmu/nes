@@ -1,0 +1,7 @@
+#!/bin/sh
+pgm2chr.pl gfx/gfx.pgm > gfx/gfx.chr
+perl map/mapcompile.pl map/basic.map > map/basic.dat
+nesmus music/wis.mus music/wis.dat
+nbasic.jcreed code/puttputt.bas music/music.bas code/footer.bas -o puttputt.asm 
+nesasm puttputt.asm 
+rm puttputt.asm

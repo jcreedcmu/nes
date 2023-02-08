@@ -1,0 +1,3 @@
+stw	.macro
+	lda (low
+	.endm

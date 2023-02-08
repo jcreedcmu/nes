@@ -1,0 +1,39 @@
+array chan0_loc 2
+array chan1_loc 2
+array chan2_loc 2
+array chan3_loc 2
+
+asm
+ .list 
+ .include "macro.inc"
+
+	.inesprg 1
+	.ineschr 0
+	.inesmir 0
+	.inesmap 0
+
+
+        .bank 0
+	.org $8000
+
+start:	
+	lda #$0F
+	sta $4015
+	lda #$FF
+	sta $4000
+	sta $4002
+	sta $4003		
+	lda #%11111010
+	sta $4001
+        stw(start, chan0_loc)
+main_loop:
+	jmp     main_loop
+
+nmi:
+	rti
+
+	.bank 1
+	.org $fffa
+	.dw nmi,start,nmi
+
+endasm

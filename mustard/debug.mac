@@ -1,0 +1,5 @@
+debug	.macro
+	mov #0, $2009
+	mov loc+1, $2008
+	mov loc, $2008
+	.endm

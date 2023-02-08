@@ -1,0 +1,85 @@
+diff -r nbasic_2004_02_15/source/nbasic/main.cpp nbasic_2004_02_15.jcreed/source/nbasic/main.cpp
+13a14
+> 	n.SetEndasmRegEx(n.NumRegExes()); //next regex is endasm
+diff -r nbasic_2004_02_15/source/nbasic/nbasic.cpp nbasic_2004_02_15.jcreed/source/nbasic/nbasic.cpp
+227,251c227,273
+< 	int len = strlen(line);
+< 	if (len == 0) return true; //sure, we can tokenize a blank line!
+< 
+< 	for(int i = 0; i < num_regexes; i++) //try matching against each regex
+< 	{
+< 		int match = regexes[i].Matches(line);
+< 		if (match > -1)
+< 		{
+< 			//token match! check whitespace requirements
+< 			if ((!regex_requirewhite[i]) ||
+< 				(regex_requirewhite[i] &&
+< 					(
+< 					match == len ||
+< 					regexes[whitespace_regex].Matches(&line[match])>-1 ||
+< 					regexes[newline_regex].Matches(&line[match])>-1
+< 					)
+< 				))
+< 			{
+< 				//we're good. add the token, check the rest of the line
+< 				tokens.AddToken(regex_returns[i], line, match, linenum);
+< 				return TokenizeLine(&line[match], linenum);
+< 			}
+< 		}
+< 	}
+< 	return false;
+---
+>   int len = strlen(line);
+>   if (len == 0) return true; //sure, we can tokenize a blank line!
+>   static bool asmmode = false; // ugh, horrible hack
+> 
+>   if (asmmode) {
+>     int match = regexes[whitespace_regex].Matches(line);
+>     if (match > -1) {
+>       tokens.AddToken(ASMTEXT, line, match, linenum);
+>       return TokenizeLine(&line[match], linenum);
+>     }
+>     else {
+>       match = regexes[endasm_regex].Matches(line);
+>       if (match > -1) {
+> 	tokens.AddToken(ENDASM, line, match, linenum);
+> 	asmmode = false;
+> 	return TokenizeLine(&line[match], linenum);
+>       }
+>       else {
+> 	tokens.AddToken(ASMTEXT, line, len, linenum);
+> 	return true;     
+>       }
+>     }
+>   }
+>   else {
+>     for(int i = 0; i < num_regexes; i++) { //try matching against each regex
+>       
+>       int match = regexes[i].Matches(line);
+>       if (match > -1) {
+> 	//token match! check whitespace requirements
+> 	if ((!regex_requirewhite[i]) ||
+> 	    (regex_requirewhite[i] &&
+> 	     (
+> 	      match == len ||
+> 	      regexes[whitespace_regex].Matches(&line[match])>-1 ||
+> 	      regexes[newline_regex].Matches(&line[match])>-1
+> 	      )
+> 	     )) {
+> 	  
+> 	  //we're good. add the token, check the rest of the line
+> 	  tokens.AddToken(regex_returns[i], line, match, linenum);
+> 	  asmmode = regex_returns[i] == ASM;
+> 	  return TokenizeLine(&line[match], linenum);
+> 	}
+>       }
+>     }
+>     return false;
+>   }
+diff -r nbasic_2004_02_15/source/nbasic/nbasic.h nbasic_2004_02_15.jcreed/source/nbasic/nbasic.h
+102a103
+> 		void SetEndasmRegEx(int n){endasm_regex=n;}
+139c140
+< 		int whitespace_regex, newline_regex;
+---
+> 		int whitespace_regex, newline_regex, endasm_regex;

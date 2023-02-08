@@ -1,0 +1,2 @@
+nbasic.jcreed test.bas -o test.asm
+nesasm test.asm

@@ -1,0 +1,8 @@
+;look, it supports comments now
+;just start a line with a semicolon to write comments
+channel 0
+t120 o2 v8 l4 a a a a
+;right now, the loop breaks if your music ends with one
+;you can fix that by having at least one note or rest
+;i realized that right now there's no way you can do any funky stuff
+;on the repeat, but i'm going to work on that

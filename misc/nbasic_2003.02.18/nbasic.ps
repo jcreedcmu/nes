@@ -1,0 +1,830 @@
+%%!PS
+%--------------------------------------------------------------------------
+% GNU UnRTF, a command-line program to convert RTF documents to other formats.
+% Copyright (C) 2000,2001 Zachary Thayer Smith
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% The author is reachable by electronic mail at tuorfa@yahoo.com.
+%--------------------------------------------------------------------------
+%%EndComments 
+%
+%         --------- Note, this PS code is unfinished -------- 
+%         --------- Note, this PS code is unfinished -------- 
+%         --------- Note, this PS code is unfinished -------- 
+%         --------- Note, this PS code is unfinished -------- 
+%         --------- Note, this PS code is unfinished -------- 
+%
+% ----------- Variables ------------
+/fontFamily /Times def
+/fontAscent 0 def % ascent for current font
+/fontDescent 0 def % descent for current font
+/lineAscent 0 def 
+/lineDescent 0 def 
+/pageWidthInches 8.5 def 
+/pageHeightInches 11 def 
+/leftMargin 20 def 
+/rightMargin 20 def 
+/topMargin 20 def 
+/bottomMargin 20 def 
+/DPI 72 def 
+/pageWidth pageWidthInches DPI mul def 
+/rightLimit pageWidth rightMargin sub def 
+/pageHeight pageHeightInches DPI mul def 
+/x 0 def 
+/y 0 def 
+/bold false def 
+/italic false def 
+/underline false def 
+/overline false def 
+/intercharSpace 0 def 
+/strike false def 
+/outline false def 
+/shadow false def 
+/fontSize 12 def 
+/didBR false def 
+/didParSkip false def 
+/didShowPage false def 
+%------------------------------------------------------
+% Set up the ISO fonts 
+
+% Times 
+% ----- 
+/Times-Roman findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/TRomanISO exch definefont pop			
+
+/Times-Bold findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/TBoldISO exch definefont pop			
+
+/Times-BoldItalic findfont dup length dict begin {	
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/TBoldItalicISO exch definefont pop			
+
+/Times-Italic findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/TItalicISO exch definefont pop			
+
+% Courier 
+% ----- 
+/Courier-Roman findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/CRomanISO exch definefont pop			
+
+/Courier-Bold findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/CBoldISO exch definefont pop			
+
+/Courier-BoldItalic findfont dup length dict begin {	
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/CBoldItalicISO exch definefont pop			
+
+/Courier-Italic findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/CItalicISO exch definefont pop			
+
+% Symbol 
+% ----- 
+/Symbol-Roman findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/SRomanISO exch definefont pop			
+
+/Symbol-Bold findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/SBoldISO exch definefont pop			
+
+/Symbol-BoldItalic findfont dup length dict begin {	
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/SBoldItalicISO exch definefont pop			
+
+/Symbol-Italic findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/SItalicISO exch definefont pop			
+
+% Helvetica 
+% --------- 
+/Helvetica-Roman findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/HRomanISO exch definefont pop			
+
+/Helvetica-Bold findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/HBoldISO exch definefont pop			
+
+/Helvetica-BoldOblique findfont dup length dict begin {	
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/HBoldItalicISO exch definefont pop			
+
+/Helvetica-Oblique findfont dup length dict begin {		
+	1 index /FID ne { def } { pop pop } ifelse	
+} forall						
+/Encoding ISOLatin1Encoding def 			
+currentdict end						
+/HItalicISO exch definefont pop			
+
+% 
+% Ideally, before we can draw a line of text, we need to collect all the
+% words that will be on it, just as I do in my Beest HTML viewer, as well
+% as character attributes for each word. But for now, this implementation 
+% does not bother. It determines the maximize ascent and descent after
+% drawing the text, not before. XX
+% 
+% ----------- Functions ------------
+/updateFont { 
+	/f0 null def 
+	(Times) fontFamily eq (Times New Roman) fontFamily eq or { 
+		bold { 
+			italic { /TBoldItalicISO } { /TBoldISO } ifelse 
+		} { 
+			italic { /TItalicISO } { /TRomanISO } ifelse 
+		} 
+		ifelse 
+	} if 
+	(Helvetica) fontFamily eq (Arial) fontFamily eq or { 
+		bold { 
+			italic { /HBoldItalicISO } { /HBoldISO } ifelse 
+		} { 
+			italic { /HItalicISO } { /HRomanISO } ifelse 
+		} 
+		ifelse 
+	} if 
+	(Courier) fontFamily eq (Courier New) fontFamily eq or { 
+		bold { 
+			italic { /CBoldItalicISO } { /CBoldISO } ifelse 
+		} { 
+			italic { /CItalicISO } { /CRomanISO } ifelse 
+		} 
+		ifelse 
+	} if 
+	(Symbol) fontFamily eq { 
+		bold { 
+			italic { /SBoldItalicISO } { /SBoldISO } ifelse 
+		} { 
+			italic { /SItalicISO } { /SRomanISO } ifelse 
+		} 
+		ifelse 
+	} if 
+
+	findfont /f0 exch def  
+	/bboxBottom f0 /FontBBox get 1 get 1000 div fontSize mul -1 mul def 
+	/bboxTop    f0 /FontBBox get 3 get 1000 div fontSize mul def 
+	f0 fontSize scalefont setfont 
+	lineAscent bboxTop lt { /lineAscent bboxTop def } if  
+	lineDescent bboxBottom lt { /lineDescent bboxBottom def } if  
+	/fontAscent bboxTop def 
+	/fontDescent bboxBottom def 
+} def
+/FS { 
+	/fontSize exch def updateFont 
+} def 
+/F { 
+	/fontFamily exch def updateFont 
+} def 
+/resetX { 
+	/x leftMargin def
+} def 
+/resetY { 
+	/y pageHeight topMargin sub def 
+} def 
+/BR {  
+	/oldx x def 
+	/y y lineAscent lineDescent add sub def  
+	resetX 
+	y bottomMargin lt { 
+		showpage 
+		/didShowPage true 
+		resetY 
+	} if 
+	oldx 0 eq didBR and { /didParSkip true def } if 
+	/didBR true def 
+	% /lineAscent 0 def 
+	% /lineDescent 0 def 
+} def 
+/P { 
+	didParSkip not { BR } if 
+	didParSkip not { BR } if 
+} 
+def 
+/acharpath { 
+	/acstr exch def pop /acsp exch def 
+	newpath  
+	str { 
+		/ch exch def 
+		1 string 0 ch put false charpath 
+		acsp 0 rmoveto 
+	} forall 
+} def 
+/A { 
+	/str exch def 
+	/w str stringwidth pop 
+		str length intercharSpace mul add 
+		def 
+		x w add rightLimit ge { BR } if 
+	x y moveto 
+	outline {                                           
+		shadow {                                    
+			1 -0.1 0 {                        
+				/offset exch def 
+				offset setgray                 
+				x offset 3 mul add y offset 3 mul sub moveto 
+				intercharSpace 0 str acharpath 
+				% str false charpath 
+				fontSize 30 div setlinewidth stroke 
+			} for                               
+			0 setgray 
+		} {                                         
+			intercharSpace 0 str acharpath      
+			% str false charpath 
+			fontSize 30 div setlinewidth stroke 
+		} ifelse                                    
+	} {                                                 
+		shadow {                                    
+			1 -0.1 0 {                        
+				/offset exch def 
+				offset setgray                 
+				x offset 3 mul add y offset 3 mul sub moveto 
+				intercharSpace 0 str ashow  
+				% str show 
+			} for                               
+			0 setgray 
+		} {                                         
+			intercharSpace 0 str ashow          
+			% str show 
+		} ifelse                                    
+	} ifelse                                            
+	strike {							
+		newpath fontSize 20 div setlinewidth			
+		x y fontAscent 0.32 mul add dup /y2 exch def moveto	
+		x w add y2 lineto stroke				
+	} if								
+	underline {							
+		newpath fontSize 20 div setlinewidth			
+		x y fontAscent 0.2 mul sub dup /y2 exch def moveto	
+		x w add y2 lineto stroke				
+	} if								
+	overline {							
+		% I don't think RTF supports this, but it can be used later. 
+		newpath fontSize 20 div setlinewidth			
+		x y fontAscent 1.2 mul add dup /y2 exch def moveto	
+		x w add y2 lineto stroke				
+	} if					
+	/x x w add def  			
+	/didBR false def 			
+	/didShowPage false def 			
+} def 
+
+% These are only binary for now 
+/X1 { /intercharSpace exch def } def
+/X0 { /intercharSpace 0 def } def
+/O1 { /outline false def } def
+/O0 { /outline false def } def
+/H1 { /shadow true def } def
+/H0 { /shadow false def } def
+/S1 { /strike true def } def
+/S0 { /strike false def } def
+/B1 { /bold true def updateFont } def
+/B0 { /bold false def updateFont } def
+/I1 { /italic true def updateFont } def
+/I0 { /italic false def updateFont } def
+/U1 { /underline true def } def
+/U0 { /underline false def } def
+updateFont 
+resetX resetY 
+
+% header begin
+% Translation from RTF performed by UnRTF, version 0.19.0
+% For information about this marvellous program,
+% please go to http://www.gnu.org/software/unrtf/unrtf.html
+% document uses Macintosh character set
+% font table contains 0 fonts total
+% invalid font number 0
+% header end
+
+
+% ---------- Document Body ------------
+B1 12 FS (Practical)A ( )A (NES)A ( )A (Programming)A ( )A (With)A ( )A (nbasic)A BR
+(by)A ( )A (Bob)A ( )A (Rost)A ( )A (\(rrost+nes@andrew.cmu.edu\))A BR
+% invalid font number 1
+BR
+% invalid font number 0
+B1 (About)A ( )A (This)A ( )A (Document:)A BR
+% invalid font number 1
+B0 (While)A ( )A (working)A ( )A (with)A ( )A (the)A ( )A (rest)A ( )A (of)A ( )A (my)A ( )A (development)A ( )A (team)A ( )A (to)A ( )A (create)A ( )A ("Sack)A ( )A (of)A ( )A (Flour,)A ( )A (Heart)A ( )A (of)A ( )A (Gold",)A ( )A (I)A ( )A (quickly)A ( )A (became)A ( )A (aware)A ( )A (that)A ( )A (the)A ( )A (state)A ( )A (of)A ( )A (NES)A ( )A (documentation)A ( )A (is)A ( )A (absolutely)A ( )A (terrible.)A ( )A (Various)A ( )A (documents)A ( )A (exist,)A ( )A (but)A ( )A (they)A ( )A (seem)A ( )A (to)A ( )A (enjoy)A ( )A (conflicting)A ( )A (with)A ( )A (each)A ( )A (other)A ( )A (in)A ( )A (their)A ( )A (often)A ( )A (poorly-written)A ( )A (English.)A ( )A (And)A ( )A (in)A ( )A (many)A ( )A (cases,)A ( )A (the)A ( )A (important)A ( )A (points)A ( )A (are)A ( )A (only)A ( )A (mentioned)A ( )A (as)A ( )A (a)A ( )A (passing)A ( )A (reference)A ( )A (buried)A ( )A (deep)A ( )A (within)A ( )A (an)A ( )A (unreadable)A ( )A (paragraph)A ( )A (of)A ( )A (a)A ( )A (single)A ( )A (obscure)A ( )A (document.)A ( )A (This)A ( )A (document)A ( )A (highlights)A ( )A (a)A ( )A (radical)A ( )A (new)A ( )A (approach)A ( )A (to)A ( )A (NES)A ( )A (development,)A ( )A (to)A ( )A (allow)A ( )A (aspiring)A ( )A (developers)A ( )A (to)A ( )A (have)A ( )A (a)A ( )A (single)A ( )A (source)A ( )A (that)A ( )A (will)A ( )A (provide)A ( )A (them)A ( )A (with)A ( )A (enough)A ( )A (information)A ( )A (to)A ( )A (create)A ( )A (a)A ( )A (high-quality)A ( )A (NES)A ( )A (game)A ( )A (or)A ( )A (demo,)A ( )A (and)A ( )A (to)A ( )A (allow)A ( )A (current)A ( )A (developers)A ( )A (to)A ( )A (create)A ( )A (their)A ( )A (games)A ( )A (and)A ( )A (demos)A ( )A (with)A ( )A (greater)A ( )A (ease.)A BR
+BR
+(This)A ( )A (document)A ( )A (illustrates)A ( )A (the)A ( )A (use)A ( )A (of)A ( )A (the)A ( )A (language)A ( )A % invalid font number 2
+I1 (nbasic)A % invalid font number 1
+I0 (,)A ( )A (which)A ( )A (was)A ( )A (created)A ( )A (for)A ( )A (the)A ( )A (rapid)A ( )A (development)A ( )A (of)A ( )A (the)A ( )A (game)A ( )A ("Sack)A ( )A (of)A ( )A (Flour,)A ( )A (Heart)A ( )A (of)A ( )A (Gold".)A ( )A (In)A ( )A (all)A ( )A (the)A ( )A (documents)A ( )A (and)A ( )A (messageboards)A ( )A (I)A ( )A (read)A ( )A (during)A ( )A (development,)A ( )A (any)A ( )A (mention)A ( )A (of)A ( )A (a)A ( )A (high)A ( )A (level)A ( )A (language)A ( )A (was)A ( )A (extremely)A ( )A (negative.)A ( )A (Arguments)A ( )A (essentially)A ( )A (stated)A ( )A (that)A ( )A (it's)A ( )A (impossible)A ( )A (to)A ( )A (program)A ( )A (anything)A ( )A (decent)A ( )A (for)A ( )A (the)A ( )A (NES)A ( )A (with)A ( )A (a)A ( )A (high)A ( )A (level)A ( )A (language)A ( )A (because)A ( )A (assembly)A ( )A (is)A ( )A (the)A ( )A (only)A ( )A (thing)A ( )A (efficient)A ( )A (enough.)A ( )A (This)A ( )A (is,)A ( )A (of)A ( )A (course,)A ( )A (not)A ( )A (true.)A ( )A (Given)A ( )A (the)A ( )A (right)A ( )A (language,)A ( )A (such)A ( )A (as)A ( )A (nbasic,)A ( )A (high)A ( )A (level)A ( )A (programming)A ( )A (is)A ( )A (very)A ( )A (efficient,)A ( )A (and)A ( )A (it)A ( )A (is)A ( )A (the)A ( )A (only)A ( )A (thing)A ( )A (to)A ( )A (feasibly)A ( )A (allow)A ( )A (development)A ( )A (of)A ( )A (a)A ( )A (large)A ( )A (project.)A ( )A (The)A ( )A (effectiveness)A ( )A (of)A ( )A (nbasic)A ( )A (was)A ( )A (immediately)A ( )A (shown,)A ( )A (as)A ( )A ("Sack)A ( )A (of)A ( )A (Flour")A ( )A (is)A ( )A (currently)A ( )A (the)A ( )A (most)A ( )A (sophisticated)A ( )A (and)A ( )A (complete)A ( )A (homebrew)A ( )A (NES)A ( )A (game)A ( )A (by)A ( )A (far.)A ( )A (I)A ( )A (look)A ( )A (forward)A ( )A (to)A ( )A (the)A ( )A (day)A ( )A (when)A ( )A (someone)A ( )A (reading)A ( )A (this)A ( )A (will)A ( )A (be)A ( )A (able)A ( )A (to)A ( )A (create)A ( )A (a)A ( )A (game)A ( )A (of)A ( )A (the)A ( )A (same)A ( )A (caliber.)A BR
+BR
+% invalid font number 0
+B1 (What)A ( )A (nbasic)A ( )A (is:)A BR
+% invalid font number 1
+B0 (nbasic)A ( )A (is)A ( )A (a)A ( )A (high-level)A ( )A (programming)A ( )A (language)A ( )A (designed)A ( )A (for)A ( )A (the)A ( )A (6502)A ( )A (processor,)A ( )A (the)A ( )A (main)A ( )A (CPU)A ( )A (of)A ( )A (the)A ( )A (Nintendo)A ( )A (Entertainment)A ( )A (System.)A ( )A (It)A ( )A (has)A ( )A (BASIC-like)A ( )A (program)A ( )A (flow,)A ( )A (relying)A ( )A (on)A ( )A (goto,)A ( )A (gosub,)A ( )A (and)A ( )A (return)A ( )A (for)A ( )A (most)A ( )A (execution)A ( )A (flow.)A ( )A (It)A ( )A (also)A ( )A (has)A ( )A (no)A ( )A (dynamic)A ( )A (memory)A ( )A (allocation)A ( )A (and)A ( )A (no)A ( )A (actual)A ( )A (function)A ( )A (parameter)A ( )A (passing;)A ( )A (rather,)A ( )A (globally)A ( )A (scoped)A ( )A (variables)A ( )A (and)A ( )A (arrays)A ( )A (take)A ( )A (the)A ( )A (place)A ( )A (of)A ( )A (these.)A ( )A (This)A ( )A (kind)A ( )A (of)A ( )A (language)A ( )A (design)A ( )A (allows)A ( )A (for)A ( )A (a)A ( )A (very)A ( )A (efficient)A ( )A (implementation)A ( )A (on)A ( )A (a)A ( )A (low-powered)A ( )A (8-bit)A ( )A (CPU)A ( )A (such)A ( )A (as)A ( )A (the)A ( )A (NES's)A ( )A (6502.)A BR
+BR
+% invalid font number 0
+B1 (What)A ( )A (nbasic)A ( )A (is)A ( )A (not:)A BR
+% invalid font number 1
+B0 (nbasic)A ( )A (is)A ( )A (not)A ( )A (a)A ( )A (clone)A ( )A (of)A ( )A (GW-BASIC)A ( )A (or)A ( )A (QBasic.)A ( )A (I)A ( )A (received)A ( )A (email)A ( )A (from)A ( )A (someone)A ( )A (saying)A ( )A (that)A ( )A (he)A ( )A (wrote)A ( )A (a)A ( )A (simple)A ( )A (program:)A BR
+B0 % invalid font number 3
+10 FS ( )A (10)A ( )A (PRINT)A ( )A ("Hello")A BR
+( )A (20)A ( )A (GOTO)A ( )A (10)A BR
+% invalid font number 1
+12 FS (and)A ( )A (he)A ( )A (couldn't)A ( )A (for)A ( )A (the)A ( )A (life)A ( )A (of)A ( )A (him)A ( )A (figure)A ( )A (out)A ( )A (why)A ( )A (it)A ( )A (wasn't)A ( )A (working.)A ( )A (Novice)A ( )A (programmers)A ( )A (relying)A ( )A (on)A ( )A (statements)A ( )A (such)A ( )A (as)A ( )A (PRINT)A ( )A (and)A ( )A (INPUT)A ( )A (are)A ( )A (not)A ( )A (the)A ( )A (target)A ( )A (audience)A ( )A (for)A ( )A (this)A ( )A (language.)A ( )A (Skilled)A ( )A (programmers)A ( )A (with)A ( )A (some)A ( )A (knowledge)A ( )A (of)A ( )A (assembly)A ( )A (and)A ( )A (the)A ( )A (need)A ( )A (for)A ( )A (easier)A ( )A (logic)A ( )A (coding)A ( )A (are)A ( )A (the)A ( )A (optimal)A ( )A (target)A ( )A (audience.)A ( )A (Any)A ( )A (NES)A ( )A (programmers)A ( )A (who)A ( )A (have)A ( )A (already)A ( )A (written)A ( )A (a)A ( )A (demo)A ( )A (and)A ( )A (who)A ( )A (wish)A ( )A (to)A ( )A (create)A ( )A (a)A ( )A (full)A ( )A (game)A ( )A (should)A ( )A (find)A ( )A (nbasic)A ( )A (to)A ( )A (be)A ( )A (a)A ( )A (blessing.)A ( )A (For)A ( )A (others,)A ( )A (nbasic)A ( )A (may)A ( )A (provide)A ( )A (a)A ( )A (reasonable)A ( )A (entry)A ( )A (path)A ( )A (to)A ( )A (NES)A ( )A (development.)A BR
+BR
+% invalid font number 0
+B1 (The)A ( )A (nbasic)A ( )A (Language)A ( )A (Definition:)A BR
+% invalid font number 1
+B0 (Usage)A BR
+(Arithmetic)A ( )A (Expressions)A BR
+(Arrays)A BR
+(Comments)A BR
+(Ending)A ( )A (a)A ( )A (Program)A BR
+(For)A ( )A (Loops)A BR
+(If)A ( )A (Statements)A BR
+(Inline)A ( )A (Assembly)A BR
+(Jumps)A BR
+(Labels)A BR
+(Numbers)A BR
+(Variables)A BR
+(Known)A ( )A (Bugs)A BR
+BR
+% invalid font number 0
+B1 (Usage:)A BR
+% invalid font number 1
+B0 (The)A ( )A (nbasic)A ( )A (compiler)A ( )A (is)A ( )A (a)A ( )A (console)A ( )A (application.)A ( )A (Its)A ( )A (usage)A ( )A (has)A ( )A (changed)A ( )A (since)A ( )A (the)A ( )A (first)A ( )A (version.)A ( )A (current)A ( )A (usage)A ( )A (is)A ( )A (made)A ( )A (to)A ( )A (somewhat)A ( )A (resemble)A ( )A (most)A ( )A (common)A ( )A (language)A ( )A (compilers.)A ( )A (It)A ( )A (accepts)A ( )A (input)A ( )A (files)A ( )A (written)A ( )A (in)A ( )A (nbasic,)A ( )A (and,)A ( )A (if)A ( )A (the)A ( )A (input)A ( )A (file)A ( )A (is)A ( )A (valid,)A ( )A (nbasic)A ( )A (outputs)A ( )A (a)A ( )A (file)A ( )A (containing)A ( )A (6502)A ( )A (assembly)A ( )A (code,)A ( )A (which)A ( )A (can)A ( )A (be)A ( )A (run)A ( )A (through)A ( )A (nesasm)A ( )A (to)A ( )A (create)A ( )A (an)A ( )A (NES)A ( )A (ROM.)A ( )A (\(nesasm)A ( )A (is)A ( )A (part)A ( )A (of)A ( )A (the)A ( )A (MagicKit)A ( )A (toolset,)A ( )A (which)A ( )A (can)A ( )A (be)A ( )A (found)A ( )A (online\).)A ( )A (If)A ( )A (no)A ( )A (target)A ( )A (filename)A ( )A (is)A ( )A (given,)A ( )A (then)A ( )A (nbasic)A ( )A (defaults)A ( )A (to)A ( )A ("nbasic_output.asm".)A ( )A (The)A ( )A (parameter)A ( )A ("-o")A ( )A (is)A ( )A (used)A ( )A (to)A ( )A (specify)A ( )A (a)A ( )A (target)A ( )A (name.)A ( )A (Note)A ( )A (that)A ( )A (nbasic)A ( )A (can)A ( )A (accept)A ( )A (more)A ( )A (than)A ( )A (one)A ( )A (input)A ( )A (file)A ( )A (on)A ( )A (the)A ( )A (command)A ( )A (line.)A ( )A (I)A ( )A (encourage)A ( )A (splitting)A ( )A (code)A ( )A (among)A ( )A (several)A ( )A (files)A ( )A (like)A ( )A (this,)A ( )A (as)A ( )A (it)A ( )A (will)A ( )A (allow)A ( )A (you)A ( )A (to)A ( )A (separate)A ( )A (code)A ( )A (into)A ( )A (logical)A ( )A (pieces,)A ( )A (as)A ( )A (well)A ( )A (as)A ( )A (easily)A ( )A (reuse)A ( )A (some)A ( )A (large)A ( )A (portions)A ( )A (of)A ( )A (code)A ( )A (in)A ( )A (various)A ( )A (games.)A ( )A (A)A ( )A (typical)A ( )A (nbasic)A ( )A (compile,)A ( )A (to)A ( )A (create)A ( )A (a)A ( )A (ROM)A ( )A (called)A ( )A (game.nes,)A ( )A (might)A ( )A (look)A ( )A (like)A ( )A (this:)A BR
+% invalid font number 3
+10 FS ( )A (nbasic)A ( )A (header.bas)A ( )A (main.bas)A ( )A (footer.bas)A ( )A (-o)A ( )A (game.asm)A BR
+( )A (nesasm)A ( )A (game.asm)A BR
+% invalid font number 1
+12 FS BR
+% invalid font number 0
+B1 (Arithmetic)A ( )A (Expressions:)A BR
+% invalid font number 1
+B0 (Arithmetic)A ( )A (expressions)A ( )A (in)A ( )A (nbasic)A ( )A (use)A ( )A (prefix)A ( )A (notation,)A ( )A (which)A ( )A (implies)A ( )A (a)A ( )A (non-ambiguous)A ( )A (order)A ( )A (of)A ( )A (operations.)A ( )A (The)A ( )A (supported)A ( )A (operations)A ( )A (are)A ( )A (addition)A ( )A (\(+\),)A ( )A (subtraction)A ( )A (\(-\),)A ( )A (shift)A ( )A (left)A ( )A (\(<<\),)A ( )A (shift)A ( )A (right)A ( )A (\(>>\))A ( )A (and)A ( )A (bitwise)A ( )A (and)A ( )A (\(&\).)A ( )A (Other)A ( )A (related)A ( )A (expressions)A ( )A (are)A ( )A (variable)A ( )A (assignment)A ( )A (\(set\),)A ( )A (variable)A ( )A (increment)A ( )A (\(inc\),)A ( )A (and)A ( )A (variable)A ( )A (decrement)A ( )A (\(dec\).)A ( )A (Here)A ( )A (are)A ( )A (some)A ( )A (example)A ( )A (arithmetic)A ( )A (expressions.)A ( )A (\(See)A ( )A (the)A ( )A (section)A ( )A (on)A ( )A (numbers)A ( )A (for)A ( )A (an)A ( )A (explanation)A ( )A (of)A ( )A (notation\).)A BR
+% invalid font number 3
+10 FS ( )A (set)A ( )A (i)A ( )A (&)A ( )A ($)A (3)A (e)A ( )A (%)A (100)A BR
+( )A (set)A ( )A (i)A ( )A (+)A ( )A (3)A ( )A (>>)A ( )A (j)A ( )A (1)A BR
+( )A (set)A ( )A ($)A (2000)A ( )A (%)A (00000011)A BR
+( )A (inc)A ( )A (i)A BR
+( )A (dec)A ( )A ($)A (2010)A BR
+% invalid font number 1
+12 FS (The)A ( )A (first)A ( )A (expression)A ( )A (will)A ( )A (calculate)A ( )A (the)A ( )A (bitwise-and)A ( )A (of)A ( )A (the)A ( )A (hexadecimal)A ( )A (number)A ( )A (3E)A ( )A (and)A ( )A (the)A ( )A (binary)A ( )A (number)A ( )A (111,)A ( )A (and)A ( )A (store)A ( )A (the)A ( )A (result)A ( )A (into)A ( )A (the)A ( )A (variable)A ( )A (i.)A ( )A (Note)A ( )A (that)A ( )A (in)A ( )A (this)A ( )A (case,)A ( )A (because)A ( )A (both)A ( )A (of)A ( )A (the)A ( )A (terms)A ( )A (involved)A ( )A (are)A ( )A (numbers,)A ( )A (the)A ( )A (compiler)A ( )A (will)A ( )A (actually)A ( )A (calculate)A ( )A (the)A ( )A (expression's)A ( )A (value)A ( )A (\(4\))A ( )A (at)A ( )A (compile)A ( )A (time.)A BR
+BR
+(The)A ( )A (second)A ( )A (expression)A ( )A (will)A ( )A (load)A ( )A (i)A ( )A (with)A ( )A (the)A ( )A (value)A ( )A (of)A ( )A (\(3)A ( )A (+)A ( )A (\(2*j\)\).)A ( )A (The)A ( )A (third)A ( )A (expression)A ( )A (will)A ( )A (store)A ( )A (the)A ( )A (number)A ( )A (3)A ( )A (into)A ( )A (memory)A ( )A (location)A ( )A ($2000.)A ( )A (The)A ( )A (fourth)A ( )A (expression)A ( )A (will)A ( )A (increment)A ( )A (the)A ( )A (value)A ( )A (of)A ( )A (variable)A ( )A (i,)A ( )A (and)A ( )A (the)A ( )A (fifth)A ( )A (expression)A ( )A (will)A ( )A (decrement)A ( )A (the)A ( )A (value)A ( )A (in)A ( )A (memory)A ( )A (location)A ( )A ($2010.)A ( )A (Note)A ( )A (that,)A ( )A (as)A ( )A (in)A ( )A (the)A ( )A (case)A ( )A (of)A ( )A (the)A ( )A (third)A ( )A (expression,)A ( )A (setting)A ( )A (a)A ( )A (constant)A ( )A (will)A ( )A (assume)A ( )A (that)A ( )A (the)A ( )A (constant)A ( )A (is)A ( )A (a)A ( )A (memory)A ( )A (location.)A ( )A (Also)A ( )A (note)A ( )A (that)A ( )A (expressions)A ( )A (may)A ( )A (only)A ( )A (be)A ( )A (bit-shifted)A ( )A (by)A ( )A (constant)A ( )A (amounts.)A BR
+BR
+% invalid font number 0
+B1 (Arrays:)A BR
+% invalid font number 1
+B0 (An)A ( )A (array)A ( )A (can)A ( )A (be)A ( )A (declared)A ( )A (at)A ( )A (any)A ( )A (point)A ( )A (in)A ( )A (the)A ( )A (code,)A ( )A (in)A ( )A (order)A ( )A (to)A ( )A (statically)A ( )A (allocate)A ( )A (memory.)A ( )A (It)A ( )A (is)A ( )A (recommended,)A ( )A (however,)A ( )A (that)A ( )A (you)A ( )A (declare)A ( )A (arrays)A ( )A (at)A ( )A (the)A ( )A (beginning)A ( )A (of)A ( )A (the)A ( )A (source)A ( )A (files)A ( )A (where)A ( )A (they)A ( )A (are)A ( )A (most)A ( )A (relevant,)A ( )A (to)A ( )A (improve)A ( )A (readability.)A ( )A (Array)A ( )A (declaration)A ( )A (requires)A ( )A (the)A ( )A (keyword)A ( )A ("array",)A ( )A (followed)A ( )A (by)A ( )A (the)A ( )A (array's)A ( )A (name)A ( )A (and)A ( )A (size.)A ( )A (6502)A ( )A (addressing)A ( )A (limits)A ( )A (array)A ( )A (indexing)A ( )A (to)A ( )A (256)A ( )A (bytes,)A ( )A (so)A ( )A (you)A ( )A (will)A ( )A (be)A ( )A (unable)A ( )A (to)A ( )A (declare)A ( )A (and)A ( )A (use)A ( )A (a)A ( )A (single)A ( )A (array)A ( )A (larger)A ( )A (than)A ( )A (that)A ( )A (size.)A ( )A (In)A ( )A (some)A ( )A (cases,)A ( )A (you)A ( )A (may)A ( )A (need)A ( )A (an)A ( )A (array)A ( )A (to)A ( )A (reside)A ( )A (in)A ( )A (the)A ( )A (zero-page)A ( )A (\(first)A ( )A (256)A ( )A (bytes\))A ( )A (memory)A ( )A (region.)A ( )A (This)A ( )A (can)A ( )A (be)A ( )A (specified)A ( )A (with)A ( )A (the)A ( )A (additional)A ( )A (keyword)A ( )A ("zeropage")A ( )A (after)A ( )A (the)A ( )A ("array")A ( )A (keyword.)A ( )A (If)A ( )A (you)A ( )A (require)A ( )A (an)A ( )A (array)A ( )A (to)A ( )A (reside)A ( )A (at)A ( )A (a)A ( )A (specific)A ( )A (memory)A ( )A (location,)A ( )A (you)A ( )A (may)A ( )A (declare)A ( )A (it)A ( )A (as)A ( )A ("absolute")A ( )A (and)A ( )A (provide)A ( )A (the)A ( )A (memory)A ( )A (location)A ( )A (in)A ( )A (the)A ( )A (declaration.)A BR
+% invalid font number 3
+10 FS ( )A (array)A ( )A (myarray)A ( )A (10)A ( )A (//allocates)A ( )A (10)A ( )A (bytes)A ( )A (for)A ( )A (variable)A ( )A ("myarray")A BR
+( )A (array)A ( )A (zeropage)A ( )A (myarray2)A ( )A (10)A ( )A (//allocates)A ( )A (10)A ( )A (bytes)A ( )A (in)A ( )A (the)A ( )A (zero-page)A BR
+( )A (array)A ( )A (absolute)A ( )A ($)A (8000)A ( )A (datastart)A ( )A (0)A BR
+% invalid font number 1
+12 FS (The)A ( )A (first)A ( )A (two)A ( )A (declarations)A ( )A (above)A ( )A (declare)A ( )A (an)A ( )A (array)A ( )A (in)A ( )A (memory,)A ( )A (and)A ( )A (one)A ( )A (specifically)A ( )A (in)A ( )A (the)A ( )A (zero)A ( )A (page.)A ( )A (The)A ( )A (third)A ( )A (declaration)A ( )A (will)A ( )A (allow)A ( )A (you)A ( )A (to)A ( )A (refer)A ( )A (to)A ( )A (a)A ( )A (specific)A ( )A (memory)A ( )A (location)A ( )A (by)A ( )A (a)A ( )A (name,)A ( )A (but)A ( )A (the)A ( )A (compiler)A ( )A (won't)A ( )A (actually)A ( )A (try)A ( )A (to)A ( )A (reserve)A ( )A (memory,)A ( )A (since)A ( )A (the)A ( )A (given)A ( )A (size)A ( )A (in)A ( )A (this)A ( )A (case)A ( )A (is)A ( )A (0.)A ( )A (When)A ( )A (writing)A ( )A (to)A ( )A (and)A ( )A (reading)A ( )A (from)A ( )A (arrays,)A ( )A (use)A ( )A (the)A ( )A (open)A ( )A (and)A ( )A (close)A ( )A (brackets,)A ( )A (as)A ( )A (shown)A ( )A (below.)A ( )A (Array)A ( )A (indexing)A ( )A (begins)A ( )A (at)A ( )A (0)A ( )A (and)A ( )A (may)A ( )A (go)A ( )A (as)A ( )A (high)A ( )A (as)A ( )A (255.)A ( )A (There)A ( )A (is)A ( )A (no)A ( )A (bounds)A ( )A (checking)A BR
+% invalid font number 3
+10 FS ( )A (set)A ( )A (i)A ( )A (+)A ( )A (\[)A ( )A (myarray)A ( )A (2)A ( )A (\])A ( )A (4)A ( )A (//gives)A ( )A (the)A ( )A (variable)A ( )A (i)A ( )A (the)A ( )A (value)A ( )A (of)A ( )A (4)A ( )A (plus)A ( )A (the)A ( )A (current)A ( )A (value)A ( )A (of)A ( )A (myarray's)A ( )A (3rd)A ( )A (index)A BR
+( )A (set)A ( )A (\[)A ( )A (myarray)A ( )A (0)A ( )A (\])A ( )A (i)A BR
+( )A (set)A ( )A (i)A ( )A (\[$)A (2002)A (\])A ( )A (//reads)A ( )A (a)A ( )A (byte)A ( )A (from)A ( )A (memory)A ( )A (location)A ( )A ($2002,)A ( )A (and)A ( )A (stores)A ( )A (it)A ( )A (in)A ( )A (i)A BR
+% invalid font number 1
+12 FS (Note)A ( )A (that)A ( )A (the)A ( )A (NES)A ( )A (has)A ( )A (its)A ( )A (call)A ( )A (stack)A ( )A (located)A ( )A (at)A ( )A (memory)A ( )A (location)A ( )A ($100,)A ( )A (with)A ( )A (a)A ( )A (size)A ( )A (of)A ( )A (256)A ( )A (bytes.)A ( )A (Since)A ( )A (accidentally)A ( )A (writing)A ( )A (over)A ( )A (this)A ( )A (memory)A ( )A (in)A ( )A (your)A ( )A (program)A ( )A (will)A ( )A (most)A ( )A (likely)A ( )A (break)A ( )A (something,)A ( )A (the)A ( )A (nbasic)A ( )A (compiler)A ( )A (automatically)A ( )A (reserves)A ( )A (this)A ( )A (area)A ( )A (of)A ( )A (memory.)A ( )A (If,)A ( )A (for)A ( )A (some)A ( )A (reason,)A ( )A (you)A ( )A (need)A ( )A (access)A ( )A (to)A ( )A (the)A ( )A (stack's)A ( )A (contents,)A ( )A (you)A ( )A (may)A ( )A (access)A ( )A (the)A ( )A (stack)A ( )A (array)A ( )A (using)A ( )A (the)A ( )A (name)A ( )A ("nbasic_stack",)A ( )A (or)A ( )A (you)A ( )A (may)A ( )A (use)A ( )A (inline)A ( )A (assembly)A ( )A (to)A ( )A (manipulate)A ( )A (it.)A ( )A (In)A ( )A (general,)A ( )A (messing)A ( )A (with)A ( )A (the)A ( )A (stack)A ( )A (is)A ( )A (highly)A ( )A (discouraged.)A BR
+BR
+(Further)A ( )A (note)A ( )A (that,)A ( )A (in)A ( )A (most)A ( )A (cases,)A ( )A (array)A ( )A (accesses)A ( )A (will)A ( )A (alter)A ( )A (the)A ( )A (contents)A ( )A (of)A ( )A (the)A ( )A (X)A ( )A (register.)A ( )A (Beware)A ( )A (of)A ( )A (this,)A ( )A (if)A ( )A (you)A ( )A (are)A ( )A (using)A ( )A (the)A ( )A (X)A ( )A (register)A ( )A (and)A ( )A (arrays)A ( )A (in)A ( )A (the)A ( )A (same)A ( )A (statement)A ( )A (or)A ( )A (function.)A BR
+BR
+% invalid font number 0
+B1 (Comments:)A BR
+% invalid font number 1
+B0 (Comments)A ( )A (are)A ( )A (created)A ( )A (by)A ( )A (using)A ( )A (any)A ( )A (of)A ( )A (several)A ( )A (common)A ( )A (comment)A ( )A (conventions.)A ( )A (Comments)A ( )A (begin)A ( )A (with)A ( )A (a)A ( )A (double)A ( )A (forward)A ( )A (slash,)A ( )A (a)A ( )A (hash)A ( )A (mark,)A ( )A (or)A ( )A (a)A ( )A (semicolon.)A ( )A (A)A ( )A (comment)A ( )A (may)A ( )A (begin)A ( )A (at)A ( )A (any)A ( )A (location)A ( )A (in)A ( )A (a)A ( )A (line,)A ( )A (and)A ( )A (the)A ( )A (rest)A ( )A (of)A ( )A (the)A ( )A (line)A ( )A (is)A ( )A (ignored)A ( )A (by)A ( )A (the)A ( )A (compiler.)A BR
+% invalid font number 3
+10 FS ( )A (//)A ( )A (this)A ( )A (is)A ( )A (a)A ( )A (C++-style)A ( )A (comment)A BR
+( )A (#)A ( )A (this)A ( )A (is)A ( )A (a)A ( )A (shell-style)A ( )A (comment)A BR
+( )A (;)A ( )A (this)A ( )A (is)A ( )A (a)A ( )A (nesasm-style)A ( )A (comment)A ( )A (\(for)A ( )A (inline)A ( )A (assembly\))A BR
+( )A (;)A (//)A ( )A (this)A ( )A (nesasm-style)A ( )A (comment)A ( )A (shows)A ( )A (up)A ( )A (colored)A ( )A (in)A ( )A (my)A ( )A (C++)A ( )A (editor)A BR
+% invalid font number 1
+12 FS BR
+% invalid font number 0
+B1 (Ending)A ( )A (a)A ( )A (Program:)A BR
+% invalid font number 1
+B0 (At)A ( )A (any)A ( )A (point)A ( )A (in)A ( )A (your)A ( )A (program's)A ( )A (source)A ( )A (code,)A ( )A (you)A ( )A (may)A ( )A (use)A ( )A (the)A ( )A (keyword)A ( )A ("end")A ( )A (to)A ( )A (stop)A ( )A (compilation)A ( )A (at)A ( )A (that)A ( )A (point.)A ( )A (This)A ( )A (allows)A ( )A (you)A ( )A (to)A ( )A (have)A ( )A (any)A ( )A (amount)A ( )A (of)A ( )A (test)A ( )A (code)A ( )A (and)A ( )A (unfinished)A ( )A (functions)A ( )A (without)A ( )A (breaking)A ( )A (compilation,)A ( )A (since)A ( )A (anything)A ( )A (after)A ( )A (the)A ( )A ("end")A ( )A (will)A ( )A (be)A ( )A (ignored.)A ( )A (Note)A ( )A (that)A ( )A (this)A ( )A (keyword)A ( )A (is)A ( )A (entirely)A ( )A (optional,)A ( )A (and)A ( )A (your)A ( )A (program)A ( )A (will)A ( )A (stop)A ( )A (compilation)A ( )A (at)A ( )A (end)A ( )A (of)A ( )A (file)A ( )A (if)A ( )A (it)A ( )A (is)A ( )A (not)A ( )A (present.)A BR
+BR
+% invalid font number 0
+B1 (Loops:)A BR
+% invalid font number 1
+B0 (Loops)A ( )A (currently)A ( )A (are)A ( )A (not)A ( )A (supported)A ( )A (natively)A ( )A (by)A ( )A (the)A ( )A (compiler,)A ( )A (but)A ( )A (you)A ( )A (can)A ( )A (create)A ( )A (them)A ( )A (manually.)A ( )A (An)A ( )A (example)A ( )A ("for")A ( )A (loop)A ( )A (is)A ( )A (shown)A ( )A (below.)A BR
+% invalid font number 3
+10 FS ( )A (set)A ( )A (i)A ( )A (0)A BR
+( )A (looplabel:)A BR
+( )A (//do)A ( )A (something)A ( )A (here)A BR
+( )A (inc)A ( )A (i)A BR
+( )A (if)A ( )A (i)A ( )A (<>)A ( )A (10)A ( )A (goto)A ( )A (looplabel)A BR
+% invalid font number 1
+12 FS (If)A ( )A (you)A ( )A (need)A ( )A (a)A ( )A (fast)A ( )A (loop,)A ( )A (you)A ( )A (may)A ( )A (wish)A ( )A (to)A ( )A (use)A ( )A (the)A ( )A ("branchto")A ( )A (keyword,)A ( )A (instead)A ( )A (of)A ( )A ("goto".)A ( )A (The)A ( )A (branchto)A ( )A (keyword)A ( )A (is)A ( )A (only)A ( )A (valid)A ( )A (as)A ( )A (the)A ( )A (result)A ( )A (of)A ( )A (an)A ( )A (if)A ( )A (statement,)A ( )A (and)A ( )A (it)A ( )A (creates)A ( )A (code)A ( )A (as)A ( )A (fast)A ( )A (as)A ( )A (hand-optimized)A ( )A (assembly.)A ( )A (Any)A ( )A (other)A ( )A (statement,)A ( )A (including)A ( )A ("goto",)A ( )A (is)A ( )A (treated)A ( )A (as)A ( )A (a)A ( )A (generalized)A ( )A (conditional)A ( )A (result)A ( )A (and)A ( )A (will)A ( )A (not)A ( )A (be)A ( )A (as)A ( )A (fast.)A ( )A (For)A ( )A (the)A ( )A (fastest)A ( )A (loop)A ( )A (execution,)A ( )A (you)A ( )A (may)A ( )A (wish)A ( )A (to)A ( )A (use)A ( )A (the)A ( )A (X)A ( )A (or)A ( )A (Y)A ( )A (register)A ( )A (as)A ( )A (your)A ( )A (looping)A ( )A (index,)A ( )A (rather)A ( )A (than)A ( )A (a)A ( )A (variable.)A BR
+% invalid font number 3
+10 FS ( )A (set)A ( )A (y)A ( )A (0)A ( )A (//using)A ( )A (the)A ( )A (Y)A ( )A (register)A ( )A (is)A ( )A (faster)A ( )A (than)A ( )A (a)A ( )A (variable)A BR
+( )A (fastloop:)A BR
+( )A (//do)A ( )A (something)A ( )A (here)A BR
+( )A (inc)A ( )A (y)A BR
+( )A (if)A ( )A (y)A ( )A (<>)A ( )A (32)A ( )A (branchto)A ( )A (fastloop)A BR
+% invalid font number 1
+12 FS BR
+% invalid font number 0
+B1 (If)A ( )A (Statements:)A BR
+% invalid font number 1
+B0 (The)A ( )A (if)A ( )A (statement)A ( )A (is)A ( )A (very)A ( )A (important)A ( )A (for)A ( )A (creating)A ( )A (code)A ( )A (that)A ( )A (does)A ( )A (anything)A ( )A (useful.)A ( )A (Available)A ( )A (comparisons)A ( )A (are)A ( )A (equal)A ( )A (\(=\),)A ( )A (less)A ( )A (than)A ( )A (\(<\),)A ( )A (greater)A ( )A (than)A ( )A (\(>\),)A ( )A (less)A ( )A (or)A ( )A (equal)A ( )A (\(<=\),)A ( )A (greater)A ( )A (or)A ( )A (equal)A ( )A (\(>=\),)A ( )A (and)A ( )A (not)A ( )A (equal)A ( )A (\(<>\).)A ( )A (The)A ( )A (standard)A ( )A (if)A ( )A (statement)A ( )A (will)A ( )A (execute)A ( )A (the)A ( )A (statement)A ( )A (following)A ( )A (it)A ( )A (when)A ( )A (the)A ( )A (comparison)A ( )A (is)A ( )A (true.)A ( )A (Multiple)A ( )A (statements)A ( )A (may)A ( )A (be)A ( )A (executed)A ( )A (by)A ( )A (using)A ( )A (the)A ( )A (block)A ( )A (if,)A ( )A (which)A ( )A (is)A ( )A (begun)A ( )A (with)A ( )A (the)A ( )A (keyword)A ( )A ("then",)A ( )A (and)A ( )A (ended)A ( )A (with)A ( )A (the)A ( )A (keyword)A ( )A ("endif".)A BR
+% invalid font number 3
+10 FS ( )A (if)A ( )A (numlives)A ( )A (>)A ( )A (0)A BR
+( )A (gosub)A ( )A (dostuff1)A ( )A (//this)A ( )A (only)A ( )A (gets)A ( )A (called)A ( )A (when)A ( )A (numlives>0)A BR
+( )A (gosub)A ( )A (dostuff2)A ( )A (//this)A ( )A (is)A ( )A (always)A ( )A (called)A BR
+( )A (if)A ( )A (health)A ( )A (=)A ( )A (3)A ( )A (then)A BR
+( )A (gosub)A ( )A (dostuff1)A ( )A (//this)A ( )A (only)A ( )A (gets)A ( )A (called)A ( )A (when)A ( )A (health=3)A BR
+( )A (gosub)A ( )A (dostuff2)A ( )A (//this)A ( )A (is)A ( )A (also)A ( )A (only)A ( )A (called)A ( )A (when)A ( )A (health=3)A BR
+( )A (endif)A BR
+% invalid font number 1
+12 FS BR
+% invalid font number 0
+B1 (Inline)A ( )A (Assembly:)A BR
+% invalid font number 1
+B0 (Inline)A ( )A (assembly)A ( )A (is)A ( )A (vital)A ( )A (for)A ( )A (functionality)A ( )A (that)A ( )A (is)A ( )A (not)A ( )A (provided)A ( )A (by)A ( )A (nbasic,)A ( )A (such)A ( )A (as)A ( )A (nesasm)A ( )A (directives.)A ( )A (An)A ( )A (assembly)A ( )A (block)A ( )A (is)A ( )A (started)A ( )A (with)A ( )A (the)A ( )A (keyword)A ( )A ("asm")A ( )A (on)A ( )A (its)A ( )A (own)A ( )A (line,)A ( )A (and)A ( )A (ended)A ( )A (by)A ( )A (the)A ( )A (keyword)A ( )A ("endasm")A ( )A (on)A ( )A (its)A ( )A (own)A ( )A (line.)A ( )A (All)A ( )A (the)A ( )A (lines)A ( )A (between)A ( )A (will)A ( )A (be)A ( )A (copied)A ( )A (to)A ( )A (the)A ( )A (output)A ( )A (assembly)A ( )A (listing)A ( )A (exactly)A ( )A (as)A ( )A (they)A ( )A (are,)A ( )A (including)A ( )A (spacing.)A ( )A (Note)A ( )A (that)A ( )A (nesasm)A ( )A (will)A ( )A (require)A ( )A (at)A ( )A (least)A ( )A (one)A ( )A (space)A ( )A (or)A ( )A (tab)A ( )A (before)A ( )A (most)A ( )A (instructions.)A BR
+% invalid font number 3
+10 FS ( )A (asm)A BR
+( )A (lda)A ( )A (#0)A ( )A (;)A (we)A ( )A (must)A ( )A (start)A ( )A (comments)A ( )A (with)A ( )A (semicolon)A ( )A (here,)A ( )A (to)A ( )A (make)A ( )A (nesasm)A ( )A (happy)A BR
+( )A (;)A (//I)A ( )A (write)A ( )A (comments)A ( )A (like)A ( )A (this,)A ( )A (so)A ( )A (they)A ( )A (show)A ( )A (up)A ( )A (in)A ( )A (my)A ( )A (usual)A ( )A (code)A ( )A (editor)A BR
+( )A (endasm)A BR
+% invalid font number 1
+12 FS BR
+% invalid font number 0
+B1 (Jumps:)A BR
+% invalid font number 1
+B0 (Jumps)A ( )A (are)A ( )A (used)A ( )A (to)A ( )A (replace)A ( )A (function)A ( )A (calls.)A ( )A (BASIC)A ( )A (programmers)A ( )A (have)A ( )A (long)A ( )A (been)A ( )A (known)A ( )A (for)A ( )A (writing)A ( )A (spaghetti)A ( )A (code,)A ( )A (thanks)A ( )A (to)A ( )A (prolific)A ( )A (usage)A ( )A (of)A ( )A (the)A ( )A ("goto")A ( )A (statement.)A ( )A (Such)A ( )A (a)A ( )A (coding)A ( )A (style)A ( )A (leads)A ( )A (to)A ( )A (horribly)A ( )A (unreadable)A ( )A (code)A ( )A (and,)A ( )A (in)A ( )A (many)A ( )A (cases,)A ( )A (a)A ( )A (slew)A ( )A (of)A ( )A (bugs.)A ( )A (For)A ( )A (this)A ( )A (reason,)A ( )A (I)A ( )A (very)A ( )A (strongly)A ( )A (suggest)A ( )A (that)A ( )A (you)A ( )A (follow)A ( )A (these)A ( )A (two)A ( )A (simple)A ( )A (rules)A ( )A (for)A ( )A (jumps:)A BR
+( )A (1.)A ( )A (Use)A ( )A (the)A ( )A ("goto")A ( )A (statement)A ( )A (only)A ( )A (for)A ( )A (downward)A ( )A (jumps)A ( )A (within)A ( )A (the)A ( )A (same)A ( )A (function,)A ( )A (or)A ( )A (for)A ( )A (loops)A BR
+( )A (2.)A ( )A (Use)A ( )A ("gosub")A ( )A (and)A ( )A ("return")A ( )A (for)A ( )A (all)A ( )A (other)A ( )A (jumps)A BR
+(Of)A ( )A (course,)A ( )A (the)A ( )A (term)A ( )A ("function")A ( )A (isn't)A ( )A (exactly)A ( )A (well-defined)A ( )A (in)A ( )A (nbasic,)A ( )A (but)A ( )A (in)A ( )A (general)A ( )A (it)A ( )A (should)A ( )A (be)A ( )A (fairly)A ( )A (obvious.)A ( )A (A)A ( )A (block)A ( )A (of)A ( )A (code)A ( )A (that)A ( )A (is)A ( )A (accessed)A ( )A (by)A ( )A (jumping)A ( )A (to)A ( )A (a)A ( )A (common)A ( )A (label)A ( )A (can)A ( )A (be)A ( )A (considered)A ( )A (to)A ( )A (be)A ( )A (a)A ( )A (function.)A BR
+BR
+(The)A ( )A (dangerous)A ( )A ("goto")A ( )A (statement)A ( )A (will)A ( )A (stop)A ( )A (program)A ( )A (execution)A ( )A (at)A ( )A (the)A ( )A (current)A ( )A (line)A ( )A (and)A ( )A (resume)A ( )A (it)A ( )A (at)A ( )A (the)A ( )A (indicated)A ( )A (label.)A ( )A (The)A ( )A ("gosub")A ( )A (statement)A ( )A (will)A ( )A (similarly)A ( )A (begin)A ( )A (execution)A ( )A (at)A ( )A (another)A ( )A (location,)A ( )A (but)A ( )A (it)A ( )A (will)A ( )A (keep)A ( )A (track)A ( )A (of)A ( )A (your)A ( )A (previous)A ( )A (location)A ( )A (in)A ( )A (the)A ( )A (code.)A ( )A (Upon)A ( )A (encountering)A ( )A (a)A ( )A ("return")A ( )A (statement,)A ( )A (execution)A ( )A (will)A ( )A (resume)A ( )A (at)A ( )A (the)A ( )A (location)A ( )A (directly)A ( )A (after)A ( )A (the)A ( )A ("gosub")A ( )A (jump.)A ( )A (Become)A ( )A (proficient)A ( )A (at)A ( )A (using)A ( )A ("gosub")A ( )A (and)A ( )A ("return".)A ( )A (They)A ( )A (are)A ( )A (your)A ( )A (friends.)A BR
+BR
+% invalid font number 0
+B1 (Labels:)A BR
+% invalid font number 1
+B0 (Labels)A ( )A (are)A ( )A (declared)A ( )A (by)A ( )A (beginning)A ( )A (a)A ( )A (line)A ( )A (with)A ( )A (a)A ( )A (label)A ( )A (name)A ( )A (followed)A ( )A (by)A ( )A (a)A ( )A (colon.)A ( )A (This)A ( )A (label)A ( )A (may)A ( )A (be)A ( )A (used)A ( )A (as)A ( )A (the)A ( )A (target)A ( )A (for)A ( )A (a)A ( )A (goto)A ( )A (or)A ( )A (gosub)A ( )A (command,)A ( )A (or,)A ( )A (if)A ( )A (you're)A ( )A (really)A ( )A (ambitious,)A ( )A (you)A ( )A (can)A ( )A (use)A ( )A (it)A ( )A (as)A ( )A (the)A ( )A (array)A ( )A (name)A ( )A (for)A ( )A (static)A ( )A (data.)A BR
+% invalid font number 3
+10 FS ( )A (mylabel:)A ( )A (//this)A ( )A (is)A ( )A (a)A ( )A (label)A BR
+% invalid font number 1
+12 FS BR
+% invalid font number 0
+B1 (Numbers:)A BR
+% invalid font number 1
+B0 (Numbers)A ( )A (in)A ( )A (nbasic)A ( )A (may)A ( )A (be)A ( )A (expressed)A ( )A (as)A ( )A (decimal,)A ( )A (hexadecimal,)A ( )A (or)A ( )A (binary.)A ( )A (In)A ( )A (most)A ( )A (cases,)A ( )A (except)A ( )A (for)A ( )A (memory)A ( )A (locations,)A ( )A (constants)A ( )A (greater)A ( )A (than)A ( )A (255)A ( )A (will)A ( )A (be)A ( )A (truncated)A ( )A (to)A ( )A (8)A ( )A (bits)A ( )A (\(mod)A ( )A (256\).)A ( )A (The)A ( )A (number)A ( )A (255)A ( )A (in)A ( )A (decimal,)A ( )A (hexadecimal,)A ( )A (and)A ( )A (binary)A ( )A (would)A ( )A (be)A ( )A (written)A ( )A (as)A ( )A (255,)A ( )A ($ff,)A ( )A (and)A ( )A (%11111111.)A BR
+BR
+% invalid font number 0
+B1 (Variables:)A % invalid font number 1
+B0 BR
+(The)A ( )A (first)A ( )A (thing)A ( )A (to)A ( )A (note)A ( )A (about)A ( )A (variables)A ( )A (is)A ( )A (that)A ( )A (you)A ( )A (should)A ( )A (not)A ( )A (use)A ( )A (A,)A ( )A (X,)A ( )A (or)A ( )A (Y)A ( )A (as)A ( )A (general)A ( )A (variable)A ( )A (names.)A ( )A (These)A ( )A (are)A ( )A (the)A ( )A (names)A ( )A (of)A ( )A (the)A ( )A (main)A ( )A (6502)A ( )A (registers,)A ( )A (and)A ( )A (they)A ( )A (could)A ( )A (cause)A ( )A (bad)A ( )A (things)A ( )A (to)A ( )A (happen)A ( )A (if)A ( )A (treated)A ( )A (carelessly.)A ( )A (However,)A ( )A (in)A ( )A (order)A ( )A (to)A ( )A (allow)A ( )A (greater)A ( )A (flexibility,)A ( )A (nbasic)A ( )A (does)A ( )A (allow)A ( )A (you)A ( )A (to)A ( )A (use)A ( )A (these)A ( )A (named)A ( )A (registers)A ( )A (in)A ( )A (many)A ( )A (useful)A ( )A (situations.)A BR
+BR
+(Arrays)A ( )A (and)A ( )A (general)A ( )A (variables)A ( )A (are)A ( )A (treated)A ( )A (as)A ( )A (essentially)A ( )A (the)A ( )A (same.)A ( )A (In)A ( )A (fact,)A ( )A (you)A ( )A (can)A ( )A (access)A ( )A (memory)A ( )A (elements)A ( )A (after)A ( )A (variables)A ( )A (by)A ( )A (treating)A ( )A (them)A ( )A (as)A ( )A (arrays,)A ( )A (but)A ( )A (this)A ( )A (is)A ( )A (not)A ( )A (recommended)A ( )A (unless)A ( )A (you're)A ( )A (certain)A ( )A (that)A ( )A (you)A ( )A (know)A ( )A (what)A ( )A (memory)A ( )A (you)A ( )A (are)A ( )A (affecting.)A ( )A (Similarly,)A ( )A (the)A ( )A (first)A ( )A (element)A ( )A (of)A ( )A (an)A ( )A (array)A ( )A (can)A ( )A (be)A ( )A (accessed)A ( )A (simply)A ( )A (by)A ( )A (using)A ( )A (the)A ( )A (array's)A ( )A (name)A ( )A (as)A ( )A (a)A ( )A (variable.)A ( )A (Single-byte)A ( )A (variables)A ( )A (do)A ( )A (not)A ( )A (need)A ( )A (to)A ( )A (be)A ( )A (declared.)A ( )A (The)A ( )A (first)A ( )A (time)A ( )A (that)A ( )A (the)A ( )A (compiler)A ( )A (sees)A ( )A (a)A ( )A (new)A ( )A (variable)A ( )A (name)A ( )A (in)A ( )A (a)A ( )A ("set")A ( )A (statement,)A ( )A (it)A ( )A (will)A ( )A (automatically)A ( )A (reserve)A ( )A (1)A ( )A (byte)A ( )A (of)A ( )A (memory)A ( )A (for)A ( )A (that)A ( )A (variable.)A BR
+BR
+(Note)A ( )A (that,)A ( )A (as)A ( )A (stated)A ( )A (above)A ( )A (in)A ( )A (the)A ( )A (array)A ( )A (section)A ( )A (of)A ( )A (this)A ( )A (document,)A ( )A (the)A ( )A (memory)A ( )A (region)A ( )A ($100-$1FF)A ( )A (is)A ( )A (reserved)A ( )A (by)A ( )A (the)A ( )A (NES's)A ( )A (execution)A ( )A (stack,)A ( )A (under)A ( )A (the)A ( )A (name)A ( )A ("nbasic_stack".)A ( )A (Attempts)A ( )A (to)A ( )A (declare)A ( )A (variables)A ( )A (of)A ( )A (non-zero)A ( )A (size)A ( )A (in)A ( )A (this)A ( )A (region)A ( )A (will)A ( )A (fail.)A BR
+BR
+BR
+% invalid font number 0
+B1 (Programming)A ( )A (The)A ( )A (NES)A BR
+% invalid font number 1
+B0 (The)A ( )A (NES)A ( )A (CPU)A BR
+(CPU)A ( )A (Memory)A ( )A (Map)A BR
+(INES)A ( )A (Header)A BR
+(Interrupt)A ( )A (Vectors)A BR
+(Joystick)A ( )A (Polling)A BR
+(MMC3)A ( )A (Memory)A ( )A (Mapper)A BR
+(PPU)A ( )A (Memory)A ( )A (Map)A BR
+(The)A ( )A (NES)A ( )A (PPU)A BR
+(Palettes)A BR
+(Tiles)A ( )A (and)A ( )A (Pattern)A ( )A (Tables)A BR
+(Name)A ( )A (Tables)A BR
+(Attribute)A ( )A (Tables)A BR
+(Scrolling)A BR
+(Sprites)A BR
+(Sprite)A ( )A (0)A ( )A (Hit)A BR
+(Vertical)A ( )A (Blanking)A BR
+(NES)A ( )A (Sound)A BR
+(Acknowledgements)A BR
+% invalid font number 0
+B1 BR
+BR
+(The)A ( )A (NES)A ( )A (CPU)A BR
+% invalid font number 1
+B0 (At)A ( )A (the)A ( )A (heart)A ( )A (of)A ( )A (the)A ( )A (NES)A ( )A (is)A ( )A (a)A ( )A (2A03)A ( )A (processor,)A ( )A (which)A ( )A (is)A ( )A (a)A ( )A (modified)A ( )A (MOS)A ( )A (6502)A ( )A (processor.)A ( )A (It)A ( )A (has)A ( )A (16-bit)A ( )A (memory)A ( )A (addressing,)A ( )A (a)A ( )A (variable)A ( )A (length)A ( )A (instruction)A ( )A (set,)A ( )A (and)A ( )A (8-bit)A ( )A (processing)A ( )A (capabilities.)A ( )A (It)A ( )A (runs)A ( )A (at)A ( )A (a)A ( )A (blazing)A ( )A (1.79)A ( )A (MHz.)A ( )A (Most)A ( )A (of)A ( )A (the)A ( )A (arithmetic)A ( )A (processing)A ( )A (is)A ( )A (handled)A ( )A (by)A ( )A (the)A ( )A (accumulator)A ( )A (register,)A ( )A (A.)A ( )A (The)A ( )A (X)A ( )A (and)A ( )A (Y)A ( )A (registers)A ( )A (are)A ( )A (used)A ( )A (mostly)A ( )A (for)A ( )A (array)A ( )A (addressing.)A ( )A (More)A ( )A (information)A ( )A (on)A ( )A (the)A ( )A (6502)A ( )A (and)A ( )A (its)A ( )A (instruction)A ( )A (set)A ( )A (can)A ( )A (be)A ( )A (found)A ( )A (in)A ( )A (the)A ( )A (following)A ( )A (two)A ( )A (documents.)A BR
+(http://nesdev.parodius.com/6502.txt)A BR
+(http://nesdev.parodius.com/6502guid.txt)A BR
+BR
+% invalid font number 0
+B1 (CPU)A ( )A (Memory)A ( )A (Map)A BR
+% invalid font number 1
+B0 (The)A ( )A (16-bit)A ( )A (addressable)A ( )A (memory)A ( )A (of)A ( )A (the)A ( )A (6502)A ( )A (gives)A ( )A (the)A ( )A (programmer)A ( )A (direct)A ( )A (access)A ( )A (to)A ( )A (64k)A ( )A (of)A ( )A (data,)A ( )A (arranged)A ( )A (as)A ( )A (in)A ( )A (the)A ( )A (table)A ( )A (below.)A ( )A (In)A ( )A (most)A ( )A (cases,)A ( )A (the)A ( )A (programmer)A ( )A (would)A ( )A (only)A ( )A (be)A ( )A (concerned)A ( )A (with)A ( )A (the)A ( )A ($8000-$FFFF)A ( )A (range)A ( )A (\(program)A ( )A (code)A ( )A (and)A ( )A (data\),)A ( )A ($0000-$07FF)A ( )A (\(generally-available)A ( )A (RAM\),)A ( )A (and)A ( )A (certain)A ( )A (memory)A ( )A (locations)A ( )A (in)A ( )A (the)A ( )A ($2000-$4FFF)A ( )A (range)A ( )A (\(hardware)A ( )A (interrupts)A ( )A (and)A ( )A (polling\).)A BR
+BR
+($C000)A ( )A (-)A ( )A ($FFFF)A ( )A (Upper)A ( )A (Bank)A ( )A (of)A ( )A (PRG)A ( )A (ROM)A BR
+($8000)A ( )A (-)A ( )A ($BFFF)A ( )A (Lower)A ( )A (Bank)A ( )A (of)A ( )A (PRG)A ( )A (ROM)A BR
+($6000)A ( )A (-)A ( )A ($7FFF)A ( )A (Cartridge)A ( )A (RAM)A ( )A (\(possibly)A ( )A (battery-backed\))A BR
+($5000)A ( )A (-)A ( )A ($5FFF)A ( )A (Expansion)A ( )A (Modules)A BR
+($2000)A ( )A (-)A ( )A ($4FFF)A ( )A (I/O)A BR
+($0000)A ( )A (-)A ( )A ($1FFF)A ( )A (Internal)A ( )A (RAM)A ( )A (\(2k,)A ( )A (mirrored)A ( )A (4)A ( )A (times\))A BR
+BR
+% invalid font number 0
+B1 (INES)A ( )A (Header:)A BR
+% invalid font number 2
+I1 (incomplete)A ( )A (section)A BR
+% invalid font number 1
+I0 BR
+% invalid font number 0
+B1 (Interrupt)A ( )A (Vectors:)A BR
+% invalid font number 2
+I1 (incomplete)A ( )A (section)A BR
+% invalid font number 1
+I0 BR
+% invalid font number 0
+B1 (Joystick)A ( )A (Polling:)A BR
+% invalid font number 1
+B0 (Polling)A ( )A (the)A ( )A (joystick,)A ( )A (or)A ( )A (reading)A ( )A (the)A ( )A (status)A ( )A (of)A ( )A (the)A ( )A (controller)A ( )A (buttons,)A ( )A (is)A ( )A (easy.)A ( )A (Controller)A ( )A (1)A ( )A (is)A ( )A (accessed)A ( )A (through)A ( )A (port)A ( )A ($4016,)A ( )A (and)A ( )A (controller)A ( )A (2)A ( )A (through)A ( )A (port)A ( )A ($4017.)A ( )A (To)A ( )A (read)A ( )A (the)A ( )A (status)A ( )A (of)A ( )A (the)A ( )A (controller,)A ( )A (first)A ( )A (strobe)A ( )A (by)A ( )A (writing)A ( )A (a)A ( )A (1)A ( )A (and)A ( )A (a)A ( )A (0)A ( )A (to)A ( )A (the)A ( )A (port.)A ( )A (Then,)A ( )A (successive)A ( )A (reads)A ( )A (from)A ( )A (the)A ( )A (port)A ( )A (will)A ( )A (give)A ( )A (the)A ( )A (status)A ( )A (of)A ( )A (each)A ( )A (button)A ( )A (in)A ( )A (turn.)A ( )A (The)A ( )A (low)A ( )A (bit)A ( )A (will)A ( )A (tell)A ( )A (if)A ( )A (the)A ( )A (button)A ( )A (is)A ( )A (currently)A ( )A (pressed.)A ( )A (The)A ( )A (buttons)A ( )A (are)A ( )A (read)A ( )A (in)A ( )A (the)A ( )A (order)A ( )A (A,)A ( )A (B,)A ( )A (Select,)A ( )A (Start,)A ( )A (Up,)A ( )A (Down,)A ( )A (Left,)A ( )A (Right.)A ( )A (The)A ( )A (following)A ( )A (code)A ( )A (will)A ( )A (read)A ( )A (the)A ( )A (status)A ( )A (of)A ( )A (the)A ( )A (first)A ( )A (controller,)A ( )A (and)A ( )A (set)A ( )A (appropriate)A ( )A (variables)A ( )A (with)A ( )A (the)A ( )A (value)A ( )A (1)A ( )A (or)A ( )A (0,)A ( )A (depending)A ( )A (on)A ( )A (whether)A ( )A (each)A ( )A (button)A ( )A (is)A ( )A (pressed)A ( )A (or)A ( )A (released)A ( )A (at)A ( )A (the)A ( )A (time.)A % invalid font number 3
+10 FS BR
+B0 B0 ( )A (poll_joystick_1:)A ( )A (//update)A ( )A (joystick)A ( )A (1)A ( )A (button)A ( )A (status)A BR
+( )A (set)A ( )A ($)A (4016)A ( )A (1)A ( )A (//first)A ( )A (strobe)A ( )A (byte)A BR
+( )A (set)A ( )A ($)A (4016)A ( )A (0)A ( )A (//second)A ( )A (strobe)A ( )A (byte)A BR
+( )A (set)A ( )A (joy1a)A ( )A (&)A ( )A (\[$)A (4016)A (\])A ( )A (1)A BR
+( )A (set)A ( )A (joy1b)A ( )A (&)A ( )A (\[$)A (4016)A (\])A ( )A (1)A BR
+( )A (set)A ( )A (joy1select)A ( )A (&)A ( )A (\[$)A (4016)A (\])A ( )A (1)A BR
+( )A (set)A ( )A (joy1start)A ( )A (&)A ( )A (\[$)A (4016)A (\])A ( )A (1)A BR
+( )A (set)A ( )A (joy1up)A ( )A (&)A ( )A (\[$)A (4016)A (\])A ( )A (1)A BR
+( )A (set)A ( )A (joy1down)A ( )A (&)A ( )A (\[$)A (4016)A (\])A ( )A (1)A BR
+( )A (set)A ( )A (joy1left)A ( )A (&)A ( )A (\[$)A (4016)A (\])A ( )A (1)A BR
+( )A (set)A ( )A (joy1right)A ( )A (&)A ( )A (\[$)A (4016)A (\])A ( )A (1)A BR
+( )A (return)A BR
+% invalid font number 1
+12 FS BR
+% invalid font number 0
+B1 (MMC3)A ( )A (Memory)A ( )A (Mapper:)A BR
+% invalid font number 2
+I1 (incomplete)A ( )A (section)A BR
+% invalid font number 1
+I0 BR
+% invalid font number 0
+B1 (PPU)A ( )A (Memory)A ( )A (Map)A BR
+% invalid font number 1
+B0 ($3F20)A ( )A (--)A BR
+($3F10)A ( )A (-)A ( )A ($3F1F)A ( )A (Foreground)A ( )A (Palette)A ( )A (\(16)A ( )A (bytes\))A BR
+($3F00)A ( )A (-)A ( )A ($3F0F)A ( )A (Background)A ( )A (Palette)A ( )A (\(16)A ( )A (bytes\))A BR
+($3000)A ( )A (--)A BR
+($2FC0)A ( )A (-)A ( )A ($2FFF)A ( )A (Attribute)A ( )A (table)A ( )A (3)A ( )A (\(8x8)A ( )A (entries,)A ( )A (64)A ( )A (bytes\))A BR
+($2C00)A ( )A (-)A ( )A ($2FBF)A ( )A (Name)A ( )A (Table)A ( )A (3)A ( )A (\(32x30)A ( )A (tiles,)A ( )A (960)A ( )A (bytes\))A BR
+($2BC0)A ( )A (-)A ( )A ($2BFF)A ( )A (Attribute)A ( )A (Table)A ( )A (2)A ( )A (\(8x8)A ( )A (entries,)A ( )A (64)A ( )A (bytes\))A BR
+($2800)A ( )A (-)A ( )A ($2BBF)A ( )A (Name)A ( )A (Table)A ( )A (2)A ( )A (\(32x30)A ( )A (tiles,)A ( )A (960)A ( )A (bytes\))A BR
+($27C0)A ( )A (-)A ( )A ($27FF)A ( )A (Attribute)A ( )A (table)A ( )A (1)A ( )A (\(8x8)A ( )A (entries,)A ( )A (64)A ( )A (bytes\))A BR
+($2400)A ( )A (-)A ( )A ($24BF)A ( )A (Name)A ( )A (Table)A ( )A (1)A ( )A (\(32x30)A ( )A (tiles,)A ( )A (960)A ( )A (bytes\))A BR
+($23C0)A ( )A (-)A ( )A ($23FF)A ( )A (Attribute)A ( )A (Table)A ( )A (0)A ( )A (\(8x8)A ( )A (entries,)A ( )A (64)A ( )A (bytes\))A BR
+($2000)A ( )A (-)A ( )A ($23BF)A ( )A (Name)A ( )A (Table)A ( )A (0)A ( )A (\(32x30)A ( )A (tiles,)A ( )A (960)A ( )A (bytes\))A BR
+($1000)A ( )A (-)A ( )A ($1FFF)A ( )A (Pattern)A ( )A (Table)A ( )A (1)A ( )A (\(256)A ( )A (tiles,)A ( )A (4)A ( )A (Kbytes\))A BR
+($0000)A ( )A (-)A ( )A ($0FFF)A ( )A (Pattern)A ( )A (Table)A ( )A (0)A ( )A (\(256)A ( )A (tiles,)A ( )A (4)A ( )A (Kbytes\))A BR
+BR
+% invalid font number 0
+B1 (The)A ( )A (NES)A ( )A (PPU)A BR
+% invalid font number 1
+B0 (The)A ( )A (PPU)A ( )A (is)A ( )A (the)A ( )A ("picture)A ( )A (processing)A ( )A (unit",)A ( )A (the)A ( )A (main)A ( )A (graphics)A ( )A (chip.)A ( )A (It)A ( )A (has)A ( )A (two)A ( )A (image)A ( )A (planes)A ( )A (--)A ( )A (one)A ( )A (for)A ( )A (background,)A ( )A (and)A ( )A (one)A ( )A (for)A ( )A (foreground.)A ( )A (The)A ( )A (NES)A ( )A (has)A ( )A (enough)A ( )A (video)A ( )A (memory)A ( )A (for)A ( )A (two)A ( )A (screens')A ( )A (worth)A ( )A (of)A ( )A (background)A ( )A (image)A ( )A (\(stored)A ( )A (in)A ( )A (the)A ( )A (name)A ( )A (tables\).)A BR
+BR
+(To)A ( )A (write)A ( )A (data)A ( )A (to)A ( )A (or)A ( )A (read)A ( )A (data)A ( )A (from)A ( )A (the)A ( )A (PPU,)A ( )A (use)A ( )A (CPU)A ( )A (ports)A ( )A ($2006)A ( )A (and)A ( )A ($2007.)A ( )A (Write)A ( )A (the)A ( )A (high)A ( )A (byte,)A ( )A (then)A ( )A (the)A ( )A (low)A ( )A (byte,)A ( )A (of)A ( )A (the)A ( )A (desired)A ( )A (PPU)A ( )A (start)A ( )A (address)A ( )A (to)A ( )A ($2006,)A ( )A (then)A ( )A (read)A ( )A (from)A ( )A (or)A ( )A (write)A ( )A (to)A ( )A ($2007.)A ( )A (Each)A ( )A (read/write)A ( )A (to)A ( )A ($2007)A ( )A (will)A ( )A (return)A ( )A (or)A ( )A (change)A ( )A (the)A ( )A (data)A ( )A (at)A ( )A (the)A ( )A (current)A ( )A (PPU)A ( )A (address,)A ( )A (and)A ( )A (then)A ( )A (increment)A ( )A (the)A ( )A (current)A ( )A (address.)A ( )A (The)A ( )A (PPU)A ( )A (initialization)A ( )A (vector)A ( )A (has)A ( )A (a)A ( )A (bit)A ( )A (that)A ( )A (allows)A ( )A (incrementing)A ( )A (by)A ( )A (32)A ( )A (instead)A ( )A (of)A ( )A (by)A ( )A (1,)A ( )A (which)A ( )A (is)A ( )A (good)A ( )A (for)A ( )A (accessing)A ( )A (vertical)A ( )A (columns)A ( )A (of)A ( )A (the)A ( )A (name)A ( )A (tables)A ( )A (without)A ( )A (many)A ( )A (address)A ( )A (restarts.)A BR
+BR
+(An)A ( )A (important)A ( )A (thing)A ( )A (to)A ( )A (note)A ( )A (is)A ( )A (that)A ( )A (before)A ( )A (each)A ( )A (screen)A ( )A (update)A ( )A (\(at)A ( )A (the)A ( )A (start)A ( )A (of)A ( )A (your)A ( )A (vblank)A ( )A (function)A ( )A (perhaps\),)A ( )A (you)A ( )A (should)A ( )A (reset)A ( )A (the)A ( )A (PPU's)A ( )A (current)A ( )A (address)A ( )A (by)A ( )A (writing)A ( )A (a)A ( )A (0)A ( )A (to)A ( )A (CPU)A ( )A (port)A ( )A ($2006)A ( )A (twice.)A ( )A (If)A ( )A (you)A ( )A (fail)A ( )A (to)A ( )A (do)A ( )A (this,)A ( )A (then)A ( )A (your)A ( )A (screen)A ( )A (will)A ( )A (probably)A ( )A (flicker)A ( )A (each)A ( )A (time)A ( )A (you)A ( )A (write)A ( )A (to)A ( )A (the)A ( )A (PPU.)A BR
+BR
+% invalid font number 0
+B1 (Palettes:)A BR
+% invalid font number 1
+B0 (The)A ( )A (background)A ( )A (and)A ( )A (foreground)A ( )A (image)A ( )A (planes)A ( )A (each)A ( )A (have)A ( )A (their)A ( )A (own)A ( )A (palette,)A ( )A (each)A ( )A (of)A ( )A (which)A ( )A (consists)A ( )A (of)A ( )A (16)A ( )A (entries.)A ( )A (Each)A ( )A (of)A ( )A (these)A ( )A (entries)A ( )A (is)A ( )A (an)A ( )A (index)A ( )A (lookup)A ( )A (into)A ( )A (the)A ( )A (NES's)A ( )A (hardware)A ( )A (palette.)A ( )A (Although)A ( )A (both)A ( )A (image)A ( )A (planes)A ( )A (are)A ( )A (allowed)A ( )A (a)A ( )A (16-color)A ( )A (palette,)A ( )A (the)A ( )A (NES)A ( )A (graphics)A ( )A (hardware)A ( )A (places)A ( )A (the)A ( )A (limitation)A ( )A (that)A ( )A (any)A ( )A (foreground)A ( )A (sprite)A ( )A (or)A ( )A (background)A ( )A (tile)A ( )A (may)A ( )A (only)A ( )A (consist)A ( )A (of)A ( )A (up)A ( )A (to)A ( )A (4)A ( )A (colors,)A ( )A (and)A ( )A (these)A ( )A (4)A ( )A (colors)A ( )A (must)A ( )A (all)A ( )A (be)A ( )A (within)A ( )A (a)A ( )A (single)A ( )A ("subpalette".)A BR
+BR
+(Each)A ( )A (palette)A ( )A (of)A ( )A (16)A ( )A (entries)A ( )A (is)A ( )A (divided)A ( )A (into)A ( )A (4)A ( )A (subpalettes)A ( )A (of)A ( )A (4)A ( )A (entries)A ( )A (each.)A ( )A (Further,)A ( )A (the)A ( )A (first)A ( )A (entry)A ( )A (of)A ( )A (each)A ( )A (4-color)A ( )A (subpalette)A ( )A (is)A ( )A (the)A ( )A (same)A ( )A (across)A ( )A (both)A ( )A (palettes.)A ( )A (In)A ( )A (both)A ( )A (the)A ( )A (foreground)A ( )A (and)A ( )A (background)A ( )A (16-color)A ( )A (palettes,)A ( )A (entries)A ( )A (4,)A ( )A (8,)A ( )A (and)A ( )A (12)A ( )A (are)A ( )A (copies)A ( )A (of)A ( )A (entry)A ( )A (0.)A ( )A (Entry)A ( )A (0)A ( )A (of)A ( )A (both)A ( )A (palettes)A ( )A (is)A ( )A (hardwired)A ( )A (to)A ( )A (the)A ( )A (same)A ( )A (memory)A ( )A (cell,)A ( )A (meaning)A ( )A (that)A ( )A (changing)A ( )A (one)A ( )A (will)A ( )A (affect)A ( )A (the)A ( )A (other,)A ( )A (as)A ( )A (well)A ( )A (as)A ( )A (entries)A ( )A (4,)A ( )A (8,)A ( )A (and)A ( )A (12)A ( )A (of)A ( )A (both)A ( )A (palettes.)A ( )A (In)A ( )A (short,)A ( )A (reading)A ( )A (palette)A ( )A (entry)A ( )A (0,)A ( )A (4,)A ( )A (8,)A ( )A (or)A ( )A (12)A ( )A (from)A ( )A (either)A ( )A (palette)A ( )A (will)A ( )A (return)A ( )A (the)A ( )A (same)A ( )A (value.)A ( )A (The)A ( )A (background)A ( )A (palette)A ( )A (treats)A ( )A (these)A ( )A (entries)A ( )A (as)A ( )A (the)A ( )A (indicated)A ( )A (color,)A ( )A (whereas)A ( )A (the)A ( )A (foreground)A ( )A (palette)A ( )A (treats)A ( )A (them)A ( )A (as)A ( )A (transparent,)A ( )A (no)A ( )A (matter)A ( )A (what)A ( )A (their)A ( )A (value.)A BR
+BR
+(Overall,)A ( )A (the)A ( )A (two)A ( )A (palettes,)A ( )A (with)A ( )A (all)A ( )A (their)A ( )A (entry)A ( )A (mirroring,)A ( )A (are)A ( )A (capable)A ( )A (of)A ( )A (displaying)A ( )A (25)A ( )A (simultaneous)A ( )A (colors.)A ( )A (This)A ( )A (consists)A ( )A (of)A ( )A (13)A ( )A (for)A ( )A (the)A ( )A (background,)A ( )A (and)A ( )A (12)A ( )A (for)A ( )A (the)A ( )A (foreground)A ( )A (\(not)A ( )A (counting)A ( )A (transparent)A ( )A (as)A ( )A (a)A ( )A (color\).)A BR
+BR
+(The)A ( )A (background)A ( )A (palette)A ( )A (is)A ( )A (located)A ( )A (at)A ( )A (PPU)A ( )A (memory)A ( )A (address)A ( )A ($3f00,)A ( )A (and)A ( )A (the)A ( )A (foreground)A ( )A (palette)A ( )A (is)A ( )A (at)A ( )A (address)A ( )A ($3f10.)A ( )A (To)A ( )A (write)A ( )A (values)A ( )A (to)A ( )A (one)A ( )A (or)A ( )A (both)A ( )A (of)A ( )A (these)A ( )A (palettes,)A ( )A (first)A ( )A (set)A ( )A (the)A ( )A (address)A ( )A (in)A ( )A (CPU)A ( )A (port)A ( )A ($2006,)A ( )A (then)A ( )A (write)A ( )A (to)A ( )A ($2007.)A BR
+B0 % invalid font number 3
+10 FS ( )A (set)A ( )A ($)A (2006)A ( )A ($)A (3)A (f)A ( )A (//high)A ( )A (byte)A BR
+( )A (set)A ( )A ($)A (2006)A ( )A ($)A (00)A ( )A (//low)A ( )A (byte)A ( )A (\(background)A ( )A (palette\))A BR
+( )A (set)A ( )A ($)A (2007)A ( )A (1)A ( )A (//first)A ( )A (palette)A ( )A (entry)A BR
+( )A (set)A ( )A ($)A (2007)A ( )A (2)A ( )A (//second)A ( )A (palette)A ( )A (entry)A BR
+( )A (...)A BR
+% invalid font number 1
+12 FS (As)A ( )A (you)A ( )A (write)A ( )A (to)A ( )A (the)A ( )A (palette,)A ( )A (keep)A ( )A (in)A ( )A (mind)A ( )A (that)A ( )A (entry)A ( )A (0)A ( )A (for)A ( )A (each)A ( )A (palette)A ( )A (is)A ( )A (actually)A ( )A (wired)A ( )A (to)A ( )A (the)A ( )A (same)A ( )A (memory)A ( )A (location,)A ( )A (and)A ( )A (mirrored)A ( )A (across)A ( )A (each)A ( )A (subpallete.)A ( )A (So,)A ( )A (for)A ( )A (your)A ( )A (own)A ( )A (sake,)A ( )A (it)A ( )A (may)A ( )A (be)A ( )A (helpful)A ( )A (to)A ( )A (write)A ( )A (the)A ( )A (same)A ( )A (value)A ( )A (in)A ( )A (each)A ( )A (subpalette.)A BR
+BR
+(One)A ( )A (technique)A ( )A (that)A ( )A (can)A ( )A (be)A ( )A (very)A ( )A (helpful)A ( )A (is)A ( )A (to)A ( )A (create)A ( )A (static)A ( )A (data)A ( )A (holding)A ( )A (the)A ( )A (desired)A ( )A (values)A ( )A (for)A ( )A (the)A ( )A (palette,)A ( )A (and)A ( )A (then)A ( )A (run)A ( )A (through)A ( )A (a)A ( )A (loop)A ( )A (to)A ( )A (set)A ( )A (the)A ( )A (palette.)A BR
+% invalid font number 3
+10 FS ( )A (set)A ( )A ($)A (2006)A ( )A ($)A (3)A (f)A BR
+( )A (set)A ( )A ($)A (2006)A ( )A (0)A BR
+( )A (set)A ( )A (x)A ( )A (0)A BR
+( )A (palette_loop:)A BR
+( )A (set)A ( )A ($)A (2007)A ( )A (\[palette_data)A ( )A (x\])A BR
+( )A (inc)A ( )A (x)A BR
+( )A (if)A ( )A (x)A ( )A (<>)A ( )A (32)A ( )A (branchto)A ( )A (palette_loop)A BR
+BR
+( )A (palette_data:)A BR
+( )A (asm)A BR
+( )A (.db)A ( )A (0)A (,)A (1)A (,)A (2)A (,)A (3)A (,)A (0)A (,)A (5)A (,)A (6)A (,)A (7)A (,)A (0)A (,)A (9)A (,)A (10)A (,)A (11)A (,)A (0)A (,)A (13)A (,)A (14)A (,)A (15)A ( )A (;)A (//background)A ( )A (colors)A BR
+( )A (.db)A ( )A (0)A (,)A (1)A (,)A (2)A (,)A (3)A (,)A (0)A (,)A (5)A (,)A (6)A (,)A (7)A (,)A (0)A (,)A (9)A (,)A (10)A (,)A (11)A (,)A (0)A (,)A (13)A (,)A (14)A (,)A (15)A ( )A (;)A (//foreground)A ( )A (colors)A BR
+( )A (endasm)A BR
+% invalid font number 1
+12 FS ( )A BR
+BR
+BR
+(Good)A ( )A (references)A ( )A (for)A ( )A (the)A ( )A (colors)A ( )A (that)A ( )A (correspond)A ( )A (to)A ( )A (each)A ( )A (value)A ( )A (are)A ( )A (below.)A BR
+(http://www.zyx.com/chrisc/NESTechFAQ.html)A ( )A (\(HTML)A ( )A (table)A ( )A (graphics)A ( )A (near)A ( )A (the)A ( )A (bottom\))A BR
+(http://nesdev.parodius.com/nespal.txt)A BR
+(http://nesdev.parodius.com/pal.txt)A BR
+BR
+% invalid font number 0
+B1 (Tiles)A ( )A (and)A ( )A (Pattern)A ( )A (Tables:)A BR
+% invalid font number 1
+B0 (Tiles)A ( )A (are)A ( )A (the)A ( )A (basic)A ( )A (unit)A ( )A (of)A ( )A (NES)A ( )A (graphics.)A ( )A (A)A ( )A (tile)A ( )A (can)A ( )A (be)A ( )A (thought)A ( )A (of)A ( )A (as)A ( )A (a)A ( )A (pre-drawn)A ( )A (picture)A ( )A (that)A ( )A (is)A ( )A (available)A ( )A (to)A ( )A (place)A ( )A (on)A ( )A (the)A ( )A (screen.)A ( )A (Each)A ( )A (tile)A ( )A (is)A ( )A (8x8)A ( )A (pixels)A ( )A (with)A ( )A (2-bit)A ( )A (color,)A ( )A (and)A ( )A (by)A ( )A (itself)A ( )A (has)A ( )A (no)A ( )A (associated)A ( )A (palette.)A ( )A (At)A ( )A (any)A ( )A (time,)A ( )A (the)A ( )A (NES)A ( )A (may)A ( )A (have)A ( )A (two)A ( )A (pattern)A ( )A (tables,)A ( )A (each)A ( )A (consisting)A ( )A (of)A ( )A (256)A ( )A (tiles.)A ( )A (A)A ( )A (pattern)A ( )A (table)A ( )A (is)A ( )A (essentially)A ( )A (a)A ( )A (bank)A ( )A (of)A ( )A (available)A ( )A (tiles.)A ( )A (Usually,)A ( )A (one)A ( )A (pattern)A ( )A (table)A ( )A (is)A ( )A (set)A ( )A (for)A ( )A (background)A ( )A (images,)A ( )A (and)A ( )A (one)A ( )A (for)A ( )A (foreground,)A ( )A (but)A ( )A (this)A ( )A (is)A ( )A (not)A ( )A (necessary)A ( )A (if)A ( )A (your)A ( )A (game)A ( )A (has)A ( )A (very)A ( )A (few)A ( )A (unique)A ( )A (tiles.)A ( )A (The)A ( )A (pattern)A ( )A (tables)A ( )A (are)A ( )A (loaded)A ( )A (from)A ( )A (the)A ( )A (CHR)A ( )A (ROM)A ( )A (of)A ( )A (your)A ( )A (game.)A BR
+BR
+(For)A ( )A (storage)A ( )A (in)A ( )A (memory,)A ( )A (each)A ( )A (of)A ( )A (these)A ( )A (2-bit)A ( )A (tiles)A ( )A (in)A ( )A (the)A ( )A (pattern)A ( )A (table)A ( )A (is)A ( )A (separated)A ( )A (into)A ( )A (its)A ( )A (two)A ( )A (bitplanes)A ( )A (\(low)A ( )A (bit)A ( )A (and)A ( )A (high)A ( )A (bit\))A ( )A (and)A ( )A (packed)A ( )A (into)A ( )A (16)A ( )A (bytes.)A ( )A (The)A ( )A (first)A ( )A (8)A ( )A (bytes)A ( )A (are)A ( )A (the)A ( )A (bit-packed)A ( )A (rows)A ( )A (of)A ( )A (the)A ( )A (low)A ( )A (bitplane)A ( )A (\(1)A ( )A (byte)A ( )A (per)A ( )A (row\),)A ( )A (and)A ( )A (the)A ( )A (next)A ( )A (8)A ( )A (bytes)A ( )A (are)A ( )A (the)A ( )A (packed)A ( )A (rows)A ( )A (of)A ( )A (the)A ( )A (high)A ( )A (bitplane.)A ( )A (With)A ( )A (16)A ( )A (bytes)A ( )A (per)A ( )A (tile)A ( )A (and)A ( )A (256)A ( )A (tiles)A ( )A (per)A ( )A (pattern)A ( )A (table,)A ( )A (each)A ( )A (pattern)A ( )A (table)A ( )A (uses)A ( )A (4)A ( )A (kilobytes)A ( )A (of)A ( )A (memory.)A BR
+BR
+(For)A ( )A (example,)A ( )A (assume)A ( )A (that)A ( )A (the)A ( )A (top)A ( )A (row)A ( )A (of)A ( )A (a)A ( )A (tile)A ( )A (has)A ( )A (the)A ( )A (2-bit)A ( )A (colors)A ( )A (01230123.)A ( )A (Written)A ( )A (as)A ( )A (binary)A ( )A (values,)A ( )A (this)A ( )A (row)A ( )A (would)A ( )A (be)A ( )A (00,)A ( )A (01,)A ( )A (10,)A ( )A (11,)A ( )A (00,)A ( )A (01,)A ( )A (10,)A ( )A (11.)A ( )A (The)A ( )A (first)A ( )A (byte)A ( )A (in)A ( )A (the)A ( )A (tile's)A ( )A (stored)A ( )A (format)A ( )A (would)A ( )A (be)A ( )A (the)A ( )A (packed)A ( )A (low)A ( )A (bits)A ( )A (of)A ( )A (the)A ( )A (top)A ( )A (row,)A ( )A (%01010101,)A ( )A (or)A ( )A (85)A ( )A (in)A ( )A (decimal.)A ( )A (The)A ( )A (packed)A ( )A (low)A ( )A (bits)A ( )A (from)A ( )A (the)A ( )A (other)A ( )A (seven)A ( )A (rows)A ( )A (would)A ( )A (take)A ( )A (up)A ( )A (the)A ( )A (next)A ( )A (seven)A ( )A (bytes,)A ( )A (and)A ( )A (the)A ( )A (eighth)A ( )A (byte)A ( )A (would)A ( )A (be)A ( )A (the)A ( )A (packed)A ( )A (high)A ( )A (bits)A ( )A (of)A ( )A (this)A ( )A (top)A ( )A (row,)A ( )A (%00110011,)A ( )A (or)A ( )A (51)A ( )A (in)A ( )A (decimal.)A BR
+BR
+% invalid font number 0
+B1 (Name)A ( )A (Tables:)A BR
+% invalid font number 1
+B0 (The)A ( )A (background)A ( )A (image)A ( )A (plane)A ( )A (is)A ( )A (called)A ( )A (the)A ( )A (name)A ( )A (table.)A ( )A (Tiles)A ( )A (are)A ( )A (copied)A ( )A (from)A ( )A (the)A ( )A (background)A ( )A (pattern)A ( )A (table)A ( )A (into)A ( )A (the)A ( )A (name)A ( )A (table,)A ( )A (and)A ( )A (their)A ( )A (colors)A ( )A (is)A ( )A (determined)A ( )A (by)A ( )A (the)A ( )A (background)A ( )A (palette)A ( )A (and)A ( )A (the)A ( )A (attribute)A ( )A (table.)A ( )A (The)A ( )A (PPU)A ( )A (memory)A ( )A (map)A ( )A (shown)A ( )A (above)A ( )A (has)A ( )A (four)A ( )A (name)A ( )A (table)A ( )A (and)A ( )A (attribute)A ( )A (table)A ( )A (pairs.)A ( )A (The)A ( )A (hardware)A ( )A (has)A ( )A (enough)A ( )A (RAM)A ( )A (for)A ( )A (two)A ( )A (name)A ( )A (tables,)A ( )A (and)A ( )A (the)A ( )A (other)A ( )A (two)A ( )A (are)A ( )A (mirrors)A ( )A (of)A ( )A (them.)A ( )A (Visually,)A ( )A (and)A ( )A (for)A ( )A (scrolling)A ( )A (purposes,)A ( )A (the)A ( )A (name)A ( )A (tables)A ( )A (are)A ( )A (laid)A ( )A (out)A ( )A (with)A ( )A (0)A ( )A (in)A ( )A (the)A ( )A (lower)A ( )A (left,)A ( )A (1)A ( )A (in)A ( )A (the)A ( )A (lower)A ( )A (right,)A ( )A (2)A ( )A (in)A ( )A (the)A ( )A (upper)A ( )A (left,)A ( )A (and)A ( )A (3)A ( )A (in)A ( )A (the)A ( )A (upper)A ( )A (right.)A ( )A (When)A ( )A (the)A ( )A (PPU)A ( )A (is)A ( )A (initialized)A ( )A (with)A ( )A (vertical)A ( )A (mirroring,)A ( )A (table)A ( )A (2)A ( )A (mirrors)A ( )A (table)A ( )A (0,)A ( )A (and)A ( )A (table)A ( )A (3)A ( )A (mirrors)A ( )A (table)A ( )A (1.)A ( )A (This)A ( )A (will)A ( )A (give)A ( )A (two)A ( )A (screens)A ( )A (of)A ( )A (contiguous)A ( )A (horizontal)A ( )A (name)A ( )A (table,)A ( )A (and)A ( )A (scrolling)A ( )A (vertically)A ( )A (will)A ( )A (create)A ( )A (a)A ( )A (wraparound.)A ( )A (This)A ( )A (vertical)A ( )A (mirroring)A ( )A (is)A ( )A (good)A ( )A (for)A ( )A (standard)A ( )A (side-scroller)A ( )A (games.)A ( )A (Similarly,)A ( )A (when)A ( )A (the)A ( )A (PPU)A ( )A (is)A ( )A (initialized)A ( )A (with)A ( )A (horizontal)A ( )A (mirroring,)A ( )A (table)A ( )A (1)A ( )A (is)A ( )A (a)A ( )A (mirror)A ( )A (of)A ( )A (0,)A ( )A (and)A ( )A (table)A ( )A (3)A ( )A (is)A ( )A (a)A ( )A (mirror)A ( )A (of)A ( )A (2.)A ( )A (This)A ( )A (would)A ( )A (be)A ( )A (good)A ( )A (for)A ( )A (standard)A ( )A (vertical)A ( )A (scrollers,)A ( )A (such)A ( )A (as)A ( )A (several)A ( )A (popular)A ( )A (driving)A ( )A (or)A ( )A (air)A ( )A (combat)A ( )A (games.)A ( )A (Some)A ( )A (memory)A ( )A (mappers)A ( )A (will)A ( )A (actually)A ( )A (provide)A ( )A (more)A ( )A (VRAM)A ( )A (on)A ( )A (the)A ( )A (cartridge,)A ( )A (which)A ( )A (will)A ( )A (allow)A ( )A (the)A ( )A (NES)A ( )A (to)A ( )A (hold)A ( )A (four)A ( )A (unique)A ( )A (name)A ( )A (tables)A ( )A (simultaneously)A ( )A (with)A ( )A (no)A ( )A (mirroring.)A BR
+BR
+(Each)A ( )A (name)A ( )A (table)A ( )A (is)A ( )A (a)A ( )A (32x30)A ( )A (array)A ( )A (of)A ( )A (bytes,)A ( )A (where)A ( )A (the)A ( )A (byte)A ( )A (is)A ( )A (a)A ( )A (tile)A ( )A (lookup)A ( )A (value)A ( )A (into)A ( )A (the)A ( )A (background)A ( )A (pattern)A ( )A (table.)A ( )A (This)A ( )A (corresponds)A ( )A (to)A ( )A (a)A ( )A (256x240)A ( )A (pixel)A ( )A (area)A ( )A (on)A ( )A (the)A ( )A (screen,)A ( )A (since)A ( )A (each)A ( )A (tile)A ( )A (is)A ( )A (8x8)A ( )A (pixels.)A ( )A (The)A ( )A (first)A ( )A (byte)A ( )A (of)A ( )A (the)A ( )A (name)A ( )A (table)A ( )A (determines)A ( )A (the)A ( )A (tile)A ( )A (in)A ( )A (the)A ( )A (upper)A ( )A (left)A ( )A (of)A ( )A (the)A ( )A (screen)A ( )A (\(discounting)A ( )A (any)A ( )A (scrolling\).)A ( )A (Consecutive)A ( )A (bytes)A ( )A (determine)A ( )A (the)A ( )A (tiles)A ( )A (to)A ( )A (the)A ( )A (right)A ( )A (in)A ( )A (the)A ( )A (same)A ( )A (row,)A ( )A (until)A ( )A (the)A ( )A (32nd)A ( )A (byte)A ( )A (wraps)A ( )A (around)A ( )A (to)A ( )A (the)A ( )A (location)A ( )A (8)A ( )A (pixels)A ( )A (below)A ( )A (the)A ( )A (first)A ( )A (tile.)A ( )A (30)A ( )A (such)A ( )A (rows)A ( )A (fill)A ( )A (the)A ( )A (name)A ( )A (table.)A ( )A (Every)A ( )A (tile)A ( )A (has)A ( )A (a)A ( )A (4-bit)A ( )A (color)A ( )A (index,)A ( )A (where)A ( )A (the)A ( )A (lower)A ( )A (two)A ( )A (bits)A ( )A (are)A ( )A (determined)A ( )A (by)A ( )A (the)A ( )A (packed)A ( )A (data)A ( )A (in)A ( )A (the)A ( )A (pattern)A ( )A (table)A ( )A (\(see)A ( )A (above\))A ( )A (and)A ( )A (the)A ( )A (upper)A ( )A (two)A ( )A (bits)A ( )A (are)A ( )A (determined)A ( )A (by)A ( )A (the)A ( )A (attribute)A ( )A (table)A ( )A (\(see)A ( )A (below\).)A BR
+BR
+% invalid font number 0
+B1 (Attribute)A ( )A (Tables:)A BR
+% invalid font number 1
+B0 (Understanding)A ( )A (the)A ( )A (attribute)A ( )A (table)A ( )A (is)A ( )A (possibly)A ( )A (the)A ( )A (most)A ( )A (difficult)A ( )A (part)A ( )A (of)A ( )A (the)A ( )A (NES)A ( )A (graphics,)A ( )A (so)A ( )A (read)A ( )A (this)A ( )A (section)A ( )A (several)A ( )A (times)A ( )A (until)A ( )A (you)A ( )A (fully)A ( )A (understand)A ( )A (it.)A % invalid font number 0
+B1 ( )A % invalid font number 1
+B0 (Since)A ( )A (tiles)A ( )A (are)A ( )A (defined)A ( )A (with)A ( )A (2-bit)A ( )A (color)A ( )A (and)A ( )A (the)A ( )A (NES)A ( )A (has)A ( )A (4-bit)A ( )A (palettes,)A ( )A (the)A ( )A (attribute)A ( )A (table)A ( )A (is)A ( )A (used)A ( )A (to)A ( )A (determine)A ( )A (the)A ( )A (upper)A ( )A (two)A ( )A (bits)A ( )A (of)A ( )A (color)A ( )A (for)A ( )A (each)A ( )A (tile)A ( )A (in)A ( )A (the)A ( )A (name)A ( )A (table.)A ( )A (Each)A ( )A (32x30)A ( )A (name)A ( )A (table)A ( )A (has)A ( )A (a)A ( )A (corresponding)A ( )A (8x8)A ( )A (attribute)A ( )A (table.)A ( )A (A)A ( )A (bit)A ( )A (of)A ( )A (simple)A ( )A (math)A ( )A (reveals)A ( )A (that)A ( )A (each)A ( )A (byte)A ( )A (of)A ( )A (the)A ( )A (attribute)A ( )A (table)A ( )A (affects)A ( )A (a)A ( )A (4x4)A ( )A (tile)A ( )A (\(32x32)A ( )A (pixel\))A ( )A (area)A ( )A (of)A ( )A (the)A ( )A (name)A ( )A (table,)A ( )A (with)A ( )A (a)A ( )A (little)A ( )A (bit)A ( )A (of)A ( )A (unused)A ( )A (attribute)A ( )A (data)A ( )A (along)A ( )A (the)A ( )A (bottom)A ( )A (row)A ( )A (of)A ( )A (the)A ( )A (table.)A BR
+BR
+(I)A ( )A (have)A ( )A (already)A ( )A (stated)A ( )A (that)A ( )A (each)A ( )A (attribute)A ( )A (byte)A ( )A (affects)A ( )A (a)A ( )A (4x4)A ( )A (square)A ( )A (of)A ( )A (tiles)A ( )A (in)A ( )A (the)A ( )A (name)A ( )A (table.)A ( )A (This)A ( )A (is)A ( )A (further)A ( )A (split)A ( )A (into)A ( )A (four)A ( )A (squares)A ( )A (of)A ( )A (2x2)A ( )A (tiles,)A ( )A (where)A ( )A (each)A ( )A (is)A ( )A (affected)A ( )A (by)A ( )A (two)A ( )A (bits)A ( )A (of)A ( )A (the)A ( )A (attribute)A ( )A (byte.)A ( )A (The)A ( )A (two)A ( )A (least)A ( )A (significant)A ( )A (bits)A ( )A (of)A ( )A (the)A ( )A (attribute)A ( )A (byte)A ( )A (\(bits)A ( )A (0)A ( )A (and)A ( )A (1\))A ( )A (provide)A ( )A (the)A ( )A (upper)A ( )A (color)A ( )A (bits)A ( )A (for)A ( )A (the)A ( )A (upper-left)A ( )A (2x2)A ( )A (square)A ( )A (of)A ( )A (tiles.)A ( )A (Bits)A ( )A (2)A ( )A (and)A ( )A (3)A ( )A (provide)A ( )A (the)A ( )A (upper)A ( )A (color)A ( )A (bits)A ( )A (for)A ( )A (the)A ( )A (upper-right)A ( )A (2x2)A ( )A (square.)A ( )A (Bits)A ( )A (4)A ( )A (and)A ( )A (5)A ( )A (provide)A ( )A (the)A ( )A (color)A ( )A (for)A ( )A (the)A ( )A (lower-left)A ( )A (square,)A ( )A (and,)A ( )A (finally,)A ( )A (bits)A ( )A (6)A ( )A (and)A ( )A (7)A ( )A (for)A ( )A (the)A ( )A (lower-right)A ( )A (square.)A ( )A (Note)A ( )A (that)A ( )A (within)A ( )A (each)A ( )A (2x2)A ( )A (square,)A ( )A (all)A ( )A (four)A ( )A (tiles)A ( )A (share)A ( )A (the)A ( )A (same)A ( )A (upper)A ( )A (color)A ( )A (bits,)A ( )A (thus)A ( )A (restricting)A ( )A (them)A ( )A (to)A ( )A (the)A ( )A (same)A ( )A (subpalette.)A ( )A (What)A ( )A (this)A ( )A (means)A ( )A (for)A ( )A (an)A ( )A (artist)A ( )A (is)A ( )A (that)A ( )A (every)A ( )A (aligned)A ( )A (16x16)A ( )A (pixel)A ( )A (area)A ( )A (of)A ( )A (the)A ( )A (background)A ( )A (can)A ( )A (only)A ( )A (have)A ( )A (a)A ( )A (maximum)A ( )A (of)A ( )A (four)A ( )A (colors,)A ( )A (all)A ( )A (from)A ( )A (the)A ( )A (same)A ( )A (subpalette.)A BR
+BR
+% invalid font number 0
+B1 (Scrolling:)A BR
+% invalid font number 1
+B0 (One)A ( )A (of)A ( )A (the)A ( )A (NES's)A ( )A (most)A ( )A (powerful)A ( )A (graphics)A ( )A (capabilities)A ( )A (is)A ( )A (the)A ( )A (built-in)A ( )A (hardware)A ( )A (scrolling.)A ( )A (Normally,)A ( )A (with)A ( )A (no)A ( )A (scrolling)A ( )A (set,)A ( )A (the)A ( )A (NES)A ( )A (will)A ( )A (display)A ( )A (name)A ( )A (table)A ( )A (0,)A ( )A (which)A ( )A (will)A ( )A (fill)A ( )A (the)A ( )A (screen)A ( )A (\(with)A ( )A (256x240)A ( )A (pixels\).)A ( )A (Setting)A ( )A (the)A ( )A (horizontal)A ( )A (scroll)A ( )A (value)A ( )A (will)A ( )A (shift)A ( )A (the)A ( )A (background)A ( )A (image)A ( )A (to)A ( )A (the)A ( )A (left,)A ( )A (and)A ( )A (the)A ( )A (lefthand)A ( )A (edge)A ( )A (of)A ( )A (name)A ( )A (table)A ( )A (1)A ( )A (will)A ( )A (appear)A ( )A (on)A ( )A (the)A ( )A (righthand)A ( )A (edge)A ( )A (of)A ( )A (the)A ( )A (screen.)A ( )A (\(See)A ( )A (the)A ( )A (above)A ( )A (section)A ( )A (on)A ( )A (name)A ( )A (tables)A ( )A (for)A ( )A (the)A ( )A (virtual)A ( )A (layout)A ( )A (in)A ( )A (video)A ( )A (memory.\))A ( )A (The)A ( )A (horizontal)A ( )A (scroll)A ( )A (value)A ( )A (has)A ( )A (a)A ( )A (range)A ( )A (of)A ( )A (0)A ( )A (to)A ( )A (255,)A ( )A (which)A ( )A (will)A ( )A (almost)A ( )A (completely)A ( )A (display)A ( )A (name)A ( )A (table)A ( )A (1)A ( )A (in)A ( )A (place)A ( )A (of)A ( )A (table)A ( )A (0)A ( )A (when)A ( )A (set)A ( )A (to)A ( )A (the)A ( )A (maximum.)A ( )A (If)A ( )A (you)A ( )A (set)A ( )A (the)A ( )A (proper)A ( )A (bit)A ( )A (in)A ( )A (the)A ( )A (PPU)A ( )A (initialization)A ( )A (vector)A ( )A (\(bit)A ( )A (0)A ( )A (of)A ( )A ($2000\),)A ( )A (then)A ( )A (the)A ( )A (base)A ( )A (name)A ( )A (table)A ( )A (will)A ( )A (be)A ( )A (1,)A ( )A (instead)A ( )A (of)A ( )A (0,)A ( )A (and)A ( )A (horizontal)A ( )A (scrolling)A ( )A (will)A ( )A (wrap)A ( )A (around)A ( )A (to)A ( )A (table)A ( )A (0.)A ( )A (Similarly,)A ( )A (the)A ( )A (vertical)A ( )A (scroll)A ( )A (has)A ( )A (a)A ( )A (range)A ( )A (of)A ( )A (0)A ( )A (to)A ( )A (255,)A ( )A (where)A ( )A (incrementing)A ( )A (the)A ( )A (scroll)A ( )A (value)A ( )A (will)A ( )A (shift)A ( )A (the)A ( )A (background)A ( )A (image)A ( )A (down,)A ( )A (wrapping)A ( )A (around)A ( )A (the)A ( )A (top.)A ( )A (Remember)A ( )A (that,)A ( )A (due)A ( )A (to)A ( )A (the)A ( )A (name)A ( )A (table)A ( )A (mirroring,)A ( )A (either)A ( )A (the)A ( )A (horizontal)A ( )A (or)A ( )A (vertical)A ( )A (scroll)A ( )A (will)A ( )A (start)A ( )A (to)A ( )A (wrap)A ( )A (around)A ( )A (immediately)A ( )A (when)A ( )A (scrolling,)A ( )A (depending)A ( )A (on)A ( )A (whether)A ( )A (you)A ( )A (have)A ( )A (horizontal)A ( )A (or)A ( )A (vertical)A ( )A (mirroring)A ( )A (set.)A BR
+BR
+(To)A ( )A (set)A ( )A (the)A ( )A (scroll)A ( )A (position,)A ( )A (write)A ( )A (the)A ( )A (horizontal)A ( )A (then)A ( )A (vertical)A ( )A (scroll)A ( )A (values)A ( )A (to)A ( )A ($2005.)A ( )A (A)A ( )A (good)A ( )A (time)A ( )A (to)A ( )A (do)A ( )A (this)A ( )A (is)A ( )A (just)A ( )A (before)A ( )A (calling)A ( )A (your)A ( )A (vwait)A ( )A (function.)A ( )A (As)A ( )A (a)A ( )A (precaution)A ( )A (against)A ( )A (flickering,)A ( )A (you)A ( )A (should)A ( )A (set)A ( )A (both)A ( )A (scroll)A ( )A (values)A ( )A (to)A ( )A (0)A ( )A (after)A ( )A (your)A ( )A (vwait)A ( )A (exits.)A ( )A (Also)A ( )A (to)A ( )A (avoid)A ( )A (flickering,)A ( )A (you)A ( )A (should)A ( )A (set)A ( )A (the)A ( )A (PPU)A ( )A (base)A ( )A (address)A ( )A (to)A ( )A ($0000)A ( )A (at)A ( )A (the)A ( )A (same)A ( )A (time,)A ( )A (as)A ( )A (mentioned)A ( )A (above.)A BR
+% invalid font number 3
+10 FS ( )A (draw:)A BR
+( )A (gosub)A ( )A (draw_things)A ( )A (//custom)A ( )A (game)A ( )A (draw)A ( )A (stuff)A BR
+( )A (set)A ( )A ($)A (2005)A ( )A (scroll_x)A ( )A (//set)A ( )A (horizontal)A ( )A (scroll)A BR
+( )A (set)A ( )A ($)A (2005)A ( )A (scroll_y)A ( )A (//set)A ( )A (vertical)A ( )A (scroll)A BR
+( )A (gosub)A ( )A (vwait)A ( )A (//wait)A ( )A (for)A ( )A (screen)A ( )A (refresh)A BR
+( )A (set)A ( )A ($)A (2005)A ( )A (0)A ( )A (//clear)A ( )A (scroll)A ( )A (to)A ( )A (avoid)A ( )A (flicker)A BR
+( )A (set)A ( )A ($)A (2005)A ( )A (0)A BR
+( )A (set)A ( )A ($)A (2006)A ( )A (0)A ( )A (//set)A ( )A (PPU)A ( )A (base)A ( )A (address)A ( )A (to)A ( )A (avoid)A ( )A (flicker)A BR
+( )A (set)A ( )A ($)A (2006)A ( )A (0)A BR
+% invalid font number 1
+12 FS BR
+% invalid font number 0
+B1 (Sprites:)A BR
+% invalid font number 1
+B0 (Sprites)A ( )A (are)A ( )A (very)A ( )A (important)A ( )A (if)A ( )A (you)A ( )A (want)A ( )A (your)A ( )A (game)A ( )A (to)A ( )A (become)A ( )A (more)A ( )A (than)A ( )A (a)A ( )A (demonstration)A ( )A (of)A ( )A (scrolling)A ( )A (backgrounds.)A ( )A (A)A ( )A (sprite)A ( )A (is)A ( )A (the)A ( )A (way)A ( )A (to)A ( )A (draw)A ( )A (a)A ( )A (tile,)A ( )A (or)A ( )A (a)A ( )A (pair)A ( )A (of)A ( )A (tiles,)A ( )A (in)A ( )A (the)A ( )A (foreground)A ( )A (image)A ( )A (plane.)A ( )A (Sprites)A ( )A (may)A ( )A (be)A ( )A (either)A ( )A (8x8)A ( )A (pixels)A ( )A (\(one)A ( )A (tile\),)A ( )A (or)A ( )A (8x16)A ( )A (pixels)A ( )A (\(two)A ( )A (tiles\).)A ( )A (Sprites)A ( )A (will)A ( )A (be)A ( )A (8x16)A ( )A (pixels)A ( )A (if)A ( )A (bit)A ( )A (5)A ( )A (of)A ( )A (port)A ( )A ($2000)A ( )A (is)A ( )A (set.)A ( )A (In)A ( )A (this)A ( )A (case,)A ( )A (the)A ( )A (tile)A ( )A (indicated)A ( )A (in)A ( )A (sprite)A ( )A (memory)A ( )A (will)A ( )A (be)A ( )A (displayed)A ( )A (at)A ( )A (the)A ( )A (given)A ( )A (coordinates,)A ( )A (and)A ( )A (the)A ( )A (next)A ( )A (tile)A ( )A (from)A ( )A (the)A ( )A (pattern)A ( )A (table)A ( )A (will)A ( )A (be)A ( )A (displayed)A ( )A (directly)A ( )A (below)A ( )A (it,)A ( )A (8)A ( )A (pixels)A ( )A (down.)A ( )A (An)A ( )A (important)A ( )A (restriction)A ( )A (to)A ( )A (note)A ( )A (is)A ( )A (that)A ( )A (when)A ( )A (in)A ( )A (8x16)A ( )A (sprite)A ( )A (mode,)A ( )A (the)A ( )A (indicated)A ( )A (tile)A ( )A (number)A ( )A (must)A ( )A (be)A ( )A (an)A ( )A (even)A ( )A (number.)A BR
+BR
+(Contrary)A ( )A (to)A ( )A (what)A ( )A (you)A ( )A (may)A ( )A (be)A ( )A (thinking)A ( )A (at)A ( )A (this)A ( )A (point,)A ( )A (overlapping)A ( )A (sprite)A ( )A (handling)A ( )A (is)A ( )A (not)A ( )A (done)A ( )A (by)A ( )A (magic.)A ( )A (While)A ( )A (Sack)A ( )A (of)A ( )A (Flour)A ( )A (did)A ( )A (make)A ( )A (use)A ( )A (of)A ( )A (some)A ( )A (elemental)A ( )A (magic)A ( )A (to)A ( )A (speed)A ( )A (up)A ( )A (certain)A ( )A (calculations,)A ( )A (all)A ( )A (sprite)A ( )A (display)A ( )A (is)A ( )A (left)A ( )A (to)A ( )A (the)A ( )A (hardware.)A ( )A (Sprites)A ( )A (are)A ( )A (numbered)A ( )A (0)A ( )A (through)A ( )A (63,)A ( )A (where)A ( )A (sprite)A ( )A (0)A ( )A (is)A ( )A (in)A ( )A (the)A ( )A (lowest)A ( )A (sprite)A ( )A (RAM)A ( )A (location,)A ( )A (and)A ( )A (63)A ( )A (in)A ( )A (the)A ( )A (highest.)A ( )A (This)A ( )A (numbering)A ( )A (acts)A ( )A (as)A ( )A (a)A ( )A (both)A ( )A (an)A ( )A (index)A ( )A (and)A ( )A (a)A ( )A (priority.)A ( )A (In)A ( )A (general,)A ( )A (lower)A ( )A (numbered)A ( )A (sprites)A ( )A (are)A ( )A (given)A ( )A (higher)A ( )A (priority,)A ( )A (and)A ( )A (thus)A ( )A (will)A ( )A (be)A ( )A (drawn)A ( )A (on)A ( )A (top)A ( )A (of)A ( )A (higher)A ( )A (numbered)A ( )A (sprites.)A ( )A (When)A ( )A (drawing)A ( )A (many)A ( )A (sprites)A ( )A (on)A ( )A (the)A ( )A (screen,)A ( )A (keep)A ( )A (in)A ( )A (mind)A ( )A (that)A ( )A (the)A ( )A (NES)A ( )A (will)A ( )A (draw)A ( )A (no)A ( )A (more)A ( )A (than)A ( )A (8)A ( )A (sprites)A ( )A (per)A ( )A (scanline.)A ( )A (If)A ( )A (more)A ( )A (than)A ( )A (8)A ( )A (sprites)A ( )A (are)A ( )A (on)A ( )A (a)A ( )A (single)A ( )A (scanline)A ( )A (\(meaning)A ( )A (that)A ( )A (some)A ( )A (part)A ( )A (of)A ( )A (each)A ( )A (of)A ( )A (them)A ( )A (has)A ( )A (the)A ( )A (same)A ( )A (vertical)A ( )A (displacement\),)A ( )A (then)A ( )A (that)A ( )A (scanline)A ( )A (will)A ( )A (display)A ( )A (the)A ( )A (8)A ( )A (highest)A ( )A (priority)A ( )A (sprites,)A ( )A (and)A ( )A (the)A ( )A (rest)A ( )A (will)A ( )A (simply)A ( )A (not)A ( )A (be)A ( )A (drawn,)A ( )A (thus)A ( )A (creating)A ( )A (a)A ( )A (flickering.)A ( )A (Each)A ( )A (scanline)A ( )A (is)A ( )A (handled)A ( )A (independently.)A BR
+BR
+(order)A ( )A (of)A ( )A (displayed)A ( )A (sprites.)A ( )A (0)A ( )A (to)A ( )A (63.)A ( )A (no)A ( )A (more)A ( )A (than)A ( )A (8)A ( )A (per)A ( )A (scanline.)A BR
+BR
+(The)A ( )A (basic)A ( )A (way)A ( )A (to)A ( )A (create)A ( )A (a)A ( )A (sprite)A ( )A (is)A ( )A (by)A ( )A (writing)A ( )A (to)A ( )A (sprite)A ( )A (memory)A ( )A (in)A ( )A (the)A ( )A (PPU.)A ( )A (The)A ( )A (PPU)A ( )A (has)A ( )A (256)A ( )A (bytes)A ( )A (of)A ( )A (sprite)A ( )A (memory,)A ( )A (and)A ( )A (each)A ( )A (sprite)A ( )A (takes)A ( )A (up)A ( )A (4)A ( )A (bytes,)A ( )A (allowing)A ( )A (room)A ( )A (for)A ( )A (64)A ( )A (sprites.)A ( )A (\(The)A ( )A (format)A ( )A (of)A ( )A (these)A ( )A (4)A ( )A (bytes)A ( )A (is)A ( )A (below.\))A ( )A (To)A ( )A (write)A ( )A (to)A ( )A (this)A ( )A (memory,)A ( )A (write)A ( )A (the)A ( )A (index)A ( )A (value)A ( )A (of)A ( )A (the)A ( )A (first)A ( )A (desired)A ( )A (byte)A ( )A (to)A ( )A ($2003,)A ( )A (and)A ( )A (then)A ( )A (write)A ( )A (consecutive)A ( )A (values)A ( )A (of)A ( )A (the)A ( )A (sprite)A ( )A (memory)A ( )A (into)A ( )A ($2004.)A ( )A (You)A ( )A (may)A ( )A (also)A ( )A (read)A ( )A (from)A ( )A ($2004)A ( )A (if)A ( )A (you)A ( )A (wish)A ( )A (to)A ( )A (read)A ( )A (the)A ( )A (sprite)A ( )A (memory)A ( )A (instead.)A ( )A (For)A ( )A (example,)A ( )A (if)A ( )A (you)A ( )A (wanted)A ( )A (to)A ( )A (place)A ( )A (sprite)A ( )A (3)A ( )A (on)A ( )A (the)A ( )A (screen,)A ( )A (you)A ( )A (would)A ( )A (want)A ( )A (to)A ( )A (start)A ( )A (writing)A ( )A (memory)A ( )A (at)A ( )A (byte)A ( )A (12.)A BR
+% invalid font number 3
+10 FS ( )A (set)A ( )A ($)A (2003)A ( )A (12)A BR
+( )A (set)A ( )A ($)A (2004)A ( )A (sprite_y)A BR
+( )A (set)A ( )A ($)A (2004)A ( )A (sprite_tile)A BR
+( )A (set)A ( )A ($)A (2004)A ( )A (sprite_attrib)A BR
+( )A (set)A ( )A ($)A (2005)A ( )A (sprite_x)A BR
+% invalid font number 1
+12 FS BR
+(Sprite)A ( )A (DMA)A ( )A (\(Direct)A ( )A (Memory)A ( )A (Access\))A ( )A (is)A ( )A (an)A ( )A (extremely)A ( )A (useful)A ( )A (feature,)A ( )A (which)A ( )A (will)A ( )A (allow)A ( )A (you)A ( )A (to)A ( )A (copy)A ( )A (a)A ( )A (256-byte)A ( )A (region)A ( )A (of)A ( )A (memory)A ( )A (to)A ( )A (the)A ( )A (PPU's)A ( )A (sprite)A ( )A (RAM.)A ( )A (By)A ( )A (writing)A ( )A (a)A ( )A (value)A ( )A (N)A ( )A (to)A ( )A (the)A ( )A (port)A ( )A ($4014,)A ( )A (memory)A ( )A (starting)A ( )A (at)A ( )A ($100*N)A ( )A (will)A ( )A (be)A ( )A (copied.)A ( )A (Good)A ( )A (game)A ( )A (design)A ( )A (will)A ( )A (take)A ( )A (full)A ( )A (advantage)A ( )A (of)A ( )A (the)A ( )A (sprite)A ( )A (DMA)A ( )A (capability,)A ( )A (and)A ( )A (probably)A ( )A (not)A ( )A (use)A ( )A (the)A ( )A (basic)A ( )A (method)A ( )A (at)A ( )A (all.)A ( )A (This)A ( )A (will)A ( )A (allow)A ( )A (you)A ( )A (to)A ( )A (modify)A ( )A (sprite)A ( )A (memory)A ( )A (as)A ( )A (needed)A ( )A (during)A ( )A (your)A ( )A (calculations)A ( )A (for)A ( )A (the)A ( )A (current)A ( )A (frame.)A ( )A (Then)A ( )A (at)A ( )A (the)A ( )A (vblank,)A ( )A (when)A ( )A (you)A ( )A (don't)A ( )A (have)A ( )A (any)A ( )A (extra)A ( )A (time)A ( )A (for)A ( )A (calculations,)A ( )A (you)A ( )A (only)A ( )A (need)A ( )A (to)A ( )A (tell)A ( )A (the)A ( )A (CPU)A ( )A (to)A ( )A (copy)A ( )A (the)A ( )A (sprite)A ( )A (memory.)A BR
+% invalid font number 3
+10 FS ( )A (array)A ( )A (absolute)A ( )A ($)A (4014)A ( )A (SPRITE_DMA)A ( )A (0)A ( )A (//make)A ( )A (a)A ( )A (0-size)A ( )A (array)A ( )A (for)A ( )A (our)A ( )A (DMA)A ( )A (port)A BR
+( )A (array)A ( )A (absolute)A ( )A ($)A (200)A ( )A (spritemem)A ( )A (256)A ( )A (//allocate)A ( )A (memory)A ( )A (for)A ( )A (sprites)A BR
+( )A (set)A ( )A (\[)A ( )A (spritemem)A ( )A (0)A ( )A (\])A ( )A (sprite_y)A BR
+( )A (set)A ( )A (\[)A ( )A (spritemem)A ( )A (1)A ( )A (\])A ( )A (sprite_tile)A BR
+( )A (set)A ( )A (\[)A ( )A (spritemem)A ( )A (2)A ( )A (\])A ( )A (sprite_attrib)A BR
+( )A (set)A ( )A (\[)A ( )A (spritemem)A ( )A (3)A ( )A (\])A ( )A (sprite_x)A BR
+( )A (//more)A ( )A (game)A ( )A (calculations)A BR
+( )A (gosub)A ( )A (vwait)A BR
+( )A (set)A ( )A (SPRITE_DMA)A ( )A (2)A ( )A (//copy)A ( )A (sprite)A ( )A (ram)A ( )A (from)A ( )A (address)A ( )A ($200)A BR
+% invalid font number 1
+12 FS BR
+(The)A ( )A (format)A ( )A (of)A ( )A (each)A ( )A (sprite's)A ( )A (memory,)A ( )A (as)A ( )A (shown)A ( )A (in)A ( )A (the)A ( )A (code)A ( )A (examples)A ( )A (above,)A ( )A (is)A ( )A (y)A ( )A (value,)A ( )A (tile)A ( )A (number,)A ( )A (attributes,)A ( )A (and)A ( )A (x)A ( )A (value.)A ( )A (The)A ( )A (coordinate)A ( )A (pair)A ( )A (\(x,y\))A ( )A (indicates)A ( )A (the)A ( )A (horizontal)A ( )A (and)A ( )A (vertical)A ( )A (displacement)A ( )A (of)A ( )A (the)A ( )A (sprite's)A ( )A (top)A ( )A (left)A ( )A (corner,)A ( )A (counted)A ( )A (in)A ( )A (pixels)A ( )A (from)A ( )A (the)A ( )A (top)A ( )A (left)A ( )A (of)A ( )A (the)A ( )A (screen.)A ( )A (A)A ( )A (larger)A ( )A (x)A ( )A (value)A ( )A (means)A ( )A (further)A ( )A (to)A ( )A (the)A ( )A (right,)A ( )A (and)A ( )A (a)A ( )A (larger)A ( )A (y)A ( )A (value)A ( )A (means)A ( )A (further)A ( )A (down)A ( )A (the)A ( )A (screen.)A ( )A (Setting)A ( )A (the)A ( )A (y)A ( )A (value)A ( )A (to)A ( )A (240)A ( )A (or)A ( )A (greater)A ( )A (will)A ( )A (place)A ( )A (the)A ( )A (sprite)A ( )A (below)A ( )A (the)A ( )A (bottom)A ( )A (edge)A ( )A (of)A ( )A (the)A ( )A (screen.)A ( )A (The)A ( )A (tile)A ( )A (number)A ( )A (is)A ( )A (an)A ( )A (index)A ( )A (lookup)A ( )A (into)A ( )A (the)A ( )A (foreground)A ( )A (pattern)A ( )A (table.)A ( )A (You)A ( )A (may)A ( )A (determine)A ( )A (whether)A ( )A (pattern)A ( )A (table)A ( )A (0)A ( )A (or)A ( )A (1)A ( )A (acts)A ( )A (as)A ( )A (foreground)A ( )A (by)A ( )A (setting)A ( )A (bit)A ( )A (3)A ( )A (of)A ( )A (port)A ( )A ($2000.)A BR
+BR
+(The)A ( )A (sprite)A ( )A (attribute)A ( )A (byte)A ( )A (is)A ( )A (a)A ( )A (bit)A ( )A (vector,)A ( )A (and)A ( )A (it)A ( )A (is)A ( )A (thankfully)A ( )A (much)A ( )A (easier)A ( )A (to)A ( )A (understand)A ( )A (than)A ( )A (the)A ( )A (background)A ( )A (attribute)A ( )A (table.)A ( )A (Like)A ( )A (the)A ( )A (background,)A ( )A (a)A ( )A (4-bit)A ( )A (palette)A ( )A (is)A ( )A (available)A ( )A (for)A ( )A (tiles)A ( )A (defined)A ( )A (with)A ( )A (2-bit)A ( )A (color.)A ( )A (The)A ( )A (two)A ( )A (least)A ( )A (significant)A ( )A (bits)A ( )A (\(0)A ( )A (and)A ( )A (1\))A ( )A (of)A ( )A (the)A ( )A (attribute)A ( )A (byte)A ( )A (determine)A ( )A (the)A ( )A (upper)A ( )A (two)A ( )A (bits)A ( )A (of)A ( )A (the)A ( )A (sprite's)A ( )A (palette)A ( )A (index.)A ( )A (Equivalently,)A ( )A (you)A ( )A (may)A ( )A (consider)A ( )A (these)A ( )A (two)A ( )A (bits)A ( )A (to)A ( )A (be)A ( )A (a)A ( )A (subpalette)A ( )A (identifier.)A ( )A (Bit)A ( )A (5)A ( )A (of)A ( )A (the)A ( )A (attribute)A ( )A (byte)A ( )A (is)A ( )A (a)A ( )A (toggle)A ( )A (to)A ( )A (display)A ( )A (behind)A ( )A (the)A ( )A (background.)A ( )A (When)A ( )A (this)A ( )A (bit)A ( )A (is)A ( )A (set)A ( )A (to)A ( )A (1,)A ( )A (the)A ( )A (sprite)A ( )A (will)A ( )A (only)A ( )A (show)A ( )A (pixels)A ( )A (where)A ( )A (the)A ( )A (background's)A ( )A (color)A ( )A (is)A ( )A (the)A ( )A (default)A ( )A (\(background)A ( )A (palette)A ( )A (entries)A ( )A (0,)A ( )A (4,)A ( )A (8,)A ( )A (and)A ( )A (12\).)A ( )A (Bit)A ( )A (6)A ( )A (of)A ( )A (the)A ( )A (attribute,)A ( )A (when)A ( )A (set)A ( )A (to)A ( )A (1,)A ( )A (will)A ( )A (display)A ( )A (the)A ( )A (sprite)A ( )A (flipped)A ( )A (horizontally,)A ( )A (around)A ( )A (the)A ( )A (Y)A ( )A (axis,)A ( )A (and)A ( )A (bit)A ( )A (7)A ( )A (will)A ( )A (similarly)A ( )A (flip)A ( )A (the)A ( )A (sprite)A ( )A (vertically.)A ( )A (Bits)A ( )A (2,)A ( )A (3,)A ( )A (and)A ( )A (4)A ( )A (of)A ( )A (the)A ( )A (attribute)A ( )A (byte)A ( )A (appear)A ( )A (to)A ( )A (be)A ( )A (unused.)A BR
+BR
+BR
+BR
+% invalid font number 0
+B1 (Sprite)A ( )A (0)A ( )A (Hit:)A BR
+% invalid font number 2
+I1 (incomplete)A ( )A (section)A BR
+% invalid font number 1
+I0 BR
+% invalid font number 0
+B1 (Vertical)A ( )A (Blanking:)A BR
+% invalid font number 1
+B0 (On)A ( )A (a)A ( )A (television)A ( )A (display,)A ( )A (the)A ( )A (vertical)A ( )A (blank)A ( )A (interval)A ( )A (is)A ( )A (the)A ( )A (time)A ( )A (during)A ( )A (which)A ( )A (the)A ( )A (electron)A ( )A (gun)A ( )A (traces)A ( )A (from)A ( )A (the)A ( )A (bottom)A ( )A (right)A ( )A (of)A ( )A (the)A ( )A (screen,)A ( )A (at)A ( )A (the)A ( )A (end)A ( )A (of)A ( )A (one)A ( )A (frame,)A ( )A (to)A ( )A (the)A ( )A (top)A ( )A (left)A ( )A (of)A ( )A (the)A ( )A (screen,)A ( )A (at)A ( )A (the)A ( )A (start)A ( )A (of)A ( )A (the)A ( )A (next)A ( )A (frame.)A ( )A (The)A ( )A (NES)A ( )A (stores)A ( )A (information)A ( )A (about)A ( )A (this)A ( )A (in)A ( )A (port)A ( )A ($2002.)A ( )A (After)A ( )A (a)A ( )A (vertical)A ( )A (blank,)A ( )A (it)A ( )A (is)A ( )A (advisable)A ( )A (to)A ( )A (set)A ( )A (the)A ( )A (scroll)A ( )A (values)A ( )A (and)A ( )A (PPU)A ( )A (base)A ( )A (address)A ( )A (to)A ( )A (0,)A ( )A (or)A ( )A (else)A ( )A (your)A ( )A (game)A ( )A (will)A ( )A (likely)A ( )A (display)A ( )A (some)A ( )A (flicker)A ( )A (after)A ( )A (writing)A ( )A (to)A ( )A (the)A ( )A (PPU.)A ( )A (More)A ( )A (information)A ( )A (on)A ( )A (the)A ( )A (intricacies)A ( )A (of)A ( )A (the)A ( )A (vertical)A ( )A (and)A ( )A (horizontal)A ( )A (blanking)A ( )A (can)A ( )A (be)A ( )A (found)A ( )A (in)A ( )A (some)A ( )A (of)A ( )A (the)A ( )A (documents)A ( )A (referenced)A ( )A (in)A ( )A (the)A ( )A (Acknowledgements)A ( )A (section,)A ( )A (but)A ( )A (most)A ( )A (developers)A ( )A (would)A ( )A (be)A ( )A (best)A ( )A (off)A ( )A (simply)A ( )A (having)A ( )A (an)A ( )A (efficient)A ( )A (vertical)A ( )A (blank)A ( )A (wait)A ( )A (function)A ( )A (handed)A ( )A (to)A ( )A (them.)A ( )A (Below)A ( )A (is)A ( )A (just)A ( )A (such)A ( )A (a)A ( )A (function.)A ( )A (Calling)A ( )A (it)A ( )A (will)A ( )A (sync)A ( )A (your)A ( )A (program)A ( )A (with)A ( )A (the)A ( )A (next)A ( )A (full)A ( )A (blanking)A ( )A (interval,)A ( )A (which)A ( )A (happens)A ( )A (30)A ( )A (times)A ( )A (per)A ( )A (second)A ( )A (on)A ( )A (an)A ( )A (NTSC)A ( )A (\(American\))A ( )A (NES,)A ( )A (and)A ( )A (25)A ( )A (times)A ( )A (per)A ( )A (second)A ( )A (on)A ( )A (a)A ( )A (PAL)A ( )A (\(European\))A ( )A (NES.)A ( )A (Note)A ( )A (that,)A ( )A (in)A ( )A (the)A ( )A (current)A ( )A (implementation)A ( )A (of)A ( )A (nbasic,)A ( )A (the)A ( )A (most)A ( )A (efficient)A ( )A (vertical)A ( )A (blanking)A ( )A (function)A ( )A (uses)A ( )A (inline)A ( )A (assembly.)A BR
+B0 % invalid font number 3
+10 FS ( )A (//wait)A ( )A (until)A ( )A (screen)A ( )A (refresh)A BR
+( )A (vwait:)A BR
+( )A (asm)A BR
+( )A (lda)A ( )A ($)A (2002)A BR
+( )A (bpl)A ( )A (vwait)A ( )A (;)A (//wait)A ( )A (for)A ( )A (start)A ( )A (of)A ( )A (retrace)A BR
+( )A (vwait_)A (1)A (:)A BR
+( )A (lda)A ( )A ($)A (2002)A BR
+( )A (bmi)A ( )A (vwait_)A (1)A ( )A (;)A (//wait)A ( )A (for)A ( )A (end)A ( )A (of)A ( )A (retrace)A BR
+( )A (endasm)A BR
+( )A (//set)A ( )A (scroll)A ( )A (and)A ( )A (PPU)A ( )A (base)A ( )A (address)A BR
+( )A (set)A ( )A ($)A (2005)A ( )A (0)A BR
+( )A (set)A ( )A ($)A (2005)A ( )A (0)A BR
+( )A (set)A ( )A ($)A (2006)A ( )A (0)A BR
+( )A (set)A ( )A ($)A (2006)A ( )A (0)A BR
+( )A (return)A BR
+% invalid font number 1
+12 FS BR
+% invalid font number 0
+B1 (NES)A ( )A (Sound:)A % invalid font number 1
+B0 BR
+% invalid font number 2
+I1 (incomplete)A ( )A (section)A BR
+% invalid font number 1
+I0 BR
+BR
+% invalid font number 0
+B1 (Acknowledgements:)A BR
+% invalid font number 1
+B0 (Some)A ( )A (of)A ( )A (the)A ( )A (information)A ( )A (for)A ( )A (this)A ( )A (document)A ( )A (was)A ( )A (taken)A ( )A (from)A ( )A (the)A ( )A (following)A ( )A (sources:)A BR
+BR
+("Nintendo)A ( )A (entertainment)A ( )A (System)A ( )A (Architecture")A ( )A (by)A ( )A (Marat)A ( )A (Fayzullin)A BR
+(http://nesdev.parodius.com/nes.txt)A BR
+BR
+("The)A ( )A (NES)A ( )A (Sound)A ( )A (Channel)A ( )A (Guide")A ( )A (by)A ( )A (Brad)A ( )A (Taylor)A BR
+(http://nesdev.parodius.com/NESSOUND.txt)A BR
+BR
+("Programming)A ( )A (That)A ( )A (8-bit)A ( )A (Beast)A ( )A (of)A ( )A (Power,)A ( )A (the)A ( )A (NES")A ( )A (by)A ( )A (joker21)A BR
+(http://nesdev.parodius.com/NESSOUND.txt)A BR
+
+% --------- 
+
+  didShowPage not { 
+    showpage 
+  } if
+
+%%EOF

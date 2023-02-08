@@ -1,0 +1,38 @@
+t120
+
+loop 2
+
+channel 2
+v18 o2 l1 p1 p2 c.e-l2cl1e-l2cfe-.l1c.e-
+
+channel 3
+v3 o2 l8 
+cdefgafegafegadcgedcedfacedbgfedgbabedfgeadfbaefefdfedfdfbaefefdfedfaefdfea
+dfeace
+
+end
+
+loop 2
+
+channel 0
+v1 o5 l16 p1 
+fbfbfabagfabage-fe-fgfgagabababfbfbfe-fe-be-be-bfe-acb-cb-cde-ce-fe-gae-fe-
+fb-cb-ccb-cde-fgagab-afe-ae-b-fb-ffb-affe-e-fe-f
+
+channel 1
+v1 o4 l16 p1 
+ce-ce-ce-fe-fe-fgfgafafagagafae-abafe-fgafge-fab-edb-afde-gagafab-ab-ce-ce-
+cce-cce-e-fe-gfe-dfe-fde-cfce-ae-agab-ae-ab-a
+
+channel 2
+o2 l1 p2 c.e-l2cl1e-l2cfe-.l1c.e-
+
+channel 3
+v7 o2 l8 cdefgafegafegadcgedcedfacedbgfedgbabedfgeadfbaefefgafdfefdea
+
+end
+
+
+channel 3
+
+o2p4l8ceafe

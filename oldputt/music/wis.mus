@@ -1,0 +1,72 @@
+t160
+
+channel 2
+v15 l8 o4 
+e e- e g p8 a p8 g
+f p8 e d p8 e c p8
+e e- e g p8 c p8 d 
+p1
+e e- e g p8 a p8 b >
+c < p8 a f p8 e d p8
+e d c d p8 < b > p8 c
+p1
+
+a p4 a p8 g f p8
+g g p4 p2
+f p4 f p8 e d p8
+e p4 g p2
+a p4 a p8 b > c d
+e p8 c < g p8 a e p8
+d p4 e p4 d p8
+l4 g p4 p2 
+
+channel 1
+v15 l8 o2 
+c p4 c p8 c c p8
+f p4 f p8 f f p8
+c p4 c p8 c c p8
+g p4 g p8 g g p8
+c p4 c p8 c c p8
+f p4 f p8 f f p8
+g p4 g p8 g g p8
+c c p8 c c p8 p4
+
+f f f f p8 f f p8
+c c c c p8 c c p8
+g g g g p8 g g p8
+c c c c p8 c c p8
+f f f f p8 f f p8
+c c c c p8 c c p8
+d d d d p8 d d p8
+g g f f e e d d
+
+
+channel 0
+v15 l8 o2 
+e p4 e p8 e e p8
+a p4 a p8 a a p8
+e p4 e p8 e e p8
+b p4 b p8 b b p8
+e p4 e p8 e e p8
+a p4 a p8 a a p8
+b p4 b p8 b b p8
+> c c p8 c c < p8 p4
+
+a > c < p4 p2
+e g p4 p2
+b > f < p4 p2
+e g p4 e b- p4
+a > c < p4 p2
+e g p4 p2
+f# > c < p4 p2
+b > f < p4 p2
+
+channel 3
+v15 l16 o4
+c p16 p8 p4 e p16 p8 p4 c p16 p8 p4 e p16 p8 p4 
+c p16 p8 p4 e p16 p8 p4 c p16 p8 p4 e p16 p8 p4 
+c p16 p8 p4 e p16 p8 p4 c p16 p8 p4 e p16 p8 p4 
+c p16 p8 p4 e p16 p8 p4 c p16 p8 p4 e p16 p8 p4 
+
+
+
